@@ -1,0 +1,43 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "LASwift",
+        "repositoryURL": "https://github.com/ianruh/LASwift.git",
+        "state": {
+          "branch": "linux",
+          "revision": "85e69c157fd6126882842bc52222d1a2ec8dca58",
+          "version": null
+        }
+      },
+      {
+        "package": "Nimble",
+        "repositoryURL": "https://github.com/Quick/Nimble.git",
+        "state": {
+          "branch": null,
+          "revision": "7a46a5fc86cb917f69e3daf79fcb045283d8f008",
+          "version": "8.1.2"
+        }
+      },
+      {
+        "package": "Quick",
+        "repositoryURL": "https://github.com/Quick/Quick.git",
+        "state": {
+          "branch": null,
+          "revision": "09b3becb37cb2163919a3842a4c5fa6ec7130792",
+          "version": "2.2.1"
+        }
+      },
+      {
+        "package": "swift-numerics",
+        "repositoryURL": "https://github.com/apple/swift-numerics",
+        "state": {
+          "branch": null,
+          "revision": "6583ac70c326c3ee080c1d42d9ca3361dca816cd",
+          "version": "0.1.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
