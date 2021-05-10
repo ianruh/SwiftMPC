@@ -324,7 +324,7 @@ func infeasibleEqualityMinimize(
 
         iterations += 1
 
-        print("Lambda: \(lambda),        Primal: \(currentPoint),         Dual: \(currentDual)")
+//        print("Lambda: \(lambda),        Primal: \(currentPoint),         Dual: \(currentDual)")
     }
 
     if(debugInfo) {
