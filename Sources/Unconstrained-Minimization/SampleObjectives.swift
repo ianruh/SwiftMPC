@@ -3,25 +3,32 @@
 //
 import LASwift
 
+///
+/// Just a simple quintic objective
+///
 struct QuinticObjective: Objective {
-    let numVariables: Int = 2
+    let numVariables: Int
+
+    init(n dimensions: Int = 2) {
+        self.numVariables = dimensions
+    }
 
     func value(_ x: Vector) -> Double {
-        return x[0]**4 + x[1]**4
+        return x.map({ $0**4 }).reduce(0, +)
     }
 
     func gradient(_ x: Vector) -> Vector {
-        return [4*x[0]**3, 4*x[1]**3]
+        return x.map({ 4*$0**3 })
     }
 
     func hessian(_ x: Vector) -> Matrix {
-        return Matrix([
-            [12*x[0]**2, 0],
-            [0, 12*x[1]**2]
-        ])
+        return diag(x.map({ 12*$0**2 }))
     }
 }
 
+///
+/// Just a simple quadratic objective
+///
 struct QuadraticObjective: Objective {
     let numVariables: Int
 
