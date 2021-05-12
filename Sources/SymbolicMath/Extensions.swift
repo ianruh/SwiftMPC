@@ -112,14 +112,6 @@ extension Double {
         d.round(.towardZero)
         return Int(d)
     }
-
-    /// Get Integer of fractional value
-    public var frac: Int {
-        let str = String(self)
-        var ind = str.firstIndex(of: ".")!
-        str.formIndex(after: &ind)
-        return Int(str.substring(from: ind))!
-    }
 }
 
 extension Collection where Element: Collection {
@@ -159,4 +151,8 @@ public func + (_ lhs: Double, _ rhs: Vector) -> Vector {
         vec.append(lhs+rhs[i])
     }
     return vec
+}
+
+public func printDebug(_ msg: String = "", file: StaticString = #file, line: UInt = #line) {
+    print("Got to \(file):\(line)                   \(msg)")
 }

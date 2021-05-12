@@ -64,7 +64,7 @@ public class Factorial: Node, Operation {
     @inlinable
     override public func evaluate(withValues values: [Node: Double]) throws -> Double {
         // TODO: Factorial evaluation
-        throw SymbolLabError.notApplicable(message: "Factorial not implemented for the moment")
+        throw SymbolicMathError.notApplicable(message: "Factorial not implemented for the moment")
     }
 
     override internal func equals(_ otherNode: Node) -> Bool {

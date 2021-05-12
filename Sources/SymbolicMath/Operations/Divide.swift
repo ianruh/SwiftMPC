@@ -184,7 +184,7 @@ public class Divide: Node, Operation {
             } else if(leftSimplified == Number(0.0)) {
                 return Number(0.0)
             } else {
-                var simplifiedDiv: Divide = Divide(leftSimplified, rightSimplified)
+                let simplifiedDiv: Divide = Divide(leftSimplified, rightSimplified)
                 return cancelTerms(simplifiedDiv)
             }
         }

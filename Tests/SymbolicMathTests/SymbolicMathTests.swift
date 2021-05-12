@@ -1,5 +1,6 @@
 import XCTest
 import SymbolicMath
+import LASwift
 
 final class SymbolicMathTests: XCTestCase {
 
@@ -89,7 +90,6 @@ final class SymbolicMathTests: XCTestCase {
 
     func testEquality() {
         let one: Number = Number(1.0)
-        let two: Number = Number(2.0)
         let three: Number = Number(3.0)
         let x = Variable("x")
         let y = Variable("y")
@@ -129,12 +129,169 @@ final class SymbolicMathTests: XCTestCase {
         assertNodesEqual(Number(0)+x, x)
     }
 
+    func testCos() {
+        do {
+            let x = Variable("x")
+            let exp = Cos(x)
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 0.0]).isApprox(1.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi / 2]).isApprox(0.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi]).isApprox(-1.0))
+        }
+    }
+
+    func testSin() {
+        do {
+            let x = Variable("x")
+            let exp = Sin(x)
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 0.0]).isApprox(0.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi / 2]).isApprox(1.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi]).isApprox(0.0))
+        }
+    }
+
+    func testTan() {
+        do {
+            let x = Variable("x")
+            let exp = Tan(x)
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 0.0]).isApprox(0.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi]).isApprox(0.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi/4]).isApprox(1.0))
+        }
+    }
+
+    func testLn() {
+        do {
+            let x = Variable("x")
+            let exp = Ln(x)
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 1.0]).isApprox(0.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 2.7182818285]).isApprox(1.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 20.0]).isApprox(2.9957322736))
+        }
+    }
+
+    func testSqrt() {
+        do {
+            let x = Variable("x")
+            let exp = Sqrt(x)
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 1.0]).isApprox(1.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 4.0]).isApprox(2.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 10.0]).isApprox(3.1622776602))
+        }
+    }
+
+    func testNodeHashable() {
+        let x = Variable("x")
+        let y = Variable("y")
+
+        let one = Number(1)
+        let two = Number(2)
+
+        let sin = Sin(x)
+        let cos = Cos(x)
+        let der = Derivative(of: x,  wrt: y)
+        let der2 = Derivative(of: y,  wrt: x)
+
+        var dict: Dictionary<Node, Bool> = [:]
+        dict[x] = true
+        dict[one] = true
+        dict[sin] = true
+        dict[der] = true
+
+        XCTAssertNil(dict[y])
+        XCTAssertNil(dict[two])
+        XCTAssertNil(dict[cos])
+        XCTAssertNil(dict[der2])
+
+        XCTAssertNotNil(dict[x])
+        XCTAssertNotNil(dict[one])
+        XCTAssertNotNil(dict[sin])
+        XCTAssertNotNil(dict[der])
+    }
+
+    func testReplace() {
+        let x = Variable("x")
+        let y = Variable("y")
+        let z = Variable("z")
+
+        let exp1 = y+y
+        let res1 = (x+x).replace(x, with: y)
+        assertNodesEqual(exp1, res1)
+
+        let exp2 = y
+        let res2 = (x*x).replace(x*x, with: y)
+        assertNodesEqual(exp2, res2)
+
+        let exp3 = z
+        let res3 = Derivative(of: x, wrt: y).replace(Derivative(of: x, wrt: y), with: z)
+        assertNodesEqual(exp3, res3)
+    }
+
+    func testGradient() {
+
+        do {
+            let x = Variable("x")
+            let y = Variable("y")
+            let z = Variable("z")
+            let eq = x**2 + y**2 + z**2
+            guard let gradient = eq.gradient() else {
+                XCTFail("Gradient of \(eq) was nil")
+                return
+            }
+            do {
+                let gradValue = try gradient.evaluate(withValues: [x: 1.0, y: 1.0, z: 1.0])
+                gradValue.forEach({ value in
+                    XCTAssertTrue(value.isApprox(2.0), "Element of grdient of \(eq) was not 1 at unity: \(value)")
+                })
+            } catch {
+                XCTFail("Exception thrown: \(error)")
+            }
+        }
+
+    }
+
+    func testHessian() {
+        do {
+            let x = Variable("x")
+            let y = Variable("y")
+            let z = Variable("z")
+            let eq = x**2 + y**2 + z**2
+
+            let expectedHessian = Matrix([
+                [2.0, 0.0, 0.0],
+                [0.0, 2.0, 0.0],
+                [0.0, 0.0, 2.0]
+            ])
+
+            guard let hessian = eq.hessian() else {
+                XCTFail("Hessian of \(eq) was nil")
+                return
+            }
+
+            do {
+                let hessianValue = try hessian.evaluate(withValues: [x: 1.0, y: 1.0, z: 1.0]) // Values don't actually matter
+                XCTAssertEqual(expectedHessian, hessianValue, "Returned Hessian did not match expected Hessian: \(hessianValue), \(expectedHessian)")
+            } catch {
+                XCTFail("Exception thrown: \(error)")
+            }
+        }
+    }
+
+
     static var allTests = [
         ("Leveling Test", testLeveling),
         ("Rational Simplifying", testRationalSimplifying),
         ("Number Combining", testNumberCombining),
         ("Equality", testEquality),
         ("Combine Like", testCombineLike),
-        ("Identities", testIdentities)
+        ("Identities", testIdentities),
+        ("Cosine", testCos),
+        ("Sine", testSin),
+        ("Tangent", testTan),
+        ("Natural Log", testLn),
+        ("Square Root", testSqrt),
+        ("Node Hashable", testNodeHashable),
+        ("Replace", testReplace),
+        ("Gradient", testGradient),
+        ("Hessian", testHessian)
     ]
 }

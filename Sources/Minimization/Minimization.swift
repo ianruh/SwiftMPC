@@ -242,7 +242,7 @@ func infeasibleEqualityMinimize(
         objective: Objective,
         equalityConstraintMatrix: Matrix,
         equalityConstraintVector: Vector,
-        startPoint: Vector = [1.0, 1.0],
+        startPoint: Vector = [1.0],
         gradEpsilon: Double = 1.0e-6,
         maxIterations: Int = 100,
         debugInfo: Bool = false) throws -> Vector {
@@ -252,7 +252,7 @@ func infeasibleEqualityMinimize(
         throw MinimizationError.wrongNumberOfVariables("Number of variables in objective and equality constraint disagree")
     }
     guard equalityConstraintMatrix.rows == equalityConstraintVector.count else {
-        throw MinimizationError.wrongNumberOfVariables("Equality constraint matrix has different number of rows than the requality constraint vector.")
+        throw MinimizationError.wrongNumberOfVariables("Equality constraint matrix has different number of rows than the equality constraint vector.")
     }
 
     // Set start point
@@ -263,7 +263,7 @@ func infeasibleEqualityMinimize(
     var currentDual = zeros(equalityConstraintVector.count)
 
     if(debugInfo) {
-        print("Starting point: \(startPoint)")
+        print("Starting point: \(currentPoint)")
     }
 
     var value = objective.value(currentPoint)

@@ -85,7 +85,7 @@ public class Power: Node, Operation {
             if let rightValueInt = Int(exactly: rightValue) {
                 return Double.pow(leftValue, rightValueInt)
             } else {
-                throw SymbolLabError.undefinedValue("Non-integer exponents of negatives are not currently supported: \(leftValue)^\(rightValue)")
+                throw SymbolicMathError.undefinedValue("Non-integer exponents of negatives are not currently supported: \(leftValue)^\(rightValue)")
             }
         }
     }

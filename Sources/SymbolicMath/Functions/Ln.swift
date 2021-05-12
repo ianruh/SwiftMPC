@@ -1,18 +1,20 @@
 import RealModule
 
-public class Cos: Node, Function {
-    public let identifier: String = "cos"
+/// The natural ln function
+///
+public class Ln: Node, Function {
+    public let identifier: String = "ln"
     public let numArguments: Int = 1
 
     // Store the parameters for the node
     public var argument: Node
 
     override public var description: String {
-        return "cos(\(self.argument))"
+        return "ln(\(self.argument))"
     }
 
     override public var latex: String {
-        return "\\cos(\(self.argument.latex))"
+        return "\\ln(\(self.argument.latex))"
     }
 
     override public var variables: Set<Variable> {
@@ -26,7 +28,7 @@ public class Cos: Node, Function {
     override public var typeIdentifier: String {
         var hasher = Hasher()
         self.hash(into: &hasher)
-        return "cosine\(hasher.finalize())"
+        return "naturallogarithm\(hasher.finalize())"
     }
 
     required public init(_ params: [Node]) {
@@ -43,12 +45,17 @@ public class Cos: Node, Function {
 
     @inlinable
     override public func evaluate(withValues values: [Node: Double]) throws -> Double {
-        return try Double.cos(self.argument.evaluate(withValues: values))
+        let value = try Double.log(self.argument.evaluate(withValues: values))
+        guard value != Double.nan else {
+            throw SymbolicMathError.undefinedValue("The ln(\(value)) is undefined.")
+        }
+
+        return value
     }
 
     override internal func equals(_ otherNode: Node) -> Bool {
-        if let cos = otherNode as? Cos {
-            return self.argument.equals(cos.argument)
+        if let ln = otherNode as? Ln {
+            return self.argument.equals(ln.argument)
         } else {
             return false
         }
@@ -56,7 +63,7 @@ public class Cos: Node, Function {
 
     override public func contains<T: Node>(nodeType: T.Type) -> [Id] {
         var ids: [Id] = []
-        if(nodeType == Cos.self) {
+        if(nodeType == Ln.self) {
             ids.append(self.id)
         }
         ids.append(contentsOf: self.argument.contains(nodeType: nodeType))
@@ -67,16 +74,16 @@ public class Cos: Node, Function {
         if(targetNode == self) {
             return replacement
         } else {
-            return Cos(self.argument.replace(targetNode, with: replacement))
+            return Ln(self.argument.replace(targetNode, with: replacement))
         }
     }
 
     public override func simplify() -> Node {
-        return Cos(self.argument.simplify())
+        return Ln(self.argument.simplify())
     }
 
     override public func hash(into hasher: inout Hasher) {
-        hasher.combine("cos")
+        hasher.combine("naturallog")
         hasher.combine(self.argument)
     }
 }

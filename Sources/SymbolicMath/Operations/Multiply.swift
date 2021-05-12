@@ -245,7 +245,7 @@ public class Multiply: Node, Operation {
             return Multiply(args)
         }
 
-        var args = self.arguments.map({$0.simplify()})
+        let args = self.arguments.map({$0.simplify()})
 
         var simplifiedMul = Multiply(args)
         simplifiedMul = level(simplifiedMul)

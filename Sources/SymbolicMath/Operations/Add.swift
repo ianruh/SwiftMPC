@@ -221,7 +221,7 @@ public class Add: Node, Operation {
             }
         }
 
-        var args = self.arguments.map({$0.simplify()})
+        let args = self.arguments.map({$0.simplify()})
         var simplifiedAdd = Add(args)
 
         simplifiedAdd = level(simplifiedAdd)

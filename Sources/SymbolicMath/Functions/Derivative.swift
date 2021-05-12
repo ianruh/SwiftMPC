@@ -68,7 +68,7 @@ public class Derivative: Node, Function {
         // Try numerically
         guard let variable = self.withRespectTo as? Variable else {
             // TODO: Numerical derivatives with respect to non-variables (aka other functions)
-            throw SymbolLabError.misc("Derivatives with respect to non-variables hasn't been implemented yet.")
+            throw SymbolicMathError.misc("Derivatives with respect to non-variables hasn't been implemented yet.")
         }
         // assume machine precision ~ 2^-52
         let sqrtEpsilon = 0.000000014899
@@ -109,18 +109,17 @@ public class Derivative: Node, Function {
     }
 
     public override func simplify() -> Node {
-//        if let newNode = differentiate(self.diffOf.simplify(), wrt: self.withRespectTo.simplify()) {
-//            if let _ = newNode as? Derivative {
-//                // To prevent recursion
-//                return newNode
-//            } else {
-//                return newNode.simplify()
-//            }
-//        } else {
-//            print("Unexpectedly found nil while simplifying a derivative: `\(self)`")
-//            return Number(0)
-//        }
-        return self
+        if let newNode = differentiate(self.diffOf.simplify(), wrt: self.withRespectTo.simplify()) {
+            if let _ = newNode as? Derivative {
+                // To prevent recursion
+                return newNode
+            } else {
+                return newNode.simplify()
+            }
+        } else {
+            print("Unexpectedly found nil while simplifying a derivative: `\(self)`")
+            return Number(0)
+        }
     }
 
     override public func hash(into hasher: inout Hasher) {

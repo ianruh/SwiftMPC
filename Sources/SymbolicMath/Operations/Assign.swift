@@ -53,7 +53,7 @@ public class Assign: Node, Operation {
     
     @inlinable
     override public func evaluate(withValues values: [Node : Double]) throws -> Double {
-        throw SymbolLabError.notApplicable(message: "evaluate isn't applicable to assignment")
+        throw SymbolicMathError.notApplicable(message: "evaluate isn't applicable to assignment")
     }
 
     override internal func equals(_ otherNode: Node) -> Bool {

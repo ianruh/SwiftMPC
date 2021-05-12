@@ -5,12 +5,17 @@
 //  Created by Ian Ruh on 5/14/20.
 //
 
-public class Node: CustomStringConvertible, Comparable, Hashable {
+import OrderedCollections
+import LASwift
+
+public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdered {
 
     //------------------------ Properties ------------------------
 
     /// The node's unqie identifier
     lazy public var id: Id = Id()
+
+    public var _ordering: OrderedSet<Variable>? = nil
 
     /// A string representation of the node. This should be overridden.
     public var description: String {
@@ -22,17 +27,17 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
         preconditionFailure("latex should be overridden")
     }
 
-    /// The set of varibales in the node. This should be overridden.
+    /// The set of variables in the node. This should be overridden.
     public var variables: Set<Variable> {
         preconditionFailure("variables should be overridden")
     }
 
-    /// The set of derivatives in the node. This should be overriden.
+    /// The set of derivatives in the node. This should be overridden.
     public var derivatives: Set<Derivative> {
         preconditionFailure("derivatives should be overridden")
     }
 
-    /// The type identifier of the class. This should be overriden.
+    /// The type identifier of the class. This should be overridden.
     public var typeIdentifier: String {
         preconditionFailure("variables should be overridden")
     }
@@ -67,6 +72,20 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
     /// Evaluate the node. This should be overridden.
     public func evaluate(withValues values: [Node: Double]) throws -> Double {
         preconditionFailure("This method must be overridden")
+    }
+
+    public func evaluate(_ x: Vector) throws -> Double {
+        // Ensure the vector is the right length
+        guard x.count == self.variables.count else {
+            throw SymbolicMathError.misc("Vector \(x) is too short (\(x.count) != \(self.variables.count)")
+        }
+
+        var values = Dictionary<Node, Double>()
+        let orderedVariables = self.orderedVariables
+        for i in 0..<x.count {
+            values[orderedVariables[i]] = x[i]
+        }
+        return try self.evaluate(withValues: values)
     }
 
     /// Function returns whether the other node logically equals this function
@@ -150,7 +169,6 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
             return (lhs as! Number).value < (rhs as! Number).value
         } else {
             // This shouldn't ever run, but just in case
-            preconditionFailure("Less than last case should never run")
             return lhs.typeIdentifier < rhs.typeIdentifier
         }
     }
@@ -287,7 +305,7 @@ public class Variable: Node, ExpressibleByStringLiteral {
         if let value  = values[self] {
             return value
         } else {
-            throw SymbolLabError.noValue(forVariable: self.description)
+            throw SymbolicMathError.noValue(forVariable: self.description)
         }
     }
 

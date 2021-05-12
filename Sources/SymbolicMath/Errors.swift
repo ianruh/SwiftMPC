@@ -8,7 +8,7 @@
 /**
 Errors that can be thrown by SymbolLab
 */
-public enum SymbolLabError: Error {
+public enum SymbolicMathError: Error {
     case noValue(forVariable: String)
     case notApplicable(message: String)
     case noVariable(forValue: String)
