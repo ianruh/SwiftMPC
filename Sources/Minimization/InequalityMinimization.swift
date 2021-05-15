@@ -72,9 +72,9 @@ struct InequalitySolver {
     }
 
     func augmentValue(objective: ObjectiveWithInequality, at x: Vector) -> Double {
-        return -1*Double.log(objective.inequalityConstraintsValue(x).reduce(1.0, {(currentMul, nextValue) in 
-            return currentMul * -1*nextValue
-        }))
+        return objective.inequalityConstraintsValue(x).reduce(0.0, {(currentSum, nextValue) in 
+            return currentSum - Double.log(-1*nextValue)
+        })
     }
 
     func augmentGradient(objective: ObjectiveWithInequality, at x: Vector) -> Vector {
@@ -103,9 +103,8 @@ struct InequalitySolver {
             equalityConstraintMatrix: Matrix,
             equalityConstraintVector: Vector,
             startPoint: Vector = [1.0],
-            gradEpsilon: Double = 1.0e-6,
-            maxIterations: Int = 100,
-            debugInfo: Bool = false) throws -> Vector {
+            gradEpsilon: Double = 1.0e-3,
+            maxIterations: Int = 100) throws -> Vector {
 
         // Check that the equality constraints and objective have the same number of variables
         guard objective.numVariables == equalityConstraintMatrix.cols else {
@@ -122,27 +121,34 @@ struct InequalitySolver {
         }
         var currentDual = zeros(equalityConstraintVector.count)
 
-        if(debugInfo) {
+        #if DEBUG 
             print("Starting point: \(currentPoint)")
-        }
+        #endif
 
         var t = 10.0
         let mu = 10.0
         var tSteps = 0
         var totalSteps = 0
-        let dualEpsilon = 1.0e-5
+        let dualEpsilon = 1.0e-3
 
-        // var value: Double = t * objective.value(currentPoint) + augmentValue(objective: objective, at: currentPoint)
         var grad: Vector = t .* objective.gradient(currentPoint) + augmentGradient(objective: objective, at: currentPoint)
         var H: Matrix = t .* objective.hessian(currentPoint) + augmentHessian(objective: objective, at: currentPoint)
-
         var lambda = self.residualNorm(objective: objective, equalityConstraintMatrix: equalityConstraintMatrix, equalityConstraintVector: equalityConstraintVector, primal: currentPoint, dual: currentDual, t: t)
+
         while(Double(objective.numConstraints) / t > dualEpsilon && tSteps < 100) {
 
             var iterations: Int = 0
 
             // This needs to be recalulated because we changed  t
             lambda = self.residualNorm(objective: objective, equalityConstraintMatrix: equalityConstraintMatrix, equalityConstraintVector: equalityConstraintVector, primal: currentPoint, dual: currentDual, t: t)
+
+            #if DEBUG
+                let value = t * objective.value(currentPoint) + augmentValue(objective: objective, at: currentPoint)
+                printDebug("\(tSteps):\(iterations)     Point:   \(currentPoint)")
+                printDebug("\(tSteps):\(iterations)     Value:   \(value)")
+                printDebug("\(tSteps):\(iterations)     Grad:    \(grad)")
+                printDebug("\(tSteps):\(iterations)     Lambda:  \(lambda)")
+            #endif
 
             while(lambda > gradEpsilon && iterations < maxIterations) {
 
@@ -192,23 +198,30 @@ struct InequalitySolver {
                 iterations += 1
                 totalSteps += 1
 
-                // value = t * objective.value(currentPoint) + augmentValue(objective: objective, at: currentPoint)
                 grad = t .* objective.gradient(currentPoint) + augmentGradient(objective: objective, at: currentPoint)
                 H = t .* objective.hessian(currentPoint) + augmentHessian(objective: objective, at: currentPoint)
 
                 lambda = self.residualNorm(objective: objective, equalityConstraintMatrix: equalityConstraintMatrix, equalityConstraintVector: equalityConstraintVector, primal: currentPoint, dual: currentDual, t: t)
+
+                #if DEBUG
+                    let value = t * objective.value(currentPoint) + augmentValue(objective: objective, at: currentPoint)
+                    printDebug("\(tSteps):\(iterations)     Point:   \(currentPoint)")
+                    printDebug("\(tSteps):\(iterations)     Value:   \(value)")
+                    printDebug("\(tSteps):\(iterations)     Grad:    \(grad)")
+                    printDebug("\(tSteps):\(iterations)     Lambda:  \(lambda)")
+                #endif
             }
             t *= mu
             tSteps += 1
         }
 
-        if(debugInfo) {
-            print("t: \(t)")
-            print("Numer of Iterations: \(totalSteps)")
-            print("Residual Norm: \(lambda)")
-            print("Minimum Location: \(currentPoint)")
-            print("Objective Value: \(objective.value(currentPoint))")
-        }
+        #if DEBUG 
+            printDebug("t: \(t)")
+            printDebug("Numer of Iterations: \(totalSteps)")
+            printDebug("Residual Norm: \(lambda)")
+            printDebug("Minimum Location: \(currentPoint)")
+            printDebug("Objective Value: \(objective.value(currentPoint))")
+        #endif
 
         return currentPoint
     }

@@ -23,6 +23,5 @@ let min = try solver.infeasibleInequalityMinimize(
         objective: objective,
         equalityConstraintMatrix: equalityConstraints,
         equalityConstraintVector: equalityConstraintVector,
-        startPoint: [10.0, 10.0, 10.0],
-        debugInfo: true)
+        startPoint: [10.0, 10.0, 10.0])
 
