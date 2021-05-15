@@ -27,10 +27,10 @@ struct SymbolicObjective: Objective, VariableOrdered {
     var symbolicConstraintsGradient: [SymbolicVector]?
     var symbolicConstraintsHessian: [SymbolicMatrix]?
 
-    let equalityConstraintMatrix: Matrix? = nil
-    let equalityConstraintVector: Vector? = nil
+    let equalityConstraintMatrix: Matrix?
+    let equalityConstraintVector: Vector?
 
-    public init?(min node: Node, subjectTo optionalConstraints: SymbolicVector? = nil, ordering optionalOrdering: OrderedSet<Variable>? = nil) {
+    public init?(min node: Node, subjectTo optionalConstraints: SymbolicVector? = nil, equalityMatrix: Matrix? = nil, equalityVector: Vector? = nil, ordering optionalOrdering: OrderedSet<Variable>? = nil) {
         // Get the set of all variables
         if let constraints = optionalConstraints {
             self.variables = node.variables.union(constraints.variables)
@@ -45,6 +45,11 @@ struct SymbolicObjective: Objective, VariableOrdered {
         if let constraints = optionalConstraints {
             self.symbolicConstraints = constraints
         }
+
+        // Save equality constraints
+        //  TODO: Check dimensions
+        self.equalityConstraintMatrix = equalityMatrix
+        self.equalityConstraintVector =  equalityVector
 
         // Set the ordering of the objective if provided
         // Needs to be done before the gradient and Hessian are constructed

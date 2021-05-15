@@ -43,13 +43,11 @@ public protocol Objective {
     func inequalityConstraintsGradient(_ x: Vector) -> [Vector]
 
     func inequalityConstraintsHessian(_ x: Vector) -> [Matrix]
-
-    //================= Step Solver ================
-
-    // func stepSolver()
 }
 
 public extension Objective {
+
+    //================= Place holders that should be overriden if there are constraints ================
 
     func inequalityConstraintsValue(_ x: Vector) -> [Double] {
         preconditionFailure("The Objective.inequalityConstraintsValue() method was called without an implementation.  This likely means you need to Objective.numConstraints = 0.")
@@ -61,6 +59,69 @@ public extension Objective {
 
     func inequalityConstraintsHessian(_ x: Vector) -> [Matrix] {
         preconditionFailure("The Objective.inequalityConstraintsHessian() method was called without an implementation.  This likely means you need to Objective.numConstraints = 0.")
+    }
+
+    //================= Step Solver Default Implementation ================
+
+    func stepSolver(gradient: Vector, hessian: Matrix, primal: Vector, dual: Vector) throws -> (primalStepDirection: Vector, dualStepDirection: Vector) {
+        if(self.equalityConstraintMatrix != nil  && self.equalityConstraintVector != nil) {
+            // These will always be non-nill as hasEqualityConstraints is true
+            let equalityConstraintMatrix = self.equalityConstraintMatrix!
+            let equalityConstraintVector = self.equalityConstraintVector!
+
+            // Construct the matrix:
+            // ┌         ┐
+            // │ ∇²f  Aᵀ │
+            // │  A   0  │
+            // └         ┘
+            // Where A is the matrix for our equality constraints
+            let firstRow = LASwift.append(hessian, cols: transpose(equalityConstraintMatrix))
+            let secondRow = LASwift.append(equalityConstraintMatrix, cols: zeros(equalityConstraintMatrix.rows, equalityConstraintMatrix.rows))
+            let newtonStepMatrix = LASwift.append(firstRow, rows: secondRow)
+
+            // Construct the rightside vector
+            //  ┌      ┐
+            //  │  ∇f  │
+            // -│ Ax-b │
+            //  └      ┘
+            let newtonStepRightSide = -1.*LASwift.append(Matrix(gradient), rows: equalityConstraintMatrix*Matrix(primal) - equalityConstraintVector)
+
+            let stepDirectionWithDual = try LASwift.linsolve(newtonStepMatrix, newtonStepRightSide).flat
+
+            // We need to pull out the step direction from the vector as it includes the dual as well
+            // ┌         ┐ ┌     ┐    ┌      ┐
+            // │ ∇²f  Aᵀ │ │  v  │    │  ∇f  │
+            // │  A   0  │ │  w  │ = -│ Ax-b │
+            // └         ┘ └     ┘    └      ┘
+            // Where v is our primal step direction, and w would be the next dual (not the dual step)
+
+            let primalStepDirection = Array(stepDirectionWithDual[0..<self.numVariables])
+            let dualStepDirection = Array(stepDirectionWithDual[self.numVariables..<stepDirectionWithDual.count]) - dual
+            // We subtract off the current dual here because w = ν + Δν, while v = Δx
+
+            return (primalStepDirection: primalStepDirection, dualStepDirection: dualStepDirection)
+        } else {
+            // Construct the matrix:
+            // ┌     ┐
+            // │ ∇²f │
+            // └     ┘
+            // 
+            let newtonStepMatrix = hessian
+
+            // Construct the rightside vector
+            //  ┌    ┐
+            // -│ ∇f │
+            //  └    ┘
+            let newtonStepRightSide = -1.*Matrix(gradient)
+
+            // ┌     ┐ ┌     ┐    ┌      ┐
+            // │ ∇²f │ │  v  │ = -│  ∇f  │
+            // └     ┘ └     ┘    └      ┘
+            // Where v is our primal step direction
+            let primalStepDirection = try LASwift.linsolve(newtonStepMatrix, newtonStepRightSide).flat
+
+            return (primalStepDirection: primalStepDirection, dualStepDirection: [])
+        }
     }
 
 }

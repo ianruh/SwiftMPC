@@ -179,65 +179,7 @@ struct InequalitySolver {
 
             while(lambda > gradEpsilon && iterations < maxIterations) {
 
-                // These need to be initialized to make the compiler happy, but both will always
-                // be set in the following if statement (they are also the wrong dimensions here)
-                var stepDirectionPrimal: Vector = []
-                var stepDirectionDual: Vector = []
-
-                if(self.hasEqaulityConstraints) {
-                    // These will always be non-nill as hasEqualityConstraints is true
-                    let equalityConstraintMatrix = objective.equalityConstraintMatrix!
-                    let equalityConstraintVector = objective.equalityConstraintVector!
-
-                    // Construct the matrix:
-                    // ┌         ┐
-                    // │ ∇²f  Aᵀ │
-                    // │  A   0  │
-                    // └         ┘
-                    // Where A is the matrix for our equality constraints
-                    let firstRow = LASwift.append(H, cols: transpose(equalityConstraintMatrix))
-                    let secondRow = LASwift.append(equalityConstraintMatrix, cols: zeros(equalityConstraintMatrix.rows, equalityConstraintMatrix.rows))
-                    let newtonStepMatrix = LASwift.append(firstRow, rows: secondRow)
-
-                    // Construct the rightside vector
-                    //  ┌      ┐
-                    //  │  ∇f  │
-                    // -│ Ax-b │
-                    //  └      ┘
-                    let newtonStepRightSide = -1.*LASwift.append(Matrix(grad), rows: equalityConstraintMatrix*Matrix(currentPoint) - equalityConstraintVector)
-
-                    let stepDirectionWithDual = try LASwift.linsolve(newtonStepMatrix, newtonStepRightSide).flat
-
-                    // We need to pull out the step direction from the vector as it includes the dual as well
-                    // ┌         ┐ ┌     ┐    ┌      ┐
-                    // │ ∇²f  Aᵀ │ │  v  │    │  ∇f  │
-                    // │  A   0  │ │  w  │ = -│ Ax-b │
-                    // └         ┘ └     ┘    └      ┘
-                    // Where v is our primal step direction, and w would be the next dual (not the dual step)
-
-                    stepDirectionPrimal = Array(stepDirectionWithDual[0..<objective.numVariables])
-                    stepDirectionDual = Array(stepDirectionWithDual[objective.numVariables..<stepDirectionWithDual.count]) - currentDual
-                    // We subtract off the current dual here because w = ν + Δν, while v = Δx
-                } else {
-                    // Construct the matrix:
-                    // ┌     ┐
-                    // │ ∇²f │
-                    // └     ┘
-                    // 
-                    let newtonStepMatrix = H
-
-                    // Construct the rightside vector
-                    //  ┌    ┐
-                    // -│ ∇f │
-                    //  └    ┘
-                    let newtonStepRightSide = -1.*Matrix(grad)
-
-                    // ┌     ┐ ┌     ┐    ┌      ┐
-                    // │ ∇²f │ │  v  │ = -│  ∇f  │
-                    // └     ┘ └     ┘    └      ┘
-                    // Where v is our primal step direction
-                    stepDirectionPrimal = try LASwift.linsolve(newtonStepMatrix, newtonStepRightSide).flat
-                }
+                let (stepDirectionPrimal, stepDirectionDual) = try objective.stepSolver(gradient: grad, hessian: H, primal: currentPoint, dual: currentDual)
 
                 // Not really the step length as the newton step direction isn't normalized
                 let stepLength = infeasibleLinesearch(

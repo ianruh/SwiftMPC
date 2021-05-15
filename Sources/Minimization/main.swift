@@ -6,18 +6,20 @@ import Foundation
 let x = Variable("x")
 let y = Variable("y")
 let z = Variable("z")
-guard let objective = SymbolicObjective(min: x**2 + y**2 + z**2,
-        subjectTo: [
-            1.0 - y,
-            5.0 - z
-            ] // f(x) <= 0
-    ) else {
+
+let obj = x**2 + y**2 + z**2
+let constraints: SymbolicVector = [
+    1.0 - y,
+    5.0 - z
+]
+let equalityConstraintMatrix = Matrix([[1.0, 0.0, 0.0]])
+let equalityConstraintVector = [1.0]
+
+guard let objective = SymbolicObjective(min: obj, subjectTo: constraints, equalityMatrix: equalityConstraintMatrix, equalityVector: equalityConstraintVector) else {
     print("Unable to construct symbolic objective")
     exit(0)
 }
 
-let equalityConstraints = Matrix([[1.0, 0.0, 0.0]])
-let equalityConstraintVector = [1.0]
 var solver = InequalitySolver()
 let (min, pt) = try solver.infeasibleInequalityMinimize(
         objective: objective,
