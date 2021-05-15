@@ -11,4 +11,4 @@ run-debug:
 	swift run
 
 test:
-	swift test -c release --build-tests -Xswiftc -Ounchecked -Xcc -ffast-math -Xcc -O2
+	swift test -Xswiftc -Ounchecked -Xcc -ffast-math -Xcc -O2

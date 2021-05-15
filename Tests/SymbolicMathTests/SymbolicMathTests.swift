@@ -253,7 +253,7 @@ final class SymbolicMathTests: XCTestCase {
             let y = Variable("y")
             let z = Variable("z")
 
-            var eq = 3*x**2 + 2*y**2 + z**2
+            let eq = 3*x**2 + 2*y**2 + z**2
             eq.setVariableOrder([x, y, z])
 
             let expectedGradient: Vector = [6.0, 4.0, 2.0]
@@ -271,7 +271,7 @@ final class SymbolicMathTests: XCTestCase {
             let y = Variable("y")
             let z = Variable("z")
 
-            var eq = x - y
+            let eq = x - y
             eq.setVariableOrder([x, y, z])
 
             let expectedGradient: Vector = [1.0, -1.0, 0.0]

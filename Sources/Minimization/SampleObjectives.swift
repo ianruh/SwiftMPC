@@ -8,6 +8,10 @@ import LASwift
 ///
 struct QuinticObjective: Objective {
     let numVariables: Int
+    let numConstraints: Int = 0
+
+    let equalityConstraintMatrix: Matrix? = nil
+    let equalityConstraintVector: Vector? = nil
 
     init(n dimensions: Int = 2) {
         self.numVariables = dimensions
@@ -31,6 +35,10 @@ struct QuinticObjective: Objective {
 ///
 struct QuadraticObjective: Objective {
     let numVariables: Int
+    let numConstraints: Int = 0
+
+    let equalityConstraintMatrix: Matrix? = nil
+    let equalityConstraintVector: Vector? = nil
 
     init(n dimensions: Int = 2) {
         self.numVariables = dimensions

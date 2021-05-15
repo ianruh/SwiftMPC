@@ -4,7 +4,7 @@ import SymbolicMath
 import Collections
 import Foundation
 
-struct SymbolicObjective: Objective, ObjectiveWithInequality, VariableOrdered {
+struct SymbolicObjective: Objective, VariableOrdered {
 
     let variables: Set<Variable>
     var numVariables: Int {
@@ -26,6 +26,9 @@ struct SymbolicObjective: Objective, ObjectiveWithInequality, VariableOrdered {
     var symbolicConstraints: SymbolicVector?
     var symbolicConstraintsGradient: [SymbolicVector]?
     var symbolicConstraintsHessian: [SymbolicMatrix]?
+
+    let equalityConstraintMatrix: Matrix? = nil
+    let equalityConstraintVector: Vector? = nil
 
     public init?(min node: Node, subjectTo optionalConstraints: SymbolicVector? = nil, ordering optionalOrdering: OrderedSet<Variable>? = nil) {
         // Get the set of all variables

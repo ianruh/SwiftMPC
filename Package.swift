@@ -37,6 +37,11 @@ let package = Package(
                 ]),
         .testTarget(
             name: "MinimizationTests",
-            dependencies: ["Minimization"]),
+            dependencies: [
+                "Minimization",
+                "LASwift",
+                "SymbolicMath",
+                .product(name: "Collections", package: "swift-collections")
+            ]),
     ]
 )
