@@ -7,6 +7,8 @@ public protocol VariableOrdered {
     var variables: Set<Variable> { get }
 
     var _ordering: OrderedSet<Variable>? { get set }
+
+    mutating func setVariableOrder<C>(_ newOrdering: C) where C: Collection, C.Element == Variable
 }
 
 public extension VariableOrdered {
@@ -17,18 +19,5 @@ public extension VariableOrdered {
         }
         // Ordering doesn't necessarily contain all of the variables, so:
         return ordering.union(self.variables.sorted())
-    }
-
-    mutating func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection, C.Element == Variable {
-        // Make sure every variable in the node is in the ordering
-        let variables = self.variables
-
-        for variable in variables {
-            guard newOrdering.contains(variable) else {
-                throw SymbolicMathError.misc("Ordering must contain all all variables, including \(variable)")
-            }
-        }
-
-        self._ordering = OrderedSet<Variable>(newOrdering)
     }
 }

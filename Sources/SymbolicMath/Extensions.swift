@@ -153,6 +153,6 @@ public func + (_ lhs: Double, _ rhs: Vector) -> Vector {
     return vec
 }
 
-public func printDebug(_ msg: String = "", file: StaticString = #file, line: UInt = #line) {
-    print("Got to \(file):\(line)                   \(msg)")
+public func printDebug(_ msg: CustomStringConvertible = "", file: StaticString = #file, line: UInt = #line) {
+    print("Got to \(file):\(line) \(msg)")
 }

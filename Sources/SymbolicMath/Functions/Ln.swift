@@ -46,7 +46,7 @@ public class Ln: Node, Function {
     @inlinable
     override public func evaluate(withValues values: [Node: Double]) throws -> Double {
         let value = try Double.log(self.argument.evaluate(withValues: values))
-        guard value != Double.nan else {
+        guard !value.isNaN else {
             throw SymbolicMathError.undefinedValue("The ln(\(value)) is undefined.")
         }
 

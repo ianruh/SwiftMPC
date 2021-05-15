@@ -69,6 +69,10 @@ public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdere
 
     //------------------------ Functions ------------------------
 
+    public func setVariableOrder<C>(_ newOrdering: C) where C: Collection, C.Element == Variable {
+        self._ordering = OrderedSet<Variable>(newOrdering)
+    }
+
     /// Evaluate the node. This should be overridden.
     public func evaluate(withValues values: [Node: Double]) throws -> Double {
         preconditionFailure("This method must be overridden")

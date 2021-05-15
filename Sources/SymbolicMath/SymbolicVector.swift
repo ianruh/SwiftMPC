@@ -5,14 +5,14 @@
 import LASwift
 import Collections
 
-public struct SymbolicVector: Collection, RangeReplaceableCollection, ExpressibleByArrayLiteral, VariableOrdered {
+public struct SymbolicVector: Collection, ExpressibleByArrayLiteral, VariableOrdered {
     public typealias Element = Node
     public typealias Index = Int
 
     public var startIndex: Index { return self.elements.startIndex }
     public var endIndex: Index { return self.elements.endIndex }
 
-    private var elements: [Node] = []
+    public var elements: [Node] = []
     public var _ordering: OrderedSet<Variable>? = nil
     public var variables: Set<Variable> {
         return self.reduce(Set<Variable>(),{(currentSet, nextElement) in
@@ -29,10 +29,6 @@ public struct SymbolicVector: Collection, RangeReplaceableCollection, Expressibl
     public init(arrayLiteral: Element...) {
         self.init()
         self.elements = arrayLiteral
-    }
-
-    public mutating func replaceSubrange<C>(_ bounds: Range<SymbolicVector.Index>, with newElements: C) where C : Collection, C.Element == Node {
-        self.elements.replaceSubrange(bounds, with: newElements)
     }
 
     public func evaluate(withValues values: [Node: Double]) throws -> Vector {
@@ -59,5 +55,15 @@ public struct SymbolicVector: Collection, RangeReplaceableCollection, Expressibl
 
     public func index(after i: Index) -> Index {
         return self.elements.index(after: i)
+    }
+
+    // every element needs to also be set
+    public mutating func setVariableOrder<C>(_ newOrdering: C) where C: Collection, C.Element == Variable {
+        self._ordering = OrderedSet<Variable>(newOrdering)
+
+        // Every child element should also have it's ordering set
+        for i in 0..<self.count {
+            self.elements[i].setVariableOrder(newOrdering)
+        }
     }
 }

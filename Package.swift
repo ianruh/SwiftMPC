@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -18,7 +18,8 @@ let package = Package(
             dependencies: [
                 .product(name: "RealModule", package: "swift-numerics"),
                 "LASwift",
-                "SymbolicMath"
+                "SymbolicMath",
+                .product(name: "Collections", package: "swift-collections")
             ]),
         .target(
                 name: "SymbolicMath",
@@ -29,7 +30,11 @@ let package = Package(
                 ]),
         .testTarget(
                 name: "SymbolicMathTests",
-                dependencies: ["SymbolicMath", "LASwift"]),
+                dependencies: [
+                    "SymbolicMath", 
+                    "LASwift",
+                    .product(name: "Collections", package: "swift-collections")
+                ]),
         .testTarget(
             name: "MinimizationTests",
             dependencies: ["Minimization"]),

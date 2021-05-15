@@ -5,7 +5,7 @@
 import LASwift
 import Collections
 
-public struct SymbolicMatrix: Collection, RangeReplaceableCollection, ExpressibleByArrayLiteral, VariableOrdered {
+public struct SymbolicMatrix: Collection, ExpressibleByArrayLiteral, VariableOrdered {
     public typealias Element = SymbolicVector
     public typealias Index = Int
 
@@ -31,10 +31,6 @@ public struct SymbolicMatrix: Collection, RangeReplaceableCollection, Expressibl
     public init(arrayLiteral: Element...) {
         self.init()
         self.vectors = arrayLiteral
-    }
-
-    public mutating func replaceSubrange<C>(_ bounds: Range<SymbolicVector.Index>, with newElements: C) where C : Collection, C.Element == SymbolicVector {
-        self.vectors.replaceSubrange(bounds, with: newElements)
     }
 
     public func evaluate(withValues values: [Node: Double]) throws -> Matrix {
@@ -81,5 +77,15 @@ public struct SymbolicMatrix: Collection, RangeReplaceableCollection, Expressibl
 
     public func index(after i: Index) -> Index {
         return self.vectors.index(after: i)
+    }
+
+    // every element needs to also be set
+    public mutating func setVariableOrder<C>(_ newOrdering: C) where C: Collection, C.Element == Variable {
+
+        self._ordering = OrderedSet<Variable>(newOrdering)
+
+        for i in 0..<self.count {
+            self.vectors[i].setVariableOrder(self._ordering!)
+        }
     }
 }

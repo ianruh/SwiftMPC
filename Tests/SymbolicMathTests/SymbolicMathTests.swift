@@ -1,6 +1,7 @@
 import XCTest
 import SymbolicMath
 import LASwift
+import Collections
 
 final class SymbolicMathTests: XCTestCase {
 
@@ -247,6 +248,42 @@ final class SymbolicMathTests: XCTestCase {
             }
         }
 
+        do {
+            let x = Variable("x")
+            let y = Variable("y")
+            let z = Variable("z")
+
+            var eq = 3*x**2 + 2*y**2 + z**2
+            eq.setVariableOrder([x, y, z])
+
+            let expectedGradient: Vector = [6.0, 4.0, 2.0]
+
+            guard let symbolicGradient = eq.gradient() else {
+                XCTFail("Failed to compute gradient of \(eq)")
+                return
+            }
+
+            XCTAssertEqual(expectedGradient, try symbolicGradient.evaluate(withValues: [x: 1.0, y: 1.0, z: 1.0]))
+        }
+
+        do {
+            let x = Variable("x")
+            let y = Variable("y")
+            let z = Variable("z")
+
+            var eq = x - y
+            eq.setVariableOrder([x, y, z])
+
+            let expectedGradient: Vector = [1.0, -1.0, 0.0]
+
+            guard let symbolicGradient = eq.gradient() else {
+                XCTFail("Failed to compute gradient of \(eq)")
+                return
+            }
+
+            XCTAssertEqual(expectedGradient, try symbolicGradient.evaluate(withValues: [x: 1.0, y: 1.0, z: 1.0]))
+        }
+
     }
 
     func testHessian() {
@@ -276,6 +313,121 @@ final class SymbolicMathTests: XCTestCase {
         }
     }
 
+    func testOrdering() {
+        let x = Variable("x")
+        let y = Variable("y")
+        let z = Variable("z")
+
+        var eq = 3*x**2 + 2*y**2 + z**2
+
+        do {
+            let ordering: OrderedSet<Variable> = [x, y, z]
+            let evalPoint: Vector = [1.0, 1.0, 1.0]
+            eq.setVariableOrder(ordering)
+
+            let expectedGradient: Vector = [6.0, 4.0, 2.0]
+            let expectedHessian = Matrix([
+                [6.0, 0.0, 0.0],
+                [0.0, 4.0, 0.0],
+                [0.0, 0.0, 2.0]
+            ])
+
+            guard let symbolicGradient = eq.gradient() else {
+                XCTFail("Failed to compute gradient of \(eq)")
+                return
+            }
+
+            guard let symbolicHessian = eq.hessian() else {
+                XCTFail("Failed to compute hessian of \(eq)")
+                return
+            }
+
+            XCTAssertEqual(expectedGradient, try symbolicGradient.evaluate(evalPoint))
+            XCTAssertEqual(expectedHessian, try symbolicHessian.evaluate(evalPoint))
+
+            // Verify child orderings
+            XCTAssertEqual(symbolicGradient.orderedVariables, ordering)
+            XCTAssertEqual(symbolicHessian.orderedVariables, ordering)
+            symbolicGradient.forEach({ XCTAssertEqual($0.orderedVariables, ordering) })
+            symbolicHessian.forEach({ XCTAssertEqual($0.orderedVariables, ordering) })
+            symbolicHessian.forEach({ vector in
+                vector.forEach({ XCTAssertEqual($0.orderedVariables, ordering) })
+            })
+        }
+
+        do {
+            let ordering: OrderedSet<Variable> = [z, y, x]
+            let evalPoint: Vector = [1.0, 1.0, 1.0]
+            eq.setVariableOrder(ordering)
+
+            let expectedGradient: Vector = [2.0, 4.0, 6.0]
+            let expectedHessian = Matrix([
+                [2.0, 0.0, 0.0],
+                [0.0, 4.0, 0.0],
+                [0.0, 0.0, 6.0]
+            ])
+
+            guard let symbolicGradient = eq.gradient() else {
+                XCTFail("Failed to compute gradient of \(eq)")
+                return
+            }
+
+            guard let symbolicHessian = eq.hessian() else {
+                XCTFail("Failed to compute hessian of \(eq)")
+                return
+            }
+
+            XCTAssertEqual(expectedGradient, try symbolicGradient.evaluate(evalPoint))
+            XCTAssertEqual(expectedHessian, try symbolicHessian.evaluate(evalPoint))
+
+            // Verify child orderings
+            XCTAssertEqual(symbolicGradient.orderedVariables, ordering)
+            XCTAssertEqual(symbolicHessian.orderedVariables, ordering)
+            symbolicGradient.forEach({ XCTAssertEqual($0.orderedVariables, ordering) })
+            symbolicHessian.forEach({ XCTAssertEqual($0.orderedVariables, ordering) })
+            symbolicHessian.forEach({ vector in
+                vector.forEach({ XCTAssertEqual($0.orderedVariables, ordering) })
+            })
+        }
+
+        do {
+            eq = x**2
+            let ordering: OrderedSet<Variable> = [y, x, z]
+            let evalPoint: Vector = [1.0, 1.0, 1.0]
+            eq.setVariableOrder(ordering)
+
+            let expectedGradient: Vector = [0.0, 2.0, 0.0]
+            let expectedHessian = Matrix([
+                [0.0, 0.0, 0.0],
+                [0.0, 2.0, 0.0],
+                [0.0, 0.0, 0.0]
+            ])
+
+            guard let symbolicGradient = eq.gradient() else {
+                XCTFail("Failed to compute gradient of \(eq)")
+                return
+            }
+
+            guard let symbolicHessian = eq.hessian() else {
+                XCTFail("Failed to compute hessian of \(eq)")
+                return
+            }
+
+            XCTAssertEqual(expectedGradient, try symbolicGradient.evaluate(evalPoint))
+            XCTAssertEqual(expectedHessian, try symbolicHessian.evaluate(evalPoint))
+
+            // Verify child orderings
+            XCTAssertEqual(symbolicGradient.orderedVariables, ordering)
+            XCTAssertEqual(symbolicHessian.orderedVariables, ordering)
+            symbolicGradient.forEach({ XCTAssertEqual($0.orderedVariables, ordering) })
+            symbolicHessian.forEach({ XCTAssertEqual($0.orderedVariables, ordering) })
+            symbolicHessian.forEach({ vector in
+                vector.forEach({ XCTAssertEqual($0.orderedVariables, ordering) })
+            })
+
+        }
+    }
+
 
     static var allTests = [
         ("Leveling Test", testLeveling),
@@ -292,6 +444,7 @@ final class SymbolicMathTests: XCTestCase {
         ("Node Hashable", testNodeHashable),
         ("Replace", testReplace),
         ("Gradient", testGradient),
-        ("Hessian", testHessian)
+        ("Hessian", testHessian),
+        ("Variable Ordering", testOrdering)
     ]
 }

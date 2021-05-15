@@ -8,20 +8,11 @@ public extension Node {
     func hessian() -> SymbolicMatrix? {
         let variables = self.orderedVariables
 
-        var vectors: SymbolicMatrix = []
-
-        // Set the ordering on the hessian matrix
-        do {
-            try vectors.setVariableOrder(self.orderedVariables)
-        } catch {
-            // Dis bad and should never happend
-            print(error)
-            preconditionFailure("This should never happen. File a bug: \(#file):\(#line)")
-        }
+        var vectors: [SymbolicVector] = []
 
         for variable1 in variables {
 
-            var vectorElements: SymbolicVector = []
+            var vectorElements: [Node] = []
             guard let firstDerivative = differentiate(self, wrt: variable1)?.simplify() else {
                 return nil
             }
@@ -35,10 +26,16 @@ public extension Node {
                 vectorElements.append(secondDerivative)
             }
 
-            vectors.append(vectorElements)
+            vectors.append(SymbolicVector(vectorElements))
         }
 
-        return vectors
+        var hessianMatrix = SymbolicMatrix(vectors)
+
+        // Set the ordering on the hessian matrix. It Inherits the ordering
+        // from the original node.
+        hessianMatrix.setVariableOrder(self.orderedVariables)
+
+        return hessianMatrix
     }
 
 }

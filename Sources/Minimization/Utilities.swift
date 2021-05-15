@@ -19,3 +19,7 @@ func ** (_ base: Double, _ exp: Double) -> Double {
 func norm(_ a: Vector) -> Double {
     return sumsq(a).squareRoot()
 }
+
+public func printDebug(_ msg: CustomStringConvertible = "", file: StaticString = #file, line: UInt = #line) {
+    print("\(file):\(line) --- \(msg)")
+}

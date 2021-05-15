@@ -182,6 +182,7 @@ func equalityConstrainedMinimize(
 
     return currentPoint
 }
+
 /// The norm of
 /// ┌          ┐
 /// │ ∇f + Aᵀν │
