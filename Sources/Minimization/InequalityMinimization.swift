@@ -3,6 +3,8 @@ import Numerics
 
 struct InequalitySolver {
 
+    public var hyperParameters:  HyperParameters = HyperParameters()
+
     private var hasEqaulityConstraints: Bool = false
     private var hasInequalityConstraints: Bool = false
 
@@ -19,6 +21,7 @@ struct InequalitySolver {
     ///   - primal:
     ///   - dual:
     /// - Returns:
+    @inlinable
     func residualNorm(
             objective: Objective,
             primal: Vector,
@@ -36,13 +39,12 @@ struct InequalitySolver {
         }
     }
 
+    @inlinable
     func infeasibleLinesearch(objective: Objective,
                             primalDirection: Vector,
                             dualDirection: Vector,
                             startPrimal: Vector,
                             startDual: Vector,
-                            alpha: Double = 0.25,
-                            beta: Double = 0.5,
                             t: Double) -> Double {
         var s = 1.0 // Starting line search length
 
@@ -61,8 +63,8 @@ struct InequalitySolver {
         // e.g. if our barrier is -log(-(0.1 - x)), then the gradient is still defined
         // even when the objective isn't. So, we need to make sure our objective always
         // stays defined (e.g. is not NaN)
-        while(shiftedNorm > (1-alpha*s)*currentNorm || shiftedNorm.isNaN || shiftedValue.isNaN) {
-            s = beta*s
+        while(shiftedNorm > (1-self.hyperParameters.lineSearchAlpha*s)*currentNorm || shiftedNorm.isNaN || shiftedValue.isNaN) {
+            s = self.hyperParameters.lineSearchBeta*s
             shiftedNorm = self.residualNorm(objective: objective,
                     primal: startPrimal + s.*primalDirection,
                     dual: startDual + s.*dualDirection,
@@ -72,20 +74,24 @@ struct InequalitySolver {
         return s
     }
 
+    @inlinable
     func barrierValue(objective: Objective,  at x: Vector, t: Double) -> Double {
         return t * objective.value(x) + augmentValue(objective: objective, at: x)
     }
 
+    @inlinable
     func augmentValue(objective: Objective, at x: Vector) -> Double {
         return objective.inequalityConstraintsValue(x).reduce(0.0, {(currentSum, nextValue) in 
             return currentSum - Double.log(-1*nextValue)
         })
     }
 
+    @inlinable
     func barrierGradient(objective: Objective, at x: Vector, t: Double) -> Vector {
         return t .* objective.gradient(x) + augmentGradient(objective: objective, at: x)
     }
 
+    @inlinable
     func augmentGradient(objective: Objective, at x: Vector) -> Vector {
         let values = objective.inequalityConstraintsValue(x)
         let gradients = objective.inequalityConstraintsGradient(x)
@@ -95,10 +101,12 @@ struct InequalitySolver {
         })
     }
 
+    @inlinable
     func barrierHessian(objective: Objective, at x: Vector, t: Double) -> Matrix {
         return t .* objective.hessian(x) + augmentHessian(objective: objective, at: x)
     }
 
+    @inlinable
     func augmentHessian(objective: Objective, at x: Vector) -> Matrix {
         let values = objective.inequalityConstraintsValue(x)
         let gradients = objective.inequalityConstraintsGradient(x)
@@ -111,11 +119,7 @@ struct InequalitySolver {
         })
     }
 
-    mutating func infeasibleInequalityMinimize(
-            objective: Objective,
-            startPoint: Vector = [1.0],
-            gradEpsilon: Double = 1.0e-3,
-            maxIterations: Int = 100) throws -> (minimum: Double, point: Vector) {
+    mutating func infeasibleInequalityMinimize(objective: Objective) throws -> (minimum: Double, point: Vector) {
 
         if let equalityConstraintMatrix =  objective.equalityConstraintMatrix {
             if let equalityConstraintVector = objective.equalityConstraintVector {
@@ -137,32 +141,37 @@ struct InequalitySolver {
             self.hasInequalityConstraints = true
         }
 
-        // Set start point
-        var currentPoint = startPoint
-        if(startPoint.count == 1 && startPoint[0] == 1.0) {
-            currentPoint = ones(objective.numVariables)
+        // Get start point
+        var (currentPoint, currentDual): (Vector, Vector) = try objective.startPoint()
+        // Check that they are the right dimensions
+        guard currentPoint.count == objective.numVariables else {
+            throw MinimizationError.wrongNumberOfVariables("Primal start \(currentPoint) does not have the same number of variables as the objective (\(objective.numVariables))")
         }
-        var currentDual: Vector = []
         if(self.hasEqaulityConstraints) {
-            currentDual = zeros(objective.equalityConstraintMatrix!.rows)
+            guard currentDual.count == objective.equalityConstraintMatrix!.rows else {
+                throw MinimizationError.wrongNumberOfVariables("Dual start \(currentDual) does not have the same number of variables as equality constraints in the objective (\(objective.equalityConstraintMatrix!.rows))")
+            }
+        } else {
+            // Just set the dual to empty even if they provide one
+            currentDual = []
         }
+
 
         #if DEBUG 
             print("Starting point: \(currentPoint)")
         #endif
 
         // Hyper parameters
-        var t = 1.0
-        let mu = 20.0
+        var t = self.hyperParameters.homotopyParameterStart
         var tSteps = 0
         var totalSteps = 0
-        let dualEpsilon = 1.0e-3
 
+        var value = self.barrierValue(objective: objective, at: currentPoint, t: t)
         var grad: Vector = self.barrierGradient(objective: objective, at: currentPoint, t: t)
         var H: Matrix = self.barrierHessian(objective: objective, at: currentPoint, t: t)
         var lambda = self.residualNorm(objective: objective, primal: currentPoint, dual: currentDual, t: t)
 
-        while(Double(objective.numConstraints) / t > dualEpsilon && tSteps < 30) {
+        while(Double(objective.numConstraints) / t > self.hyperParameters.dualGapEpsilon && tSteps < self.hyperParameters.homotopyStagesMaximum && !(value < self.hyperParameters.valueThreshold)) {
 
             var iterations: Int = 0
 
@@ -170,16 +179,18 @@ struct InequalitySolver {
             lambda = self.residualNorm(objective: objective, primal: currentPoint, dual: currentDual, t: t)
 
             #if DEBUG
-                let value = self.barrierValue(objective: objective, at: currentPoint, t: t)
                 printDebug("\(tSteps):\(iterations)     Point:   \(currentPoint)")
                 printDebug("\(tSteps):\(iterations)     Value:   \(value)")
                 printDebug("\(tSteps):\(iterations)     Grad:    \(grad)")
                 printDebug("\(tSteps):\(iterations)     Lambda:  \(lambda)")
             #endif
 
-            while(lambda > gradEpsilon && iterations < maxIterations) {
+            while(lambda > self.hyperParameters.residualEpsilon && iterations < self.hyperParameters.newtonStepsStageMaximum && !(value < self.hyperParameters.valueThreshold)) {
 
                 let (stepDirectionPrimal, stepDirectionDual) = try objective.stepSolver(gradient: grad, hessian: H, primal: currentPoint, dual: currentDual)
+
+                // TODO: the next point value and residual are calculated twice, once in the line search and
+                // again when actually calculating it. This would be a good place for memoization
 
                 // Not really the step length as the newton step direction isn't normalized
                 let stepLength = infeasibleLinesearch(
@@ -196,19 +207,19 @@ struct InequalitySolver {
                 iterations += 1
                 totalSteps += 1
 
+                value = self.barrierValue(objective: objective, at: currentPoint, t: t)
                 grad = self.barrierGradient(objective: objective, at: currentPoint, t: t)
                 H = self.barrierHessian(objective: objective, at: currentPoint, t: t)
                 lambda = self.residualNorm(objective: objective, primal: currentPoint, dual: currentDual, t: t)
 
                 #if DEBUG
-                    let value = self.barrierValue(objective: objective, at: currentPoint, t: t)
                     printDebug("\(tSteps):\(iterations)     Point:   \(currentPoint)")
                     printDebug("\(tSteps):\(iterations)     Value:   \(value)")
                     printDebug("\(tSteps):\(iterations)     Grad:    \(grad)")
                     printDebug("\(tSteps):\(iterations)     Lambda:  \(lambda)")
                 #endif
             }
-            t *= mu
+            t *= self.hyperParameters.homotopyParameterMultiplier
             tSteps += 1
         }
 
@@ -224,4 +235,26 @@ struct InequalitySolver {
 
         return (minimum: minimum, point: currentPoint)
     }
+
+    struct HyperParameters {
+        // Iteration Maximums
+        var newtonStepsStageMaximum: Int = 100
+        var homotopyStagesMaximum: Int = 50
+        
+        // Epsilons
+        var residualEpsilon: Double = 1.0e-3
+        var dualGapEpsilon: Double = 1.0e-3
+
+        // Homtopy Parameters
+        var homotopyParameterStart: Double = 1.0
+        var homotopyParameterMultiplier: Double = 20.0
+
+        // Line Search
+        var lineSearchAlpha: Double = 0.25
+        var lineSearchBeta: Double = 0.5
+
+        // Misc
+        var valueThreshold: Double = -1*Double.infinity
+    }
+
 }

@@ -17,6 +17,10 @@ struct QuinticObjective: Objective {
         self.numVariables = dimensions
     }
 
+    func startPoint() -> (primal: Vector, dual: Vector) {
+        return (primal: zeros(self.numVariables), dual: zeros(0))
+    }
+
     func value(_ x: Vector) -> Double {
         return x.map({ $0**4 }).reduce(0, +)
     }
@@ -42,6 +46,10 @@ struct QuadraticObjective: Objective {
 
     init(n dimensions: Int = 2) {
         self.numVariables = dimensions
+    }
+
+    func startPoint() -> (primal: Vector, dual: Vector) {
+        return (primal: zeros(self.numVariables), dual: zeros(0))
     }
 
     func value(_ x: Vector) -> Double {

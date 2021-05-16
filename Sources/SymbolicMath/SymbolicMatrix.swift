@@ -12,6 +12,17 @@ public struct SymbolicMatrix: Collection, ExpressibleByArrayLiteral, VariableOrd
     public var startIndex: Index { return self.vectors.startIndex }
     public var endIndex: Index { return self.vectors.endIndex }
 
+    public var rows: Int {
+        return self.count
+    }
+    public var cols: Int {
+        if(self.rows == 0) {
+            return 0
+        } else {
+            return self[0].count
+        }
+    }
+
     private var vectors: [SymbolicVector] = []
     public var _ordering: OrderedSet<Variable>? = nil
     public var variables: Set<Variable> {
@@ -20,6 +31,28 @@ public struct SymbolicMatrix: Collection, ExpressibleByArrayLiteral, VariableOrd
                 return currentSet2.union(nextElement.variables)
             })
         })
+    }
+
+    public var sparsityString: String {
+        var str: String = ""
+        let zeroNode: Node = Number(0)
+
+        // First line
+        str += "┌\(" "*self.cols)┐\n"
+        for row in self {
+            str += "│"
+            for el in row {
+                if(el == zeroNode) {
+                    str += " "
+                } else {
+                    str += "*"
+                }
+            }
+            str += "│\n"
+        }
+        str += "└\(" "*self.cols)┘"
+
+        return str
     }
 
     public init() {}

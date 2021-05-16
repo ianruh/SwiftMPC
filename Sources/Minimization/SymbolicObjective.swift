@@ -30,12 +30,23 @@ struct SymbolicObjective: Objective, VariableOrdered {
     let equalityConstraintMatrix: Matrix?
     let equalityConstraintVector: Vector?
 
-    public init?(min node: Node, subjectTo optionalConstraints: SymbolicVector? = nil, equalityMatrix: Matrix? = nil, equalityVector: Vector? = nil, ordering optionalOrdering: OrderedSet<Variable>? = nil) {
+    let startPrimal: Vector?
+    let startDual: Vector?
+
+    public init?(min node: Node, subjectTo optionalConstraints: SymbolicVector? = nil, equalityMatrix: Matrix? = nil, equalityVector: Vector? = nil, startPrimal: Vector? = nil, startDual: Vector? = nil, ordering optionalOrdering: OrderedSet<Variable>? = nil) {
         // Get the set of all variables
         if let constraints = optionalConstraints {
-            self.variables = node.variables.union(constraints.variables)
+            if let ordering  = optionalOrdering {
+                self.variables = Set(ordering.union(node.variables).union(constraints.variables))
+            } else {
+                self.variables = node.variables.union(constraints.variables)
+            }
         } else {
-            self.variables = node.variables
+            if let ordering  = optionalOrdering {
+                self.variables = Set(ordering.union(node.variables))
+            } else {
+                self.variables = node.variables
+            }
         }
 
         // Save the objective node
@@ -50,6 +61,10 @@ struct SymbolicObjective: Objective, VariableOrdered {
         //  TODO: Check dimensions
         self.equalityConstraintMatrix = equalityMatrix
         self.equalityConstraintVector =  equalityVector
+
+        // Save the start points
+        self.startPrimal = startPrimal
+        self.startDual = startDual
 
         // Set the ordering of the objective if provided
         // Needs to be done before the gradient and Hessian are constructed
@@ -129,6 +144,91 @@ struct SymbolicObjective: Objective, VariableOrdered {
         if let _ = self.symbolicConstraintsHessian {
             for i in 0..<self.numConstraints {
                 self.symbolicConstraintsHessian![i].setVariableOrder(newOrdering)
+            }
+        }
+    }
+
+    /// We want to solve the system
+    ///  min s over x,s
+    ///      f_i(x) <= s
+    ///      Ax = b
+    ///
+    /// If s is negative then we are strictly feasible, if positive then not feasible
+    /// If 0, then it's tricky, but we'll call it infeasible to be safe
+    func startPoint() throws -> (primal: Vector, dual: Vector) {
+        // We only need to find a strictly feasible point if we actually have inequality constraints
+        if let symbolicConstraints  = self.symbolicConstraints {
+            //  First check if the provided start points are strictly feasible
+            if let startPrimal = self.startPrimal {
+                if(try symbolicConstraints.evaluate(startPrimal) .<= 0.0) {
+                    // Check if the startDual was provided
+                    if let startDual = self.startDual {
+                        return (primal: startPrimal, dual: startDual)
+                    } else {
+                        // We need to know haw large the dual vector should be
+                        if let equalityMatrix = self.equalityConstraintMatrix {
+                            return (primal: startPrimal, dual: zeros(equalityMatrix.rows))
+                        } else {
+                            return  (primal: startPrimal, dual: zeros(0))
+                        }
+                    }
+                }
+                // Just fall through if it's not strictly feasible
+            }
+
+            // Set up the problem
+            let s: Variable = Variable("$$s")
+            var constraints: [Node] = symbolicConstraints.map({originalConstraint in 
+                return originalConstraint <= s
+            })
+            constraints.append(-10.0 <= s) // To alleive the singularity of the hessian
+            let ordering: OrderedSet<Variable> = OrderedSet<Variable>([s]).union(self.orderedVariables)
+
+            // We can always find a strictly feasible point for this problem. We choose an arbitrary x
+            // and set s to be the maximum value of the  constraints  plus a little bit to make sure
+            // s is strictly feasible
+            let xStart = zeros(self.numVariables)
+            let startConstraintValues = try symbolicConstraints.evaluate(xStart)
+            let sStart = startConstraintValues.max()! + 1.0 // 1.0 is arbitrary
+            // In the ordering we gave, s is the first variable, so we put it at the beginning of the start vector
+            var startVector = [sStart]
+            startVector.append(contentsOf: xStart)
+
+            // We also need to expand the equality matrix if it is there
+            var expandedEqualityMatrix = self.equalityConstraintMatrix
+            if let equalityMatrix = expandedEqualityMatrix {
+                // We add a column of zeros to the beginning, as s is the first variable in the ordering
+                expandedEqualityMatrix = append(zeros(equalityMatrix.rows, 1), cols: equalityMatrix)
+            }
+            // The equality vector doesn't need to change at all
+
+            guard let newObjective = SymbolicObjective(min: s, subjectTo: SymbolicVector(constraints), equalityMatrix: expandedEqualityMatrix, equalityVector: self.equalityConstraintVector, startPrimal: startVector, ordering: ordering) else {
+                throw MinimizationError.misc("Unable to find feasible point")
+            }
+
+            var solver = InequalitySolver()
+            solver.hyperParameters.valueThreshold = 0.0
+            let (min, pt) = try solver.infeasibleInequalityMinimize(objective: newObjective)
+
+            // Min should be negative if we have a feasible point
+            guard min < 0.0 else {
+                throw MinimizationError.misc("Problem may be infeasible. Found minimum feasible point of \(pt)")
+            }
+
+            let startPrimal = Array(pt[1..<pt.count])
+            
+            // Return the point
+            if let equalityMatrix = self.equalityConstraintMatrix {
+                return (primal: startPrimal, dual: zeros(equalityMatrix.rows))
+            } else {
+                return  (primal: startPrimal, dual: zeros(0))
+            }
+        } else {
+            // We can return any point here, so we just default to 0s os the  right length
+            if let equalityMatrix = self.equalityConstraintMatrix {
+                return (primal: zeros(self.numVariables), dual: zeros(equalityMatrix.rows))
+            } else {
+                return  (primal: zeros(self.numVariables), dual: zeros(0))
             }
         }
     }

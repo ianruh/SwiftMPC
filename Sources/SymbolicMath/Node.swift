@@ -80,8 +80,8 @@ public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdere
 
     public func evaluate(_ x: Vector) throws -> Double {
         // Ensure the vector is the right length
-        guard x.count == self.variables.count else {
-            throw SymbolicMathError.misc("Vector \(x) is too short (\(x.count) != \(self.variables.count)")
+        guard x.count == self.orderedVariables.count else {
+            throw SymbolicMathError.misc("Vector \(x) is the wrong length (\(x.count) != \(self.orderedVariables.count)")
         }
 
         var values = Dictionary<Node, Double>()

@@ -43,6 +43,13 @@ public protocol Objective {
     func inequalityConstraintsGradient(_ x: Vector) -> [Vector]
 
     func inequalityConstraintsHessian(_ x: Vector) -> [Matrix]
+
+    //=============== Start Point ================
+
+    /// Strictly feasible start point
+    /// dual should be zeros is you don't have one or care
+    func startPoint() throws -> (primal: Vector, dual: Vector)
+
 }
 
 public extension Objective {
@@ -62,7 +69,14 @@ public extension Objective {
     }
 
     //================= Step Solver Default Implementation ================
-
+    // TODO: This doesn't handle the case of singular H (it will explode in some random direction)
+    // Here are some options: https://math.stackexchange.com/questions/2092999/a-question-about-newtons-method-for-equality-constrained-convex-minimization
+    // It shouldn't come up if our objective is strongly convex, as then we are gaurenteed the hessian
+    // will be non-singular. However, for the problem of finding a feasible point, we  minimize the scalar
+    // function s, which is clearly not convex (it doesn't even have a minimum). We adapted the solver to
+    // stop when s became negative, but it will explode before  then. In stead, we add a  onstraint to that
+    // problem that s >= -10. This *shouldn't* restrict any feasible objectives, and will gaurentee that our
+    // barrier augmented objective is non-singular.
     func stepSolver(gradient: Vector, hessian: Matrix, primal: Vector, dual: Vector) throws -> (primalStepDirection: Vector, dualStepDirection: Vector) {
         if(self.equalityConstraintMatrix != nil  && self.equalityConstraintVector != nil) {
             // These will always be non-nill as hasEqualityConstraints is true
@@ -123,5 +137,4 @@ public extension Objective {
             return (primalStepDirection: primalStepDirection, dualStepDirection: [])
         }
     }
-
 }

@@ -7,10 +7,10 @@ let x = Variable("x")
 let y = Variable("y")
 let z = Variable("z")
 
-let obj = x**2 + y**2 + z**2
+let obj = x**4 + y**4 + z**4
 let constraints: SymbolicVector = [
-    1.0 - y,
-    5.0 - z
+    1.0 <= y,
+    5.0 <= z
 ]
 let equalityConstraintMatrix = Matrix([[1.0, 0.0, 0.0]])
 let equalityConstraintVector = [1.0]
@@ -21,7 +21,5 @@ guard let objective = SymbolicObjective(min: obj, subjectTo: constraints, equali
 }
 
 var solver = InequalitySolver()
-let (min, pt) = try solver.infeasibleInequalityMinimize(
-        objective: objective,
-        startPoint: [10.0, 10.0, 10.0])
+let (min, pt) = try solver.infeasibleInequalityMinimize(objective: objective)
 

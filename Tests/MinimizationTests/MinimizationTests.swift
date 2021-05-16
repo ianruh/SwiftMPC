@@ -4,10 +4,11 @@ import LASwift
 
 final class Unconstrained_MinimizationTests: XCTestCase {
 
-    func testConstrainedMinimization() {
+    func testConstrainedMinimization1() {
+
     }
 
     static var allTests = [
-        ("Constrained Minimization", testConstrainedMinimization),
+        ("Constrained Minimization 1", testConstrainedMinimization1),
     ]
 }

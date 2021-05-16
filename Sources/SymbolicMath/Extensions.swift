@@ -153,6 +153,14 @@ public func + (_ lhs: Double, _ rhs: Vector) -> Vector {
     return vec
 }
 
+public func *(_ lhs: String, _ rhs: Int) -> String {
+    var str = ""
+    for _ in 0..<rhs {
+        str += lhs
+    }
+    return str
+}
+
 public func printDebug(_ msg: CustomStringConvertible = "", file: StaticString = #file, line: UInt = #line) {
     print("Got to \(file):\(line) \(msg)")
 }

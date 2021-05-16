@@ -4,4 +4,5 @@
 
 enum MinimizationError: Error {
     case wrongNumberOfVariables(_ msg: String)
+    case misc(_ msg: String)
 }
