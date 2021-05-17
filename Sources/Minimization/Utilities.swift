@@ -103,3 +103,15 @@ public func *(_ lhs: String, _ rhs: Int) -> String {
     }
     return str
 }
+
+public func .==(_ lhs: Vector, _ rhs: Double) -> Bool {
+    return lhs.reduce(true, {(currentStatus, nextElement) in 
+        return currentStatus && nextElement == rhs
+    })
+}
+
+public func .==(_ lhs: Double, _ rhs: Vector) -> Bool {
+    return rhs.reduce(true, {(currentStatus, nextElement) in 
+        return currentStatus && nextElement == lhs
+    })
+}

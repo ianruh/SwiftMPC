@@ -30,7 +30,7 @@ struct InequalitySolver {
         if(self.hasEqaulityConstraints) {
             // The norm of the full residual shown above
             let firstRow = Matrix(self.barrierGradient(objective: objective, at: primal, t: t)) + transpose(objective.equalityConstraintMatrix!)*Matrix(dual)
-            let secondRow = objective.equalityConstraintMatrix!*Matrix(primal) - objective.equalityConstraintVector!
+            let secondRow = objective.equalityConstraintMatrix!*Matrix(primal) - Matrix(objective.equalityConstraintVector!)
             return norm(append(firstRow, rows: secondRow).flat)
         } else {
             // If there are no equality constraints, then the residual is just the gradient,
@@ -155,7 +155,6 @@ struct InequalitySolver {
             // Just set the dual to empty even if they provide one
             currentDual = []
         }
-
 
         #if DEBUG 
             print("Starting point: \(currentPoint)")

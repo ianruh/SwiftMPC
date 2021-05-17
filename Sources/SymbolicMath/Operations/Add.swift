@@ -14,6 +14,11 @@ public class Add: Node, Operation {
     override public var description: String {
         var str = ""
 
+        // Handle if there is only one child
+        if(self.arguments.count == 1) {
+            return self.arguments[0].description
+        }
+
         for i in 0..<self.arguments.count-1 {
             if let op = self.arguments[i] as? Operation {
                 if(op.precedence <= self.precedence && op.type == .infix) {

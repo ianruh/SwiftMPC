@@ -108,23 +108,23 @@ public func **(_ lhs: Number, _ rhs: Node) -> Node {
 ///   - lhs:
 ///   - rhs:
 /// - Returns:
-public func ~(_ lhs: Node, _ rhs: Node) -> Node {
+public func ~(_ lhs: Node, _ rhs: Node) -> Assign {
     return Assign([lhs, rhs])
 }
-public func ~(_ lhs: Number, _ rhs: Node) -> Node {
+public func ~(_ lhs: Number, _ rhs: Node) -> Assign {
     return Assign([lhs, rhs])
 }
-public func ~(_ lhs: Node, _ rhs: Number) -> Node {
+public func ~(_ lhs: Node, _ rhs: Number) -> Assign {
     return Assign([lhs, rhs])
 }
 
-public func ≈(_ lhs: Node, _ rhs: Node) -> Node {
+public func ≈(_ lhs: Node, _ rhs: Node) -> Assign {
     return Assign([lhs, rhs])
 }
-public func ≈(_ lhs: Number, _ rhs: Node) -> Node {
+public func ≈(_ lhs: Number, _ rhs: Node) -> Assign {
     return Assign([lhs, rhs])
 }
-public func ≈(_ lhs: Node, _ rhs: Number) -> Node {
+public func ≈(_ lhs: Node, _ rhs: Number) -> Assign {
     return Assign([lhs, rhs])
 }
 

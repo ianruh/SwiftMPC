@@ -27,13 +27,15 @@ struct SymbolicObjective: Objective, VariableOrdered {
     var symbolicConstraintsGradient: [SymbolicVector]?
     var symbolicConstraintsHessian: [SymbolicMatrix]?
 
-    let equalityConstraintMatrix: Matrix?
-    let equalityConstraintVector: Vector?
+    var equalityConstraintMatrix: Matrix? = nil
+    var equalityConstraintVector: Vector? = nil
 
     let startPrimal: Vector?
     let startDual: Vector?
 
-    public init?(min node: Node, subjectTo optionalConstraints: SymbolicVector? = nil, equalityMatrix: Matrix? = nil, equalityVector: Vector? = nil, startPrimal: Vector? = nil, startDual: Vector? = nil, ordering optionalOrdering: OrderedSet<Variable>? = nil) {
+    // TODO: The equality constraints have some very strong assumptions
+    // The equality constraint matrix and vector overule the symbolic equality constraints
+    public init?(min node: Node, subjectTo optionalConstraints: SymbolicVector? = nil, equalityConstraints optionalEqualityConstraints: [Assign]? = nil, equalityConstraintMatrix optionalEqualityConstraintMatrix: Matrix? = nil, equalityConstraintVector optionalEqualityConstraintVector: Vector? = nil, startPrimal: Vector? = nil, startDual: Vector? = nil, ordering optionalOrdering: OrderedSet<Variable>? = nil) {
         // Get the set of all variables
         if let constraints = optionalConstraints {
             if let ordering  = optionalOrdering {
@@ -57,11 +59,6 @@ struct SymbolicObjective: Objective, VariableOrdered {
             self.symbolicConstraints = constraints
         }
 
-        // Save equality constraints
-        //  TODO: Check dimensions
-        self.equalityConstraintMatrix = equalityMatrix
-        self.equalityConstraintVector =  equalityVector
-
         // Save the start points
         self.startPrimal = startPrimal
         self.startDual = startDual
@@ -72,6 +69,106 @@ struct SymbolicObjective: Objective, VariableOrdered {
             self.objectiveNode.setVariableOrder(ordering.union(self.orderedVariables))
         } else {
             self.objectiveNode.setVariableOrder(self.orderedVariables)
+        }
+
+        if let equalityConstraintMatrix = optionalEqualityConstraintMatrix {
+            guard let equalityConstraintVector = optionalEqualityConstraintVector else {
+                print("literal equality constraint matrix provided, but not literal equality constraint vector")
+                return nil
+            }
+            // Make sure they are the same height
+            guard equalityConstraintMatrix.rows == equalityConstraintVector.count else {
+                print("Literal equality contraint matrix and literal equality constraint vector dimensions do not agree. \(equalityConstraintMatrix.rows) vs \(equalityConstraintVector.count)")
+                return nil
+            }
+            // Make sure the matrix has  the right number of columns
+            guard equalityConstraintMatrix.cols == self.orderedVariables.count else {
+                print("Literal equality constraint matrix does not have the same number of columns as objective has variables. \(equalityConstraintMatrix.cols) vs \(self.orderedVariables.count)")
+                return nil
+            }
+
+            self.equalityConstraintMatrix = equalityConstraintMatrix
+            self.equalityConstraintVector = equalityConstraintVector
+        } else {
+            // Fall back to the symbolic equality constraints
+            if let equalityConstraints = optionalEqualityConstraints {
+                // First, we'll simplify everything. Simpligying assign always results
+                // in another assign node
+                let simplifiedConstraints: [Assign] = equalityConstraints.map({ $0.simplify() as! Assign })
+                var equalityMatrixRows: [Vector] = []
+                var equalityVector: Vector = []
+                for constraint in simplifiedConstraints {
+                    // Extract the elements on each side
+                    var leftElements: [Node] = []
+                    var rightElements: [Node] = []
+                    if let leftAddition = constraint.left as? Add {
+                        leftElements = leftAddition.arguments
+                    } else {
+                        leftElements = [constraint.left]
+                    }
+                    if let rightAddition = constraint.right as? Add {
+                        rightElements = rightAddition.arguments
+                    } else {
+                        rightElements = [constraint.right]
+                    }
+
+                    // Move everything to the left via subtraction
+                    leftElements.append(contentsOf: rightElements.map({ Negative([$0]) }))
+                    rightElements = [] // We moved everything left
+
+                    // Check that the following holds true for every element
+                    // - Contains one or no variables
+                    var variablesDict: Dictionary<Variable, Double> = [:]
+                    var constants: Double = 0.0
+                    for el in leftElements {
+                        // Check the number of variables
+                        if(el.variables.count > 1) {
+                            print("The constraint \(constraint) contains a non-linear term")
+                            return nil
+                        } else if(el.variables.count == 1) {
+                            let variable = el.variables.first!
+                            do {
+                                let multiplier = try el.evaluate(withValues: [variable: 1.0])
+                                if let currentMultiplier = variablesDict[variable] {
+                                    variablesDict[variable] = currentMultiplier + multiplier
+                                } else {
+                                    variablesDict[variable] = multiplier
+                                }
+                            } catch {
+                                print(error)
+                                return nil
+                            }
+                        } else if(el.variables.count == 0) {
+                            do {
+                                let value = try el.evaluate(withValues: [:])
+                                constants += value
+                            } catch {
+                                print(error)
+                                return nil
+                            }
+                        }
+
+                    }
+
+                    // Append the row to the matrix and the value to the vector
+                    equalityVector.append(-1*constants)
+                    var row: Vector = []
+                    for orderedVar in self.orderedVariables {
+                        if let value = variablesDict[orderedVar] {
+                            row.append(value)
+                        } else {
+                            row.append(0)
+                        }
+                    }
+                    equalityMatrixRows.append(row)
+                }
+
+                self.equalityConstraintMatrix = Matrix(equalityMatrixRows)
+                self.equalityConstraintVector = equalityVector
+            } else {
+                self.equalityConstraintMatrix = nil
+                self.equalityConstraintVector = nil
+            }
         }
 
         // Try to construct the symbolic gradient
@@ -182,27 +279,72 @@ struct SymbolicObjective: Objective, VariableOrdered {
                 return originalConstraint <= s
             })
             constraints.append(-10.0 <= s) // To alleive the singularity of the hessian
-            let ordering: OrderedSet<Variable> = OrderedSet<Variable>([s]).union(self.orderedVariables)
+            var newConstraintsSymbolicVector = SymbolicVector(constraints)
+            var originalConstraintsSymbolicVector = symbolicConstraints
+            var ordering: OrderedSet<Variable> = OrderedSet<Variable>([s]).union(self.orderedVariables)
+
+            // We can also end up with a singular hessian when our ambient problem involves a variable (lets say x),
+            // but that variable is not involved in any inequality or equality constraints. This results in a row
+            // and a column of all zeros. The conceptual understanding of this is that the problem is strictly feasible,
+            // including equality constraints, for any value of x. Therefore, we can remove it from our feasibility
+            // search and give it an arbitrary start value (zero).
+            var unusedVariables: Set<Variable> = Set(self.orderedVariables).subtracting(symbolicConstraints.variables)
+            
+            if let equalityMatrix = self.equalityConstraintMatrix {
+                var unusedEqualityVariables: Set<Variable> = []
+                for i in 0..<equalityMatrix.cols {
+                    if(equalityMatrix[col: i] .== 0.0) {
+                        unusedEqualityVariables.update(with: self.orderedVariables[i])
+                    }
+                }
+                unusedVariables = unusedVariables.intersection(unusedEqualityVariables)
+            }
+
+            // If we have unused variables, the we need to:
+            // - Remove the variable from the ordering
+            // - Remove that column from the equality matrix, if there is one
+            // - Set the new ordering for the inequality constraints (both old copy and new)
+            // - After solving, insert one into the resulting primal vector at the right locations
+            // Note that we can no longer assume the number of variables is the same as the ambient problem + 1
+            // Also, the equality constraint vector doesn't need to be changed as it doesn't depend on the number
+            // of variables in the problem.
+
+            // Remove the variables from the odering
+            unusedVariables.forEach({ ordering.remove($0) })
+            var shrunkAmbientOrdering = self.orderedVariables
+            unusedVariables.forEach({ shrunkAmbientOrdering.remove($0) })
+
+            // Set the inequality constraints ordering
+            newConstraintsSymbolicVector.setVariableOrder(ordering)
+            originalConstraintsSymbolicVector.setVariableOrder(shrunkAmbientOrdering)
+
+            // Remove the columns from the equality matrix. Need to introduce intermediary though
+            var shrunkEqualityMatrix: Matrix? = self.equalityConstraintMatrix
+            if let equalityMatrix = self.equalityConstraintMatrix {
+                let indexes: [Int] = unusedVariables.map({ self.orderedVariables.firstIndex(of: $0)! })
+                let keptIndexes = Array(0..<self.orderedVariables.count).filter({ !indexes.contains($0) })
+                shrunkEqualityMatrix = equalityMatrix[(er: Extractor.All, ec: Extractor.Pos(keptIndexes))]
+            }
 
             // We can always find a strictly feasible point for this problem. We choose an arbitrary x
             // and set s to be the maximum value of the  constraints  plus a little bit to make sure
             // s is strictly feasible
-            let xStart = zeros(self.numVariables)
-            let startConstraintValues = try symbolicConstraints.evaluate(xStart)
+            let xStart = zeros(self.numVariables - unusedVariables.count) // Account for any variables that were rmeoved
+            let startConstraintValues = try originalConstraintsSymbolicVector.evaluate(xStart)
             let sStart = startConstraintValues.max()! + 1.0 // 1.0 is arbitrary
             // In the ordering we gave, s is the first variable, so we put it at the beginning of the start vector
             var startVector = [sStart]
             startVector.append(contentsOf: xStart)
 
             // We also need to expand the equality matrix if it is there
-            var expandedEqualityMatrix = self.equalityConstraintMatrix
+            var expandedEqualityMatrix = shrunkEqualityMatrix
             if let equalityMatrix = expandedEqualityMatrix {
                 // We add a column of zeros to the beginning, as s is the first variable in the ordering
                 expandedEqualityMatrix = append(zeros(equalityMatrix.rows, 1), cols: equalityMatrix)
             }
             // The equality vector doesn't need to change at all
 
-            guard let newObjective = SymbolicObjective(min: s, subjectTo: SymbolicVector(constraints), equalityMatrix: expandedEqualityMatrix, equalityVector: self.equalityConstraintVector, startPrimal: startVector, ordering: ordering) else {
+            guard let newObjective = SymbolicObjective(min: s, subjectTo: newConstraintsSymbolicVector, equalityConstraintMatrix: expandedEqualityMatrix, equalityConstraintVector: self.equalityConstraintVector, startPrimal: startVector, ordering: ordering) else {
                 throw MinimizationError.misc("Unable to find feasible point")
             }
 
@@ -215,7 +357,23 @@ struct SymbolicObjective: Objective, VariableOrdered {
                 throw MinimizationError.misc("Problem may be infeasible. Found minimum feasible point of \(pt)")
             }
 
-            let startPrimal = Array(pt[1..<pt.count])
+            var startPrimal: [Double] = Array(pt[1..<pt.count])
+
+            // If we removed any unused variables, add them back in with initial value of one
+            if(unusedVariables.count > 0) {
+                var startPrimalDict: Dictionary<Variable, Double> = [:]
+                for i in 1..<ordering.count {
+                    startPrimalDict[ordering[i]] = pt[i]
+                }
+                startPrimal = []
+                for variable in self.orderedVariables {
+                    if let startValue = startPrimalDict[variable] {
+                        startPrimal.append(startValue)
+                    } else {
+                        startPrimal.append(1.0)
+                    }
+                }
+            }
             
             // Return the point
             if let equalityMatrix = self.equalityConstraintMatrix {

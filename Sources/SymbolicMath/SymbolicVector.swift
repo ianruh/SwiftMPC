@@ -38,7 +38,7 @@ public struct SymbolicVector: Collection, ExpressibleByArrayLiteral, VariableOrd
     public func evaluate(_ x: Vector) throws -> Vector {
         // Ensure the vector is the right length
         guard x.count == self.orderedVariables.count else {
-            throw SymbolicMathError.misc("Vector \(x) is the wrong length (\(x.count) != \(self.variables.count)")
+            throw SymbolicMathError.misc("Vector \(x) is the wrong length (\(x.count) != \(self.orderedVariables.count)")
         }
 
         var values = Dictionary<Node, Double>()

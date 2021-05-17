@@ -98,7 +98,7 @@ public extension Objective {
             //  │  ∇f  │
             // -│ Ax-b │
             //  └      ┘
-            let newtonStepRightSide = -1.*LASwift.append(Matrix(gradient), rows: equalityConstraintMatrix*Matrix(primal) - equalityConstraintVector)
+            let newtonStepRightSide = -1.*LASwift.append(Matrix(gradient), rows: equalityConstraintMatrix*Matrix(primal) - Matrix(equalityConstraintVector))
 
             let stepDirectionWithDual = try LASwift.linsolve(newtonStepMatrix, newtonStepRightSide).flat
 
