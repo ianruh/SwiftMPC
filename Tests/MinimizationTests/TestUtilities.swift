@@ -33,7 +33,7 @@ extension Array where Element == Double {
 
         // Check each element
         for i in 0..<self.count {
-            if(!self[i].isApprox(expectedValue[i])) {
+            if(!self[i].isApprox(expectedValue[i], within: delta)) {
                 return false
             }
         }

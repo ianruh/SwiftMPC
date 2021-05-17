@@ -4,23 +4,24 @@
 
 import Numerics
 import LASwift
+import SymbolicMath
 
 precedencegroup ExponentiationPrecedence {
     associativity: right
     higherThan: MultiplicationPrecedence
 }
 
-infix operator ** : ExponentiationPrecedence
+// infix operator ** : ExponentiationPrecedence
 
-func ** (_ base: Double, _ exp: Double) -> Double {
+public func ** (_ base: Double, _ exp: Double) -> Double {
     return Double.pow(base, exp)
 }
 
-func norm(_ a: Vector) -> Double {
+public func norm(_ a: Vector) -> Double {
     return sumsq(a).squareRoot()
 }
 
-public func printDebug(_ msg: CustomStringConvertible = "", file: StaticString = #file, line: UInt = #line) {
+internal func printDebug(_ msg: CustomStringConvertible = "", file: StaticString = #file, line: UInt = #line) {
     print("\(file):\(line) --- \(msg)")
 }
 

@@ -4,31 +4,32 @@ import SymbolicMath
 import Collections
 import Foundation
 
-struct SymbolicObjective: Objective, VariableOrdered {
+public struct SymbolicObjective: Objective, VariableOrdered {
 
-    let variables: Set<Variable>
-    var numVariables: Int {
+    public let variables: Set<Variable>
+    public var numVariables: Int {
         return self.variables.count
     }
-    var _ordering: OrderedSet<Variable>?
+    public var _ordering: OrderedSet<Variable>?
 
-    var objectiveNode: Node
-    var symbolicGradient: SymbolicVector = []
-    var symbolicHessian: SymbolicMatrix = []
+    public var objectiveNode: Node
+    public var symbolicGradient: SymbolicVector = []
+    public var symbolicHessian: SymbolicMatrix = []
 
-    var numConstraints: Int {
+    public var numConstraints: Int {
         if let constraints = self.symbolicConstraints {
             return constraints.count
         } else {
             return 0
         }
     }
-    var symbolicConstraints: SymbolicVector?
-    var symbolicConstraintsGradient: [SymbolicVector]?
-    var symbolicConstraintsHessian: [SymbolicMatrix]?
 
-    var equalityConstraintMatrix: Matrix? = nil
-    var equalityConstraintVector: Vector? = nil
+    public var symbolicConstraints: SymbolicVector?
+    public var symbolicConstraintsGradient: [SymbolicVector]?
+    public var symbolicConstraintsHessian: [SymbolicMatrix]?
+
+    public var equalityConstraintMatrix: Matrix? = nil
+    public var equalityConstraintVector: Vector? = nil
 
     let startPrimal: Vector?
     let startDual: Vector?
@@ -56,7 +57,12 @@ struct SymbolicObjective: Objective, VariableOrdered {
 
         // Save the constraints if provided
         if let constraints = optionalConstraints {
-            self.symbolicConstraints = constraints
+            // Handle an edge case where the symbolic constraints array is empty
+            if(constraints.count > 0) {
+                self.symbolicConstraints = constraints
+            } else {
+                self.symbolicConstraints = nil
+            }
         }
 
         // Save the start points
@@ -91,7 +97,14 @@ struct SymbolicObjective: Objective, VariableOrdered {
             self.equalityConstraintVector = equalityConstraintVector
         } else {
             // Fall back to the symbolic equality constraints
-            if let equalityConstraints = optionalEqualityConstraints {
+            EQUALITY_CONSTRAINTS_IF: if let equalityConstraints = optionalEqualityConstraints {
+                // Handle a bit of an edge case where the passed assign constraints are empty
+                guard equalityConstraints.count > 0 else {
+                    self.equalityConstraintMatrix = nil
+                    self.equalityConstraintVector = nil
+                    break EQUALITY_CONSTRAINTS_IF
+                }
+
                 // First, we'll simplify everything. Simpligying assign always results
                 // in another assign node
                 let simplifiedConstraints: [Assign] = equalityConstraints.map({ $0.simplify() as! Assign })
@@ -225,7 +238,7 @@ struct SymbolicObjective: Objective, VariableOrdered {
         }
     }
 
-    internal mutating func setVariableOrder<C>(_ newOrdering: C) where C: Collection, C.Element == Variable {
+    public mutating func setVariableOrder<C>(_ newOrdering: C) where C: Collection, C.Element == Variable {
         self._ordering = OrderedSet<Variable>(newOrdering)
 
         // Propogate it to the children
@@ -252,7 +265,7 @@ struct SymbolicObjective: Objective, VariableOrdered {
     ///
     /// If s is negative then we are strictly feasible, if positive then not feasible
     /// If 0, then it's tricky, but we'll call it infeasible to be safe
-    func startPoint() throws -> (primal: Vector, dual: Vector) {
+    public func startPoint() throws -> (primal: Vector, dual: Vector) {
         // We only need to find a strictly feasible point if we actually have inequality constraints
         if let symbolicConstraints  = self.symbolicConstraints {
             //  First check if the provided start points are strictly feasible
@@ -264,9 +277,9 @@ struct SymbolicObjective: Objective, VariableOrdered {
                     } else {
                         // We need to know haw large the dual vector should be
                         if let equalityMatrix = self.equalityConstraintMatrix {
-                            return (primal: startPrimal, dual: zeros(equalityMatrix.rows))
+                            return (primal: startPrimal, dual: ones(equalityMatrix.rows))
                         } else {
-                            return  (primal: startPrimal, dual: zeros(0))
+                            return  (primal: startPrimal, dual: ones(0))
                         }
                     }
                 }
@@ -329,7 +342,7 @@ struct SymbolicObjective: Objective, VariableOrdered {
             // We can always find a strictly feasible point for this problem. We choose an arbitrary x
             // and set s to be the maximum value of the  constraints  plus a little bit to make sure
             // s is strictly feasible
-            let xStart = zeros(self.numVariables - unusedVariables.count) // Account for any variables that were rmeoved
+            let xStart = ones(self.numVariables - unusedVariables.count) // Account for any variables that were rmeoved
             let startConstraintValues = try originalConstraintsSymbolicVector.evaluate(xStart)
             let sStart = startConstraintValues.max()! + 1.0 // 1.0 is arbitrary
             // In the ordering we gave, s is the first variable, so we put it at the beginning of the start vector
@@ -377,16 +390,20 @@ struct SymbolicObjective: Objective, VariableOrdered {
             
             // Return the point
             if let equalityMatrix = self.equalityConstraintMatrix {
-                return (primal: startPrimal, dual: zeros(equalityMatrix.rows))
+                return (primal: startPrimal, dual: ones(equalityMatrix.rows))
             } else {
-                return  (primal: startPrimal, dual: zeros(0))
+                return  (primal: startPrimal, dual: ones(0))
             }
         } else {
             // We can return any point here, so we just default to 0s os the  right length
+            var dual = ones(0)
             if let equalityMatrix = self.equalityConstraintMatrix {
-                return (primal: zeros(self.numVariables), dual: zeros(equalityMatrix.rows))
+                dual = ones(equalityMatrix.rows)
+            }
+            if let startPrimal = self.startPrimal {
+                return (primal: startPrimal, dual: dual)
             } else {
-                return  (primal: zeros(self.numVariables), dual: zeros(0))
+                return (primal: ones(self.numVariables), dual: dual)
             }
         }
     }
@@ -395,7 +412,8 @@ struct SymbolicObjective: Objective, VariableOrdered {
     ///
     /// - Parameter x: The point to evaluate the objective at
     /// - Returns: The value of teh objective
-    func value(_ x: Vector) -> Double {
+    @inlinable
+    public func value(_ x: Vector) -> Double {
         do {
             return try self.objectiveNode.evaluate(x)
         } catch {
@@ -409,7 +427,8 @@ struct SymbolicObjective: Objective, VariableOrdered {
     ///
     /// - Parameter x: The point to evaluate the gradient at
     /// - Returns: The value of teh gradient
-    func gradient(_ x: Vector) -> Vector {
+    @inlinable
+    public func gradient(_ x: Vector) -> Vector {
         do {
             return try self.symbolicGradient.evaluate(x)
         } catch {
@@ -423,7 +442,8 @@ struct SymbolicObjective: Objective, VariableOrdered {
     ///
     /// - Parameter x: The point to evaluate the Hessian at.
     /// - Returns: The value of the Hessian.
-    func hessian(_ x: Vector) -> Matrix {
+    @inlinable
+    public func hessian(_ x: Vector) -> Matrix {
         do {
             return try self.symbolicHessian.evaluate(x)
         } catch {
@@ -433,7 +453,8 @@ struct SymbolicObjective: Objective, VariableOrdered {
         }
     }
 
-    func inequalityConstraintsValue(_ x: Vector) -> [Double] {
+    @inlinable
+    public func inequalityConstraintsValue(_ x: Vector) -> [Double] {
         // Check that we actually have constraints
         guard let constraints = self.symbolicConstraints else {
             return [Double]()
@@ -448,7 +469,8 @@ struct SymbolicObjective: Objective, VariableOrdered {
         }
     }
 
-    func inequalityConstraintsGradient(_ x: Vector) -> [Vector] {
+    @inlinable
+    public func inequalityConstraintsGradient(_ x: Vector) -> [Vector] {
         // Check that we actually have constraints
         guard let constraintsGradient = self.symbolicConstraintsGradient else {
             return [Vector]()
@@ -463,7 +485,8 @@ struct SymbolicObjective: Objective, VariableOrdered {
         }
     }
 
-    func inequalityConstraintsHessian(_ x: Vector) -> [Matrix] {
+    @inlinable
+    public func inequalityConstraintsHessian(_ x: Vector) -> [Matrix] {
         // Check that we actually have constraints
         guard let constraintsHessian = self.symbolicConstraintsHessian else {
             return [Matrix]()

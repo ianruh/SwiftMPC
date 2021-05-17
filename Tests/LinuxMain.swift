@@ -1,7 +1,10 @@
 import XCTest
 
-import Unconstrained_MinimizationTests
+import MinimizationTests
+import MinimizationRegressionTests
 
 var tests = [XCTestCaseEntry]()
-tests += Unconstrained_MinimizationTests.allTests()
+tests += MinimizationTests.allTests()
+tests += RegressionTests.allTests()
+tests += BenchmarkTests.allTests()
 XCTMain(tests)

@@ -79,7 +79,7 @@ public class Power: Node, Operation {
         let leftValue: Double = try self.left.evaluate(withValues: values)
         let rightValue: Double = try self.right.evaluate(withValues: values)
 
-        if(leftValue > 0) {
+        if(leftValue >= 0) {
             return Double.pow(leftValue, rightValue)
         } else {
             if let rightValueInt = Int(exactly: rightValue) {

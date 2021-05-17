@@ -135,9 +135,15 @@ public func <=(_ lhs: Node, _ rhs: Node) -> Node {
 public func <=(_ lhs: Number, _ rhs: Node) -> Node {
     return Subtract(lhs, rhs)
 }
+public func <=(_ lhs: Node, _ rhs: Number) -> Node {
+    return Subtract(lhs, rhs)
+}
 public func >=(_ lhs: Node, _ rhs: Node) -> Node {
     return Subtract(rhs, lhs)
 }
 public func >=(_ lhs: Number, _ rhs: Node) -> Node {
+    return Subtract(rhs, lhs)
+}
+public func >=(_ lhs: Node, _ rhs: Number) -> Node {
     return Subtract(rhs, lhs)
 }
