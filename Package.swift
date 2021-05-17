@@ -9,6 +9,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-numerics.git", from: "0.0.8"),
         .package(url: "https://github.com/ianruh/LASwift.git", .branch("linux")),
         .package(url: "https://github.com/apple/swift-collections.git", from: "0.0.1"),
+        .package(url: "https://github.com/pvieito/PythonKit.git", .branch("master")),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -28,6 +29,16 @@ let package = Package(
                     "LASwift",
                     .product(name: "Collections", package: "swift-collections")
                 ]),
+        .target(
+            name: "StraightLineMPC",
+            dependencies: [
+                .product(name: "RealModule", package: "swift-numerics"),
+                "LASwift",
+                "SymbolicMath",
+                .product(name: "Collections", package: "swift-collections"),
+                "Minimization",
+                "PythonKit"
+            ]),
         .testTarget(
                 name: "SymbolicMathTests",
                 dependencies: [

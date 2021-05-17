@@ -21,6 +21,7 @@ public func norm(_ a: Vector) -> Double {
     return sumsq(a).squareRoot()
 }
 
+@usableFromInline
 internal func printDebug(_ msg: CustomStringConvertible = "", file: StaticString = #file, line: UInt = #line) {
     print("\(file):\(line) --- \(msg)")
 }

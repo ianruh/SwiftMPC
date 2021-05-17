@@ -38,19 +38,17 @@ public struct SymbolicObjective: Objective, VariableOrdered {
     // The equality constraint matrix and vector overule the symbolic equality constraints
     public init?(min node: Node, subjectTo optionalConstraints: SymbolicVector? = nil, equalityConstraints optionalEqualityConstraints: [Assign]? = nil, equalityConstraintMatrix optionalEqualityConstraintMatrix: Matrix? = nil, equalityConstraintVector optionalEqualityConstraintVector: Vector? = nil, startPrimal: Vector? = nil, startDual: Vector? = nil, ordering optionalOrdering: OrderedSet<Variable>? = nil) {
         // Get the set of all variables
+        var allVariables = node.variables
         if let constraints = optionalConstraints {
-            if let ordering  = optionalOrdering {
-                self.variables = Set(ordering.union(node.variables).union(constraints.variables))
-            } else {
-                self.variables = node.variables.union(constraints.variables)
-            }
-        } else {
-            if let ordering  = optionalOrdering {
-                self.variables = Set(ordering.union(node.variables))
-            } else {
-                self.variables = node.variables
-            }
+            allVariables = allVariables.union(constraints.variables)
         }
+        if let ordering  = optionalOrdering {
+            allVariables = allVariables.union(Set(ordering))
+        }
+        if let equalityConstraints = optionalEqualityConstraints {
+            allVariables = allVariables.union(SymbolicVector(equalityConstraints).variables)
+        }
+        self.variables = allVariables
 
         // Save the objective node
         self.objectiveNode = node
@@ -361,6 +359,10 @@ public struct SymbolicObjective: Objective, VariableOrdered {
                 throw MinimizationError.misc("Unable to find feasible point")
             }
 
+            #if DEBUG
+                printDebug("=========== Starting Feasible Point Search ===========")
+            #endif
+
             var solver = InequalitySolver()
             solver.hyperParameters.valueThreshold = 0.0
             let (min, pt) = try solver.infeasibleInequalityMinimize(objective: newObjective)
@@ -387,6 +389,10 @@ public struct SymbolicObjective: Objective, VariableOrdered {
                     }
                 }
             }
+            #if DEBUG
+                printDebug("Found feasible point: \(startPrimal)")
+                printDebug("=========== Finished Feasible Point Search ===========")
+            #endif
             
             // Return the point
             if let equalityMatrix = self.equalityConstraintMatrix {

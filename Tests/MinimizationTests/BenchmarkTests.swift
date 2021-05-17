@@ -103,9 +103,45 @@ final class BenchmarkTests: XCTestCase {
         }
     }
 
+    /// Benchmark reference: http://benchmarkfcns.xyz/benchmarkfcns/mccormickfcn.html
+    ///
+    /// Not convex despite what the reference claims. Has local minimums.
+    ///
+    /// $$f(x, y)=sin(x + y) + (x - y) ^2 - 1.5x + 2.5 y + 1$$
+    ///
+    func testMcCormick() {
+        do {
+            let x = Variable("x")
+            let y = Variable("y")
+
+            let obj: Node = Sin(x + y) + (x - y)**2 - 1.5*x + 2.5*y + 1
+            let constraints: SymbolicVector = []
+            let equalityConstraints: [Assign] = []
+            let startPoint: Vector = [-1.0, -1.0]
+
+            let expectedLocation: Vector = [-0.547,-1.547]
+
+            guard let objective = SymbolicObjective(min: obj, subjectTo: constraints, equalityConstraints: equalityConstraints, startPrimal: startPoint) else {
+                print("Unable to construct symbolic objective")
+                XCTFail("Unable to construct symbolic objective for \(obj)")
+                return
+            }
+
+            var solver = InequalitySolver()
+            solver.hyperParameters.residualEpsilon = 1e-8
+            let (_, pt) = try solver.infeasibleInequalityMinimize(objective: objective)
+
+            XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
+        } catch {
+            print(error)
+            XCTFail("Unexpected error thrown")
+        }
+    }
+
     static var allTests = [
         ("Symbolic Benchmark Booth", testBooth),
         ("Symbolic Benchmark Brent", testBrent),
         ("Symbolic Benchmark Matyas", testMatyas),
+        ("Symbolic Benchmark McCormick", testMcCormick),
     ]
 }

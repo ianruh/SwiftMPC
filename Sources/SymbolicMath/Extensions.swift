@@ -100,17 +100,21 @@ extension Set {
     }
 }
 
-extension Double {
+public extension Double {
     /// Get a six decimal accuracy number
-    public var sixAc: String {
+    var sixAc: String {
         return String(format: "%0.6f", self)
     }
 
     /// Get whole value of double
-    public var whole: Int {
+    var whole: Int {
         var d = self
         d.round(.towardZero)
         return Int(d)
+    }
+
+    var symbol: Number {
+        return Number(self)
     }
 }
 
