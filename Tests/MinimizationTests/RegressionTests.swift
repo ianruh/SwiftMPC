@@ -163,11 +163,67 @@ final class RegressionTests: XCTestCase {
         }
     }
 
+    func testRegression6() {
+        do {
+            let numSteps: Int = 3
+            let timeStep: Double = 0.1
+            let maxAcceleration: Double = 1.0
+            var solver = InequalitySolver()
+
+            let x = Variable.vector("x", count: numSteps)
+            let v = Variable.vector("v", count: numSteps)
+            
+            var ordering: OrderedSet<Variable> = []
+            zip(x, v).forEach({(pos, vel) in 
+                ordering.append(pos)
+                ordering.append(vel)
+            })
+
+            let startingValues = ones(numSteps * 2)
+
+            // Impose the max acceleration constraints
+            var accelerationConstraints: [Node] = []
+            for i in 0..<numSteps-1 {
+                accelerationConstraints.append( v[i+1] - v[i] <= (maxAcceleration*timeStep).symbol )
+            }
+
+            // Impose the dynamics constraints
+            var dynamicsConstraints: [Assign] = []
+            for i in 0..<numSteps-1 {
+                dynamicsConstraints.append( x[i+1] - x[i] ≈ v[i]*timeStep.symbol )
+            }
+
+            // Impose initial conditions
+            dynamicsConstraints.append( x[0] ≈ 0.0 )
+            dynamicsConstraints.append( v[0] ≈ 0.0 )
+
+            let obj = -1*x.last! - v.last!
+            let inequalityConstraints: SymbolicVector = SymbolicVector(accelerationConstraints)
+            let equalityConstraints: [Assign] = dynamicsConstraints
+
+            let expectedSolution: Vector = [0.0, 0.0, 0.0, 0.1, 0.01, 0.2]
+
+            guard let objective = SymbolicObjective(min: obj, subjectTo: inequalityConstraints, equalityConstraints: equalityConstraints, startPrimal: startingValues, ordering: ordering) else {
+                print("Unable to construct symbolic objective")
+                XCTFail("Unable to construct symbolic objective for \(obj)")
+                return
+            }
+
+            let (_, pt) = try solver.infeasibleInequalityMinimize(objective: objective)
+
+            XCTAssertTrue(pt.isApprox(expectedSolution, within: 0.1), "Calculate min solution \(pt) is not equal to the expected one \(expectedSolution)")
+        } catch {
+            print(error)
+            XCTFail("Unnexpected excpetion thrown")
+        }
+    }
+
     static var allTests = [
         ("Regression 1", testRegression1),
         ("Regression 2", testRegression2),
         ("Regression 3", testRegression3),
         ("Regression 4", testRegression4),
         ("Regression 5", testRegression5),
+        ("Regression 6", testRegression6),
     ]
 }

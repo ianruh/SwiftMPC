@@ -7,9 +7,9 @@ import SymbolicMath
 struct StraightLineMPC {
 
     var numSteps: Int = 20
-    var timeStep: Double = 0.05
+    var timeStep: Double = 0.1
 
-    var maxAcceleration: Double = 0.1
+    var maxAcceleration: Double = 1.0
 
     var solver = InequalitySolver()
 
@@ -37,17 +37,10 @@ struct StraightLineMPC {
             dynamicsConstraints.append( x[i+1] - x[i] ≈ v[i]*self.timeStep.symbol )
         }
 
-        // Impose Misc constraints
-        // for i in 0..<self.numSteps {
-        //     accelerationConstraints.append( x[i] >= 0 )
-        //     accelerationConstraints.append( v[i] >= 0 )
-        // }
-
         // Impose initial conditions
         dynamicsConstraints.append( x[0] ≈ 0.0 )
         dynamicsConstraints.append( v[0] ≈ 0.0 )
 
-        // let obj = 1/x.last! + 1/v.last!
         let obj = -1*x.last! - v.last!
         let inequalityConstraints: SymbolicVector = SymbolicVector(accelerationConstraints)
         let equalityConstraints: [Assign] = dynamicsConstraints
@@ -56,8 +49,6 @@ struct StraightLineMPC {
             print("Unable to construct symbolic objective")
             exit(0)
         }
-
-        print("Ordering: \(objective.orderedVariables)")
 
         return try self.solver.infeasibleInequalityMinimize(objective: objective)
 

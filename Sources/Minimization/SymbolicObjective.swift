@@ -70,9 +70,11 @@ public struct SymbolicObjective: Objective, VariableOrdered {
         // Set the ordering of the objective if provided
         // Needs to be done before the gradient and Hessian are constructed
         if let ordering = optionalOrdering {
-            self.objectiveNode.setVariableOrder(ordering.union(self.orderedVariables))
+            // self.objectiveNode.setVariableOrder(ordering.union(self.orderedVariables))
+            self.setVariableOrder(ordering.union(self.orderedVariables))
         } else {
-            self.objectiveNode.setVariableOrder(self.orderedVariables)
+            // self.objectiveNode.setVariableOrder(self.orderedVariables)
+            self.setVariableOrder(self.orderedVariables)
         }
 
         if let equalityConstraintMatrix = optionalEqualityConstraintMatrix {

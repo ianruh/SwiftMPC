@@ -7,9 +7,9 @@ import LASwift
 // let np = Python.import("numpy")
 
 var mpc = StraightLineMPC()
-mpc.numSteps = 2
-mpc.solver.hyperParameters.newtonStepsStageMaximum = 100
-mpc.solver.hyperParameters.homotopyStagesMaximum = 10
+mpc.numSteps = 20
+mpc.solver.hyperParameters.newtonStepsStageMaximum = 40
+mpc.solver.hyperParameters.homotopyStagesMaximum = 5
 mpc.solver.hyperParameters.homotopyParameterStart = 1.0
 let (min, pt): (Double, Vector) = try mpc.run()
 
