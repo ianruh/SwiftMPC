@@ -179,8 +179,6 @@ final class RegressionTests: XCTestCase {
                 ordering.append(vel)
             })
 
-            let startingValues = ones(numSteps * 2)
-
             // Impose the max acceleration constraints
             var accelerationConstraints: [Node] = []
             for i in 0..<numSteps-1 {
@@ -203,7 +201,7 @@ final class RegressionTests: XCTestCase {
 
             let expectedSolution: Vector = [0.0, 0.0, 0.0, 0.1, 0.01, 0.2]
 
-            guard let objective = SymbolicObjective(min: obj, subjectTo: inequalityConstraints, equalityConstraints: equalityConstraints, startPrimal: startingValues, ordering: ordering) else {
+            guard let objective = SymbolicObjective(min: obj, subjectTo: inequalityConstraints, equalityConstraints: equalityConstraints, ordering: ordering) else {
                 print("Unable to construct symbolic objective")
                 XCTFail("Unable to construct symbolic objective for \(obj)")
                 return
