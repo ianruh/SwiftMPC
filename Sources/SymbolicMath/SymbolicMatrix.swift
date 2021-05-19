@@ -23,7 +23,7 @@ public struct SymbolicMatrix: Collection, ExpressibleByArrayLiteral, VariableOrd
         }
     }
 
-    private var vectors: [SymbolicVector] = []
+    internal var vectors: [SymbolicVector] = []
     public var _ordering: OrderedSet<Variable>? = nil
     public var variables: Set<Variable> {
         return self.reduce(Set<Variable>(),{(currentSet, nextVector) in

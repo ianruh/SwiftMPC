@@ -100,4 +100,8 @@ public class Factorial: Node, Operation {
         hasher.combine("factorial")
         hasher.combine(self.argument)
     }
+
+    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        throw SymbolicMathError.noCodeRepresentation("Factorial node")
+    }
 }

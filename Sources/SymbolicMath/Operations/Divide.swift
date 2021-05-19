@@ -195,4 +195,8 @@ public class Divide: Node, Operation {
         hasher.combine(self.left)
         hasher.combine(self.right)
     }
+
+    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        return "(\(try self.left.swiftCode(using: representations)))/(\(try self.right.swiftCode(using: representations)))"
+    }
 }

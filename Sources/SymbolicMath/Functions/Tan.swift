@@ -79,4 +79,8 @@ public class Tan: Node, Function {
         hasher.combine("tan")
         hasher.combine(self.argument)
     }
+
+    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        return "Double.tan(\(try self.argument.swiftCode(using: representations)))"
+    }
 }

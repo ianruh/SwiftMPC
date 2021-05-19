@@ -274,4 +274,15 @@ public class Multiply: Node, Operation {
         hasher.combine("multiply")
         hasher.combine(self.arguments)
     }
+
+    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        var str = ""
+
+        for i in 0..<self.arguments.count-1 {
+            str += "(\(try self.arguments[i].swiftCode(using: representations)))*"
+        }
+        str += "(\(try self.arguments.last!.swiftCode(using: representations)))"
+
+        return str
+    }
 }

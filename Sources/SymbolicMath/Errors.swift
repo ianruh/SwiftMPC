@@ -17,4 +17,5 @@ public enum SymbolicMathError: Error {
     case multipleIndependentVariables(_ msg: String)
     case misc(_ message: String)
     case undefinedValue(_ msg: String)
+    case noCodeRepresentation(_ msg: String)
 }

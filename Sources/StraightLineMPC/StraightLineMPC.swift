@@ -13,7 +13,23 @@ struct StraightLineMPC {
 
     var solver = InequalitySolver()
 
-    mutating func run() throws -> (minimum: Double, point: Vector) {
+    mutating func runSymbolic() throws -> (minimum: Double, point: Vector) {
+        
+        let objective = try self.symbolicObjective()
+
+        return try self.solver.infeasibleInequalityMinimize(objective: objective)
+
+    }
+
+    mutating func runNumeric() throws -> (minimum: Double, point: Vector) {
+        
+        let objective = StraightLineNumericObjective()
+
+        return try self.solver.infeasibleInequalityMinimize(objective: objective)
+
+    }
+
+    public func symbolicObjective() throws -> SymbolicObjective {
         let x = Variable.vector("x", count: self.numSteps)
         let v = Variable.vector("v", count: self.numSteps)
         
@@ -46,12 +62,10 @@ struct StraightLineMPC {
         let equalityConstraints: [Assign] = dynamicsConstraints
 
         guard let objective = SymbolicObjective(min: obj, subjectTo: inequalityConstraints, equalityConstraints: equalityConstraints, startPrimal: startingValues, ordering: ordering) else {
-            print("Unable to construct symbolic objective")
-            exit(0)
+            throw MPCError.misc("Unable to construct symbolic objective")
         }
 
-        return try self.solver.infeasibleInequalityMinimize(objective: objective)
-
+        return objective
     }
 
 }

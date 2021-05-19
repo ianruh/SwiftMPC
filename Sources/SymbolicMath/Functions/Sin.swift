@@ -79,4 +79,8 @@ public class Sin: Node, Function {
         hasher.combine("sin")
         hasher.combine(self.argument)
     }
+
+    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        return "Double.sin(\(try self.argument.swiftCode(using: representations)))"
+    }
 }

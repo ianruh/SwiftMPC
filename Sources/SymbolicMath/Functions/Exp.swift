@@ -79,4 +79,8 @@ public class Exp: Node, Function {
         hasher.combine("exp")
         hasher.combine(self.argument)
     }
+
+    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        return "Double.exp(\(try self.argument.swiftCode(using: representations)))"
+    }
 }

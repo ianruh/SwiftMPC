@@ -79,4 +79,8 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
         hasher.combine("number")
         hasher.combine(self.value)
     }
+
+    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        return "\(self.value)"
+    }
 }

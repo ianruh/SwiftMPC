@@ -79,4 +79,8 @@ public class Sqrt: Node, Function {
         hasher.combine("sqrt")
         hasher.combine(self.argument)
     }
+
+    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        return "Double.sqrt(\(try self.argument.swiftCode(using: representations)))"
+    }
 }

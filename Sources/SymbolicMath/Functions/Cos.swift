@@ -79,4 +79,8 @@ public class Cos: Node, Function {
         hasher.combine("cos")
         hasher.combine(self.argument)
     }
+
+    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        return "Double.cos(\(try self.argument.swiftCode(using: representations)))"
+    }
 }

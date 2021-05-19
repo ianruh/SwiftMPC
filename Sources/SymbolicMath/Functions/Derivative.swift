@@ -127,4 +127,8 @@ public class Derivative: Node, Function {
         hasher.combine(self.diffOf)
         hasher.combine(self.withRespectTo)
     }
+
+    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        throw SymbolicMathError.noCodeRepresentation("Derivative node")
+    }
 }

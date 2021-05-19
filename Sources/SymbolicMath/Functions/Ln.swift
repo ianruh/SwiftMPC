@@ -86,4 +86,8 @@ public class Ln: Node, Function {
         hasher.combine("naturallog")
         hasher.combine(self.argument)
     }
+
+    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        return "Double.log(\(try self.argument.swiftCode(using: representations)))"
+    }
 }

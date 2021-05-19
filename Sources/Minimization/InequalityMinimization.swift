@@ -161,7 +161,8 @@ public struct InequalitySolver {
         }
 
         #if DEBUG
-            printDebug("Starting point: \(currentPoint)")
+            printDebug("Starting Primal: \(currentPoint)")
+            printDebug("Starting Dual: \(currentDual)")
         #endif
 
         // Hyper parameters

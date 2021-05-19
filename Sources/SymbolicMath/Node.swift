@@ -142,6 +142,13 @@ public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdere
         preconditionFailure("This method must be overriden")
     }
 
+    /// A Swift representation of the node value. This should be overridden.
+    /// It is really f******* verbose (lots of parenthesis)
+    /// Assumes access to swift-numerics real module
+    public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        preconditionFailure("This method must be overriden")
+    }
+
     //--------------Comparable Conformance-----------------
 
     public static func ==(_ lhs: Node, _ rhs: Node) -> Bool {

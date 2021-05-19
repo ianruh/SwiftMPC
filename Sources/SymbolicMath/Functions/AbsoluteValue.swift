@@ -80,4 +80,8 @@ public class AbsoluteValue: Node, Function {
         hasher.combine("abs")
         hasher.combine(self.argument)
     }
+
+    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        return "abs(\(try self.argument.swiftCode(using: representations)))"
+    }
 }

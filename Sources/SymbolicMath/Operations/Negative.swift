@@ -84,4 +84,8 @@ public class Negative: Node, Operation {
         hasher.combine("negative")
         hasher.combine(self.argument)
     }
+
+    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        return "-1*(\(try self.argument.swiftCode(using: representations)))"
+    }
 }

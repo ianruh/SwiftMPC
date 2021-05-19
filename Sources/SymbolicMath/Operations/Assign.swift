@@ -91,4 +91,8 @@ public class Assign: Node, Operation {
         hasher.combine(self.left)
         hasher.combine(self.right)
     }
+
+    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        throw SymbolicMathError.noCodeRepresentation("Assign node")
+    }
 }

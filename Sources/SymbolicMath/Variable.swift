@@ -93,6 +93,14 @@ public class Variable: Node, ExpressibleByStringLiteral {
         hasher.combine("variable")
         hasher.combine(self.string)
     }
+
+    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+        if let rep = representations[self] {
+            return rep
+        } else {
+            throw SymbolicMathError.noCodeRepresentation("\(self)")
+        }
+    }
 }
 
 
