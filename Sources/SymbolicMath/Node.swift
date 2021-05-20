@@ -32,6 +32,11 @@ public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdere
         preconditionFailure("variables should be overridden")
     }
 
+    /// The set of variables in the node. This should be overridden.
+    public var parameters: Set<Parameter> {
+        preconditionFailure("parameters should be overridden")
+    }
+
     /// The set of derivatives in the node. This should be overridden.
     public var derivatives: Set<Derivative> {
         preconditionFailure("derivatives should be overridden")
@@ -114,10 +119,6 @@ public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdere
     ///   - replacement: The replacement node.
     /// - Returns: Returns true if the node was replaced, and false otherwise.
     /// - Throws: If the node cannot be replaced.
-    public func replace(id: Id, with replacement: Node) throws -> Bool {
-        preconditionFailure("This method must be overridden")
-    }
-
     /// Replace a node with another node.
     @discardableResult public func replace(_ targetNode: Node, with replacement: Node) -> Node {
         preconditionFailure("This method must be overridden.")
@@ -145,7 +146,7 @@ public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdere
     /// A Swift representation of the node value. This should be overridden.
     /// It is really f******* verbose (lots of parenthesis)
     /// Assumes access to swift-numerics real module
-    public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+    public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
         preconditionFailure("This method must be overriden")
     }
 

@@ -1,6 +1,5 @@
 
-public class Variable: Node, ExpressibleByStringLiteral {
-    public typealias StringLiteralType = String
+public class Parameter: Node {
 
     private static var currentNameIndex: Int = 0
 
@@ -9,22 +8,22 @@ public class Variable: Node, ExpressibleByStringLiteral {
         return "$\(self.currentNameIndex)"
     }
 
-    public var string: String
+    public var name: String
     
     override public var description: String {
-        return self.string
+        return self.name
     }
     
     override public var latex: String {
-        return "\(self.string)"
+        return "\(self.name)"
     }
     
     override public var variables: Set<Variable> {
-        return [self]
+        return []
     }
 
     override public var parameters: Set<Parameter> {
-        return []
+        return [self]
     }
 
     override public var derivatives: Set<Derivative> {
@@ -32,15 +31,11 @@ public class Variable: Node, ExpressibleByStringLiteral {
     }
 
     override public var typeIdentifier: String {
-        return self.string
+        return self.name
     }
 
-    public static func ==(_ lhs: Variable, _ rhs: Variable) -> Bool {
-        return lhs.string == rhs.string
-    }
-    
-    public required init(stringLiteral str: String) {
-        self.string = str
+    public static func ==(_ lhs: Parameter, _ rhs: Parameter) -> Bool {
+        return lhs.name == rhs.name
     }
 
     /// Initialize a variable using a string. The initial value is only used if the variable is the dependent variable in an ODE.
@@ -48,12 +43,12 @@ public class Variable: Node, ExpressibleByStringLiteral {
     /// - Parameters:
     ///   - str: String representation of the variable.
     ///   - initialValue: Initial value of the variable in an ODE. Won't be used and doesn't need to be specified if it is not the independent variable in an ODE.
-    public convenience init(_ str: String) {
-        self.init(stringLiteral: str)
+    public init(_ str: String) {
+        self.name = str
     }
 
     override public convenience init() {
-        self.init(stringLiteral: Self.nextName)
+        self.init(Self.nextName)
     }
     
     @inlinable
@@ -61,20 +56,20 @@ public class Variable: Node, ExpressibleByStringLiteral {
         if let value  = values[self] {
             return value
         } else {
-            throw SymbolicMathError.noValue(forVariable: self.description)
+            throw SymbolicMathError.misc("No value provided for parameter \(self.name)")
         }
     }
 
     override internal func equals(_ otherNode: Node) -> Bool {
-        if let variable = otherNode as? Variable {
-            return self.string == variable.string
+        if let parameter = otherNode as? Parameter {
+            return self.name == parameter.name
         } else {
             return false
         }
     }
 
     override public func contains<T: Node>(nodeType: T.Type) -> [Id] {
-        if(nodeType == Variable.self) {
+        if(nodeType == Parameter.self) {
             return [self.id]
         } else {
             return []
@@ -94,36 +89,36 @@ public class Variable: Node, ExpressibleByStringLiteral {
     }
 
     override public func hash(into hasher: inout Hasher) {
-        hasher.combine("variable")
-        hasher.combine(self.string)
+        hasher.combine("parameter")
+        hasher.combine(self.name)
     }
 
     override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
         if let rep = representations[self] {
             return rep
         } else {
-            throw SymbolicMathError.noCodeRepresentation("\(self)")
+            throw SymbolicMathError.noCodeRepresentation("for parameter \(self)")
         }
     }
 }
 
 
-public extension Variable {
+public extension Parameter {
 
-    static func vector(_ name: String, count: Int) -> [Variable] {
-        var arr: [Variable] = []
+    static func vector(_ name: String, count: Int) -> [Parameter] {
+        var arr: [Parameter] = []
         for i in 0..<count {
-            arr.append(Variable("\(name)[\(i)]"))
+            arr.append(Parameter("\(name)[\(i)]"))
         }
         return arr
     }
 
-    static func matrix(_ name: String, rows: Int, cols: Int) -> [[Variable]] {
-        var arrs: [[Variable]] = []
+    static func matrix(_ name: String, rows: Int, cols: Int) -> [[Parameter]] {
+        var arrs: [[Parameter]] = []
         for i in 0..<rows {
-            var arr: [Variable] = []
+            var arr: [Parameter] = []
             for j in 0..<cols {
-                arr.append(Variable("\(name)[\(i),\(j)]"))
+                arr.append(Parameter("\(name)[\(i),\(j)]"))
             }
             arrs.append(arr)
         }
@@ -132,8 +127,8 @@ public extension Variable {
 
 }
 
-public extension Array where Array.Element == Array<Variable> {
-    subscript(_ row: Int, _ col: Int) -> Variable {
+public extension Array where Array.Element == Array<Parameter> {
+    subscript(_ row: Int, _ col: Int) -> Parameter {
         return self[row][col]
     }
 }

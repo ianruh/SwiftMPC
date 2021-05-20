@@ -38,6 +38,10 @@ public class Factorial: Node, Operation {
         return self.argument.variables
     }
 
+    override public var parameters: Set<Parameter> {
+        return self.argument.parameters
+    }
+
     override public var derivatives: Set<Derivative> {
         return self.argument.derivatives
     }
@@ -101,7 +105,7 @@ public class Factorial: Node, Operation {
         hasher.combine(self.argument)
     }
 
-    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
         throw SymbolicMathError.noCodeRepresentation("Factorial node")
     }
 }

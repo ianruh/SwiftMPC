@@ -52,7 +52,7 @@ public extension SymbolicObjective {
             return "//=================== \(str) ==================="
         }
 
-        var representation: Dictionary<Variable, String> = [:]
+        var representation: Dictionary<Node, String> = [:]
         for i in 0..<self.orderedVariables.count {
             representation[self.orderedVariables[i]] = "\(stateVectorName)[\(i)]"
         }

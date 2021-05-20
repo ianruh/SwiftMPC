@@ -55,6 +55,16 @@ public class Multiply: Node, Operation {
         return variables
     }
 
+    override public var parameters: Set<Parameter> {
+        var parameters: Set<Parameter> = []
+        
+        for arg in self.arguments {
+            parameters = parameters + arg.parameters
+        }
+
+        return parameters
+    }
+
     override public var derivatives: Set<Derivative> {
         var derivatives: Set<Derivative> = []
         
@@ -275,7 +285,7 @@ public class Multiply: Node, Operation {
         hasher.combine(self.arguments)
     }
 
-    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
         var str = ""
 
         for i in 0..<self.arguments.count-1 {

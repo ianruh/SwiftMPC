@@ -28,15 +28,25 @@ public struct SymbolicObjective: Objective, VariableOrdered {
     public var symbolicConstraintsGradient: [SymbolicVector]?
     public var symbolicConstraintsHessian: [SymbolicMatrix]?
 
-    public var equalityConstraintMatrix: Matrix? = nil
-    public var equalityConstraintVector: Vector? = nil
+    public var symbolicEqualityConstraintMatrix: SymbolicMatrix? = nil
+    public var symbolicEqualityConstraintVector: SymbolicVector? = nil
+
+    public var equalityConstraintMatrix: Matrix? {
+        return try! self.symbolicEqualityConstraintMatrix?.evaluate(withValues: self.parameterValues)
+    }
+    public var equalityConstraintVector: Vector? {
+        return try! self.symbolicEqualityConstraintVector?.evaluate(withValues: self.parameterValues)
+    }
 
     let startPrimal: Vector?
     let startDual: Vector?
 
+    var parameterValues: Dictionary<Parameter, Double> = [:]
+    var parameters: Set<Parameter> = []
+
     // TODO: The equality constraints have some very strong assumptions
     // The equality constraint matrix and vector overule the symbolic equality constraints
-    public init?(min node: Node, subjectTo optionalConstraints: SymbolicVector? = nil, equalityConstraints optionalEqualityConstraints: [Assign]? = nil, equalityConstraintMatrix optionalEqualityConstraintMatrix: Matrix? = nil, equalityConstraintVector optionalEqualityConstraintVector: Vector? = nil, startPrimal: Vector? = nil, startDual: Vector? = nil, ordering optionalOrdering: OrderedSet<Variable>? = nil) {
+    public init?(min node: Node, subjectTo optionalConstraints: SymbolicVector? = nil, equalityConstraints optionalEqualityConstraints: [Assign]? = nil, equalityConstraintMatrix optionalEqualityConstraintMatrix: SymbolicMatrix? = nil, equalityConstraintVector optionalEqualityConstraintVector: SymbolicVector? = nil, startPrimal: Vector? = nil, startDual: Vector? = nil, ordering optionalOrdering: OrderedSet<Variable>? = nil, parameterValues optionalParameterValues: Dictionary<Parameter, Double> = [:]) {
         // Get the set of all variables
         var allVariables = node.variables
         if let constraints = optionalConstraints {
@@ -45,10 +55,33 @@ public struct SymbolicObjective: Objective, VariableOrdered {
         if let ordering  = optionalOrdering {
             allVariables = allVariables.union(Set(ordering))
         }
+        // The symbolic equality constraint matrices cannot have any variables, so we don't need to check them
         if let equalityConstraints = optionalEqualityConstraints {
             allVariables = allVariables.union(SymbolicVector(equalityConstraints).variables)
         }
         self.variables = allVariables
+
+        // Get the set of all parameters
+        var allParameters = node.parameters
+        if let constraints = optionalConstraints {
+            allParameters = allParameters.union(constraints.parameters)
+        }
+        // The symbolic equality constraint matrices can have parameters, so we need to check them
+        if let matrix = optionalEqualityConstraintMatrix {
+            // Check the provide matrix and vector
+            allParameters = allParameters.union(matrix.parameters)
+            if let vector = optionalEqualityConstraintVector {
+                allParameters = allParameters.union(vector.parameters)
+            }
+        } else {
+            if let equalityConstraints = optionalEqualityConstraints {
+                allParameters = allParameters.union(SymbolicVector(equalityConstraints).parameters)
+            }
+        }
+        self.parameters = allParameters
+
+        // Save the parameter values
+        self.parameterValues = optionalParameterValues
 
         // Save the objective node
         self.objectiveNode = node
@@ -77,6 +110,21 @@ public struct SymbolicObjective: Objective, VariableOrdered {
             self.setVariableOrder(self.orderedVariables)
         }
 
+        // The symbolic equality constraint matrix and vector are not allowed to have any variables
+        if let matrix = optionalEqualityConstraintMatrix {
+            guard matrix.variables.count == 0 else {
+                print("The equality constraint matrix cannot contain variables.")
+                return nil
+            }
+        }
+        if let vector = optionalEqualityConstraintVector {
+            guard vector.variables.count == 0 else {
+                print("The equality constraint vector cannot contain variables.")
+                return nil
+            }
+        }
+
+        // Save the equality constraint matrices
         if let equalityConstraintMatrix = optionalEqualityConstraintMatrix {
             guard let equalityConstraintVector = optionalEqualityConstraintVector else {
                 print("literal equality constraint matrix provided, but not literal equality constraint vector")
@@ -93,23 +141,23 @@ public struct SymbolicObjective: Objective, VariableOrdered {
                 return nil
             }
 
-            self.equalityConstraintMatrix = equalityConstraintMatrix
-            self.equalityConstraintVector = equalityConstraintVector
+            self.symbolicEqualityConstraintMatrix = equalityConstraintMatrix
+            self.symbolicEqualityConstraintVector = equalityConstraintVector
         } else {
             // Fall back to the symbolic equality constraints
             EQUALITY_CONSTRAINTS_IF: if let equalityConstraints = optionalEqualityConstraints {
                 // Handle a bit of an edge case where the passed assign constraints are empty
                 guard equalityConstraints.count > 0 else {
-                    self.equalityConstraintMatrix = nil
-                    self.equalityConstraintVector = nil
+                    self.symbolicEqualityConstraintMatrix = nil
+                    self.symbolicEqualityConstraintVector = nil
                     break EQUALITY_CONSTRAINTS_IF
                 }
 
-                // First, we'll simplify everything. Simpligying assign always results
+                // First, we'll simplify everything. Simplifying assign always results
                 // in another assign node
                 let simplifiedConstraints: [Assign] = equalityConstraints.map({ $0.simplify() as! Assign })
-                var equalityMatrixRows: [Vector] = []
-                var equalityVector: Vector = []
+                var equalityMatrixRows: [SymbolicVector] = []
+                var equalityVector: [Node] = []
                 for constraint in simplifiedConstraints {
                     // Extract the elements on each side
                     var leftElements: [Node] = []
@@ -131,8 +179,8 @@ public struct SymbolicObjective: Objective, VariableOrdered {
 
                     // Check that the following holds true for every element
                     // - Contains one or no variables
-                    var variablesDict: Dictionary<Variable, Double> = [:]
-                    var constants: Double = 0.0
+                    var variablesDict: Dictionary<Variable, Node> = [:]
+                    var constants: Node = Number(0)
                     for el in leftElements {
                         // Check the number of variables
                         if(el.variables.count > 1) {
@@ -140,47 +188,44 @@ public struct SymbolicObjective: Objective, VariableOrdered {
                             return nil
                         } else if(el.variables.count == 1) {
                             let variable = el.variables.first!
-                            do {
-                                let multiplier = try el.evaluate(withValues: [variable: 1.0])
-                                if let currentMultiplier = variablesDict[variable] {
-                                    variablesDict[variable] = currentMultiplier + multiplier
-                                } else {
-                                    variablesDict[variable] = multiplier
-                                }
-                            } catch {
-                                print(error)
-                                return nil
+                            let multiplier: Node = el.replace(variable, with: Number(1)) // Replace the variable by 1, so the result is the multiplier
+                            if let currentMultiplier = variablesDict[variable] {
+                                variablesDict[variable] = currentMultiplier + multiplier
+                            } else {
+                                variablesDict[variable] = multiplier
                             }
                         } else if(el.variables.count == 0) {
-                            do {
-                                let value = try el.evaluate(withValues: [:])
-                                constants += value
-                            } catch {
-                                print(error)
-                                return nil
-                            }
+                            constants = constants + el
                         }
 
                     }
 
                     // Append the row to the matrix and the value to the vector
-                    equalityVector.append(-1*constants)
-                    var row: Vector = []
+                    equalityVector.append(Negative([constants]))
+                    var row: [Node] = []
                     for orderedVar in self.orderedVariables {
                         if let value = variablesDict[orderedVar] {
                             row.append(value)
                         } else {
-                            row.append(0)
+                            row.append(Number(0))
                         }
                     }
-                    equalityMatrixRows.append(row)
+                    equalityMatrixRows.append(SymbolicVector(row))
                 }
 
-                self.equalityConstraintMatrix = Matrix(equalityMatrixRows)
-                self.equalityConstraintVector = equalityVector
+                self.symbolicEqualityConstraintMatrix = SymbolicMatrix(equalityMatrixRows)
+                self.symbolicEqualityConstraintVector = SymbolicVector(equalityVector)
             } else {
-                self.equalityConstraintMatrix = nil
-                self.equalityConstraintVector = nil
+                self.symbolicEqualityConstraintMatrix = nil
+                self.symbolicEqualityConstraintVector = nil
+            }
+        }
+
+        // Check that every parameter has a value
+        for param in self.parameters {
+            guard self.parameterValues[param] != nil else {
+                print("Parameter \(param) does not have a specified value")
+                return nil
             }
         }
 
@@ -276,7 +321,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
                         return (primal: startPrimal, dual: startDual)
                     } else {
                         // We need to know haw large the dual vector should be
-                        if let equalityMatrix = self.equalityConstraintMatrix {
+                        if let equalityMatrix = self.symbolicEqualityConstraintMatrix {
                             return (primal: startPrimal, dual: ones(equalityMatrix.rows))
                         } else {
                             return  (primal: startPrimal, dual: ones(0))
@@ -357,7 +402,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
             }
             // The equality vector doesn't need to change at all
 
-            guard let newObjective = SymbolicObjective(min: s, subjectTo: newConstraintsSymbolicVector, equalityConstraintMatrix: expandedEqualityMatrix, equalityConstraintVector: self.equalityConstraintVector, startPrimal: startVector, ordering: ordering) else {
+            guard let newObjective = SymbolicObjective(min: s, subjectTo: newConstraintsSymbolicVector, equalityConstraintMatrix: expandedEqualityMatrix?.symbolic, equalityConstraintVector: self.equalityConstraintVector?.symbolic, startPrimal: startVector, ordering: ordering, parameterValues: self.parameterValues) else {
                 throw MinimizationError.misc("Unable to find feasible point")
             }
 
@@ -397,7 +442,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
             #endif
             
             // Return the point
-            if let equalityMatrix = self.equalityConstraintMatrix {
+            if let equalityMatrix = self.symbolicEqualityConstraintMatrix {
                 return (primal: startPrimal, dual: ones(equalityMatrix.rows))
             } else {
                 return  (primal: startPrimal, dual: ones(0))
@@ -405,7 +450,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
         } else {
             // We can return any point here, so we just default to 0s os the  right length
             var dual = ones(0)
-            if let equalityMatrix = self.equalityConstraintMatrix {
+            if let equalityMatrix = self.symbolicEqualityConstraintMatrix {
                 dual = ones(equalityMatrix.rows)
             }
             if let startPrimal = self.startPrimal {

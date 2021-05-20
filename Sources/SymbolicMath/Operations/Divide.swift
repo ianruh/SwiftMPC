@@ -39,6 +39,10 @@ public class Divide: Node, Operation {
         return self.left.variables + self.right.variables
     }
 
+    override public var parameters: Set<Parameter> {
+        return self.left.parameters + self.right.parameters
+    }
+
     override public var derivatives: Set<Derivative> {
         return self.left.derivatives + self.right.derivatives
     }
@@ -196,7 +200,7 @@ public class Divide: Node, Operation {
         hasher.combine(self.right)
     }
 
-    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
         return "(\(try self.left.swiftCode(using: representations)))/(\(try self.right.swiftCode(using: representations)))"
     }
 }

@@ -21,6 +21,10 @@ public class Ln: Node, Function {
         return self.argument.variables
     }
 
+    override public var parameters: Set<Parameter> {
+        return self.argument.parameters
+    }
+
     override public var derivatives: Set<Derivative> {
         return self.argument.derivatives
     }
@@ -87,7 +91,7 @@ public class Ln: Node, Function {
         hasher.combine(self.argument)
     }
 
-    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
         return "Double.log(\(try self.argument.swiftCode(using: representations)))"
     }
 }

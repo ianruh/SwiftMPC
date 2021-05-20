@@ -19,6 +19,11 @@ public struct SymbolicVector: Collection, ExpressibleByArrayLiteral, VariableOrd
             return currentSet.union(nextElement.variables)
         })
     }
+    public var parameters: Set<Parameter> {
+        return self.reduce(Set<Parameter>(),{(currentSet, nextElement) in
+            return currentSet.union(nextElement.parameters)
+        })
+    }
 
     public init() {}
 
@@ -65,5 +70,11 @@ public struct SymbolicVector: Collection, ExpressibleByArrayLiteral, VariableOrd
         for i in 0..<self.count {
             self.elements[i].setVariableOrder(newOrdering)
         }
+    }
+}
+
+public extension Vector {
+    var symbolic: SymbolicVector {
+        return SymbolicVector(self.map({ Number($0) }))
     }
 }

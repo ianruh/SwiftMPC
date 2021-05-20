@@ -31,6 +31,10 @@ public class Derivative: Node, Function {
         return []
     }
 
+    override public var parameters: Set<Parameter> {
+        return self.diffOf.parameters.union(self.withRespectTo.parameters)
+    }
+
     override public var derivatives: Set<Derivative> {
         return [self]
     }
@@ -128,7 +132,7 @@ public class Derivative: Node, Function {
         hasher.combine(self.withRespectTo)
     }
 
-    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
         throw SymbolicMathError.noCodeRepresentation("Derivative node")
     }
 }

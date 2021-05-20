@@ -9,7 +9,7 @@
 ///   - variable:
 /// - Returns: The derivative, or nil for 0
 /// - Throws:
-internal func differentiate(_ term: Node, wrt variableNode: Node, partially: Bool = true) -> Node? {
+public func differentiate(_ term: Node, wrt variableNode: Node, partially: Bool = true) -> Node? {
 
     guard let variable = variableNode as? Variable else {
         // TODO: Figure out how to do this with matching
@@ -34,6 +34,8 @@ internal func differentiate(_ term: Node, wrt variableNode: Node, partially: Boo
             }
         }
     case is Number:
+        return Number(0)
+    case is Parameter:
         return Number(0)
     case is Assign:
         return nil

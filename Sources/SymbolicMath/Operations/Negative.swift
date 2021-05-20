@@ -23,6 +23,10 @@ public class Negative: Node, Operation {
         return self.argument.variables
     }
 
+    override public var parameters: Set<Parameter> {
+        return self.argument.parameters
+    }
+
     override public var derivatives: Set<Derivative> {
         return self.argument.derivatives
     }
@@ -85,7 +89,7 @@ public class Negative: Node, Operation {
         hasher.combine(self.argument)
     }
 
-    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
         return "-1*(\(try self.argument.swiftCode(using: representations)))"
     }
 }

@@ -3,7 +3,7 @@
 
 public extension SymbolicVector {
 
-    func swiftCode(using representations: Dictionary<Variable, String>, onlyElements: Bool = false) throws -> String {
+    func swiftCode(using representations: Dictionary<Node, String>, onlyElements: Bool = false) throws -> String {
         var elementsStr = ""
         if self.elements.count > 0 {
             for i in 0..<self.elements.count-1 {
@@ -28,7 +28,7 @@ public extension SymbolicVector {
 
 public extension SymbolicMatrix {
 
-    func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+    func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
         var elementsStr = ""
         if self.vectors.count > 0 {
             for i in 0..<self.vectors.count-1 {

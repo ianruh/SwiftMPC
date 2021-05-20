@@ -216,6 +216,37 @@ final class RegressionTests: XCTestCase {
         }
     }
 
+    func testRegression7() {
+        do {
+            let x = Variable("x")
+            let y = Variable("y")
+
+            let obj = x**2 + y**2
+            let constraints: SymbolicVector = [
+                y >= 4.0
+            ]
+            let equalityConstraints: [Assign] = [
+                10.0 ≈ y
+            ]
+
+            let expectedLocation: Vector = [0.0, 10.0]
+
+            guard let objective = SymbolicObjective(min: obj, subjectTo: constraints, equalityConstraints: equalityConstraints) else {
+                print("Unable to construct symbolic objective")
+                XCTFail("Unable to construct symbolic objective for \(obj)")
+                return
+            }
+
+            var solver = InequalitySolver()
+            let (_, pt) = try solver.infeasibleInequalityMinimize(objective: objective)
+
+            XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
+        } catch {
+            print(error)
+            XCTFail("Unnexpected excpetion thrown")
+        }
+    }
+
     static var allTests = [
         ("Regression 1", testRegression1),
         ("Regression 2", testRegression2),
@@ -223,5 +254,6 @@ final class RegressionTests: XCTestCase {
         ("Regression 4", testRegression4),
         ("Regression 5", testRegression5),
         ("Regression 6", testRegression6),
+        ("Regression 7", testRegression7),
     ]
 }

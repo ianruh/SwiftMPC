@@ -19,6 +19,10 @@ public class AbsoluteValue: Node, Function {
         return self.argument.variables
     }
 
+    override public var parameters: Set<Parameter> {
+        return self.argument.parameters
+    }
+
     override public var derivatives: Set<Derivative> {
         return self.argument.derivatives
     }
@@ -81,7 +85,7 @@ public class AbsoluteValue: Node, Function {
         hasher.combine(self.argument)
     }
 
-    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
         return "abs(\(try self.argument.swiftCode(using: representations)))"
     }
 }

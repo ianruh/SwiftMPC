@@ -138,11 +138,27 @@ final class SymbolicMathTests: XCTestCase {
             XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi / 2]).isApprox(0.0))
             XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi]).isApprox(-1.0))
         }
+
+        do {
+            let x = Parameter("x")
+            let exp = Cos(x)
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 0.0]).isApprox(1.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi / 2]).isApprox(0.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi]).isApprox(-1.0))
+        }
     }
 
     func testSin() {
         do {
             let x = Variable("x")
+            let exp = Sin(x)
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 0.0]).isApprox(0.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi / 2]).isApprox(1.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi]).isApprox(0.0))
+        }
+
+        do {
+            let x = Parameter("x")
             let exp = Sin(x)
             XCTAssertTrue(try exp.evaluate(withValues: [x: 0.0]).isApprox(0.0))
             XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi / 2]).isApprox(1.0))
@@ -158,6 +174,14 @@ final class SymbolicMathTests: XCTestCase {
             XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi]).isApprox(0.0))
             XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi/4]).isApprox(1.0))
         }
+
+        do {
+            let x = Parameter("x")
+            let exp = Tan(x)
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 0.0]).isApprox(0.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi]).isApprox(0.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: Double.pi/4]).isApprox(1.0))
+        }
     }
 
     func testLn() {
@@ -168,11 +192,27 @@ final class SymbolicMathTests: XCTestCase {
             XCTAssertTrue(try exp.evaluate(withValues: [x: 2.7182818285]).isApprox(1.0))
             XCTAssertTrue(try exp.evaluate(withValues: [x: 20.0]).isApprox(2.9957322736))
         }
+
+        do {
+            let x = Parameter("x")
+            let exp = Ln(x)
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 1.0]).isApprox(0.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 2.7182818285]).isApprox(1.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 20.0]).isApprox(2.9957322736))
+        }
     }
 
     func testSqrt() {
         do {
             let x = Variable("x")
+            let exp = Sqrt(x)
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 1.0]).isApprox(1.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 4.0]).isApprox(2.0))
+            XCTAssertTrue(try exp.evaluate(withValues: [x: 10.0]).isApprox(3.1622776602))
+        }
+
+        do {
+            let x = Parameter("x")
             let exp = Sqrt(x)
             XCTAssertTrue(try exp.evaluate(withValues: [x: 1.0]).isApprox(1.0))
             XCTAssertTrue(try exp.evaluate(withValues: [x: 4.0]).isApprox(2.0))
@@ -428,6 +468,15 @@ final class SymbolicMathTests: XCTestCase {
         }
     }
 
+    func testParameter() {
+        do {
+            let x = Variable("x")
+            let p = Parameter("p")
+
+            assertNodesEqual(differentiate(x*p, wrt: x), p)
+        }
+    }
+
 
     static var allTests = [
         ("Leveling Test", testLeveling),
@@ -445,6 +494,7 @@ final class SymbolicMathTests: XCTestCase {
         ("Replace", testReplace),
         ("Gradient", testGradient),
         ("Hessian", testHessian),
-        ("Variable Ordering", testOrdering)
+        ("Variable Ordering", testOrdering),
+        ("Parameter Derivative", testParameter)
     ]
 }

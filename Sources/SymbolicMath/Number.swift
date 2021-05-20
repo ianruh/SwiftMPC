@@ -14,6 +14,10 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
         return []
     }
 
+    override public var parameters: Set<Parameter> {
+        return []
+    }
+
     override public var derivatives: Set<Derivative> {
         return []
     }
@@ -80,7 +84,7 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
         hasher.combine(self.value)
     }
 
-    override public func swiftCode(using representations: Dictionary<Variable, String>) throws -> String {
+    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
         return "\(self.value)"
     }
 }

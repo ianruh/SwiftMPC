@@ -37,6 +37,15 @@ let package = Package(
                 .product(name: "Collections", package: "swift-collections"),
                 "Minimization"
             ]),
+        // .target(
+        //     name: "SpringsMPC",
+        //     dependencies: [
+        //         .product(name: "RealModule", package: "swift-numerics"),
+        //         "LASwift",
+        //         "SymbolicMath",
+        //         .product(name: "Collections", package: "swift-collections"),
+        //         "Minimization"
+        //     ]),
         .testTarget(
                 name: "SymbolicMathTests",
                 dependencies: [

@@ -27,9 +27,15 @@ public struct SymbolicMatrix: Collection, ExpressibleByArrayLiteral, VariableOrd
     public var _ordering: OrderedSet<Variable>? = nil
     public var variables: Set<Variable> {
         return self.reduce(Set<Variable>(),{(currentSet, nextVector) in
-            return nextVector.reduce(currentSet, {(currentSet2, nextElement) in
-                return currentSet2.union(nextElement.variables)
-            })
+            return currentSet.union(nextVector.variables)
+            // return nextVector.reduce(currentSet, {(currentSet2, nextElement) in
+            //     return currentSet2.union(nextElement.variables)
+            // })
+        })
+    }
+    public var parameters: Set<Parameter> {
+        return self.reduce(Set<Parameter>(),{(currentSet, nextVector) in
+            return currentSet.union(nextVector.parameters)
         })
     }
 
@@ -108,6 +114,11 @@ public struct SymbolicMatrix: Collection, ExpressibleByArrayLiteral, VariableOrd
         return self.vectors[i]
     }
 
+    public subscript(_ row: Int, _ col: Int) -> Node {
+        return self.vectors[row][col]
+    }
+
+
     public func index(after i: Index) -> Index {
         return self.vectors.index(after: i)
     }
@@ -120,5 +131,15 @@ public struct SymbolicMatrix: Collection, ExpressibleByArrayLiteral, VariableOrd
         for i in 0..<self.count {
             self.vectors[i].setVariableOrder(self._ordering!)
         }
+    }
+}
+
+public extension Matrix {
+    var symbolic: SymbolicMatrix {
+        var arrs: [SymbolicVector] = []
+        for i in 0..<self.rows {
+            arrs.append(SymbolicVector(self[row: i].map({ Number($0) })))
+        }
+        return SymbolicMatrix(arrs)
     }
 }
