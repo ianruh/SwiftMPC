@@ -83,17 +83,26 @@ public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdere
         preconditionFailure("This method must be overridden")
     }
 
-    public func evaluate(_ x: Vector) throws -> Double {
+    public func evaluate(_ x: Vector, withParameters parameterValues: Dictionary<Parameter, Double> = [:]) throws -> Double {
         // Ensure the vector is the right length
         guard x.count == self.orderedVariables.count else {
             throw SymbolicMathError.misc("Vector \(x) is the wrong length (\(x.count) != \(self.orderedVariables.count)")
         }
+
+        // We don't check that all parameters are represented. It will throw a clear error if one is missing when
+        // it tries to evaluate it.
 
         var values = Dictionary<Node, Double>()
         let orderedVariables = self.orderedVariables
         for i in 0..<x.count {
             values[orderedVariables[i]] = x[i]
         }
+
+        // merge in the parameters. The closure is meaningless, as there will never be conflicting
+        // keys in this case (only variables present in values, and only parameters present in 
+        // parameterValues).
+        values.merge(parameterValues, uniquingKeysWith: {(current, _) in current})
+
         return try self.evaluate(withValues: values)
     }
 

@@ -41,6 +41,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
     let startPrimal: Vector?
     let startDual: Vector?
 
+    @usableFromInline
     var parameterValues: Dictionary<Parameter, Double> = [:]
     var parameters: Set<Parameter> = []
 
@@ -315,7 +316,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
         if let symbolicConstraints  = self.symbolicConstraints {
             //  First check if the provided start points are strictly feasible
             if let startPrimal = self.startPrimal {
-                if(try symbolicConstraints.evaluate(startPrimal) .<= 0.0) {
+                if(try symbolicConstraints.evaluate(startPrimal, withParameters: self.parameterValues) .<= 0.0) {
                     // Check if the startDual was provided
                     if let startDual = self.startDual {
                         return (primal: startPrimal, dual: startDual)
@@ -388,7 +389,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
             // and set s to be the maximum value of the  constraints  plus a little bit to make sure
             // s is strictly feasible
             let xStart = ones(self.numVariables - unusedVariables.count) // Account for any variables that were rmeoved
-            let startConstraintValues = try originalConstraintsSymbolicVector.evaluate(xStart)
+            let startConstraintValues = try originalConstraintsSymbolicVector.evaluate(xStart, withParameters: self.parameterValues)
             let sStart = startConstraintValues.max()! + 1.0 // 1.0 is arbitrary
             // In the ordering we gave, s is the first variable, so we put it at the beginning of the start vector
             var startVector = [sStart]
@@ -468,7 +469,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
     @inlinable
     public func value(_ x: Vector) -> Double {
         do {
-            return try self.objectiveNode.evaluate(x)
+            return try self.objectiveNode.evaluate(x, withParameters: self.parameterValues)
         } catch {
             print(error)
             print("Returned NaN instead")
@@ -483,7 +484,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
     @inlinable
     public func gradient(_ x: Vector) -> Vector {
         do {
-            return try self.symbolicGradient.evaluate(x)
+            return try self.symbolicGradient.evaluate(x, withParameters: self.parameterValues)
         } catch {
             print(error)
             print("Returned NaN instead")
@@ -498,7 +499,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
     @inlinable
     public func hessian(_ x: Vector) -> Matrix {
         do {
-            return try self.symbolicHessian.evaluate(x)
+            return try self.symbolicHessian.evaluate(x, withParameters: self.parameterValues)
         } catch {
             print(error)
             print("Returned NaN instead")
@@ -514,7 +515,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
         }
 
         do {
-            return Array(try constraints.evaluate(x))
+            return Array(try constraints.evaluate(x, withParameters: self.parameterValues))
         } catch {
             print(error)
             Thread.callStackSymbols.forEach{print($0)}
@@ -530,7 +531,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
         }
 
         do {
-            return try constraintsGradient.map({ try $0.evaluate(x) })
+            return try constraintsGradient.map({ try $0.evaluate(x, withParameters: self.parameterValues) })
         } catch {
             print(error)
             Thread.callStackSymbols.forEach{print($0)}
@@ -546,7 +547,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
         }
 
         do {
-            return try constraintsHessian.map({ try $0.evaluate(x) })
+            return try constraintsHessian.map({ try $0.evaluate(x, withParameters: self.parameterValues) })
         } catch {
             print("Unable to evaluate \(constraintsHessian) at \(x)")
             return constraintsHessian.map({ _ in Matrix(self.numVariables, self.numVariables, Double.nan) })
