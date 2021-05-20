@@ -97,7 +97,9 @@ public class Factorial: Node, Operation {
     }
 
     public override func simplify() -> Node {
-        return Factorial(self.argument.simplify())
+        let new = Factorial(self.argument.simplify())
+        new.setVariableOrder(self.orderedVariables)
+        return new
     }
 
     override public func hash(into hasher: inout Hasher) {

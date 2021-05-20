@@ -81,7 +81,9 @@ public class Negative: Node, Operation {
     }
 
     public override func simplify() -> Node {
-        return Multiply(Number(-1), self.argument.simplify())
+        let new = Multiply(Number(-1), self.argument.simplify())
+        new.setVariableOrder(self.orderedVariables)
+        return new
     }
 
     override public func hash(into hasher: inout Hasher) {

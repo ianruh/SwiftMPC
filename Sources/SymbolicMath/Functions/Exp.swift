@@ -68,7 +68,9 @@ public class Exp: Node, Function {
     }
 
     public override func simplify() -> Node {
-        return Exp(self.argument.simplify())
+        let new = Exp(self.argument.simplify())
+        new.setVariableOrder(self.orderedVariables)
+        return new
     }
 
     @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {

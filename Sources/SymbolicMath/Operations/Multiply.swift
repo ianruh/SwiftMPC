@@ -270,14 +270,22 @@ public class Multiply: Node, Operation {
         simplifiedMul = combineNumbers(simplifiedMul)
 
         if(simplifiedMul.arguments.contains(Number(0))) {
-            return Number(0)
+            let new = Number(0)
+            new.setVariableOrder(self.orderedVariables)
+            return new
         } else if(simplifiedMul.arguments.count == 1) {
-            return simplifiedMul.arguments[0]
+            let new = simplifiedMul.arguments[0]
+            new.setVariableOrder(self.orderedVariables)
+            return new
         } else if(simplifiedMul.arguments.count == 0) {
-            return Number(1)
+            let new = Number(1)
+            new.setVariableOrder(self.orderedVariables)
+            return new
         }
 
-        return fractionProduct(simplifiedMul)
+        let new = fractionProduct(simplifiedMul)
+        new.setVariableOrder(self.orderedVariables)
+        return new
     }
 
     override public func hash(into hasher: inout Hasher) {

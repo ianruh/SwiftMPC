@@ -87,7 +87,9 @@ public class Assign: Node, Operation {
     }
 
     public override func simplify() -> Node {
-        return Assign(self.left.simplify(), self.right.simplify())
+        let new = Assign(self.left.simplify(), self.right.simplify())
+        new.setVariableOrder(self.orderedVariables)
+        return new
     }
 
     override public func hash(into hasher: inout Hasher) {

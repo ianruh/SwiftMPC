@@ -245,7 +245,9 @@ public class Add: Node, Operation {
         simplifiedAdd = sortNodes(simplifiedAdd)
         simplifiedAdd = removeZero(simplifiedAdd)
 
-        return terminal(simplifiedAdd)
+        let new = terminal(simplifiedAdd)
+        new.setVariableOrder(self.orderedVariables)
+        return new
     }
 
     override public func hash(into hasher: inout Hasher) {

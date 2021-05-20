@@ -116,9 +116,12 @@ public class Derivative: Node, Function {
         if let newNode = differentiate(self.diffOf.simplify(), wrt: self.withRespectTo.simplify()) {
             if let _ = newNode as? Derivative {
                 // To prevent recursion
+                newNode.setVariableOrder(self.orderedVariables)
                 return newNode
             } else {
-                return newNode.simplify()
+                let new = newNode.simplify()
+                new.setVariableOrder(self.orderedVariables)
+                return new
             }
         } else {
             print("Unexpectedly found nil while simplifying a derivative: `\(self)`")

@@ -141,6 +141,12 @@ public struct SymbolicMatrix: Collection, ExpressibleByArrayLiteral, VariableOrd
             self.vectors[i].setVariableOrder(self._ordering!)
         }
     }
+
+    public func simplify() -> SymbolicMatrix {
+        var new = SymbolicMatrix(self.vectors.map({ $0.simplify() }))
+        new.setVariableOrder(self.orderedVariables)
+        return new
+    }
 }
 
 public extension Matrix {

@@ -83,7 +83,9 @@ public class Ln: Node, Function {
     }
 
     public override func simplify() -> Node {
-        return Ln(self.argument.simplify())
+        let new = Ln(self.argument.simplify())
+        new.setVariableOrder(self.orderedVariables)
+        return new
     }
 
     override public func hash(into hasher: inout Hasher) {

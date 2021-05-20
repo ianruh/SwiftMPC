@@ -80,6 +80,12 @@ public struct SymbolicVector: Collection, ExpressibleByArrayLiteral, VariableOrd
             self.elements[i].setVariableOrder(newOrdering)
         }
     }
+
+    public func simplify() -> SymbolicVector {
+        var new = SymbolicVector(self.elements.map({ $0.simplify() }))
+        new.setVariableOrder(self.orderedVariables)
+        return new
+    }
 }
 
 public extension Vector {

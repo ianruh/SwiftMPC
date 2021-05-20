@@ -128,25 +128,37 @@ public class Power: Node, Operation {
         let rightIsNum = rightSimplified as? Number != nil
 
         if(rightIsNum && (rightSimplified as! Number) == Number(1)) {
-            return leftSimplified
+            let new = leftSimplified
+            new.setVariableOrder(self.orderedVariables)
+            return new
         } else if(rightIsNum && (rightSimplified as! Number) == Number(0)) {
-            return Number(1)
+            let new = Number(1)
+            new.setVariableOrder(self.orderedVariables)
+            return new
         } else if(leftIsNum && rightIsNum) {
             // Explanation for the weirdness here: https://github.com/apple/swift-numerics/pull/82
             let leftValue = (leftSimplified as! Number).value
             let rightValue = (rightSimplified as! Number).value
             if(leftValue > 0) {
-                return Number(Double.pow(leftValue, rightValue))
+                let new = Number(Double.pow(leftValue, rightValue))
+                new.setVariableOrder(self.orderedVariables)
+                return new
             } else {
                 if let rightValueInt = Int(exactly: rightValue) {
-                    return Number(Double.pow(leftValue, rightValueInt))
+                    let new = Number(Double.pow(leftValue, rightValueInt))
+                    new.setVariableOrder(self.orderedVariables)
+                    return new
                 } else {
-                    return Power(leftSimplified, rightSimplified)
+                    let new = Power(leftSimplified, rightSimplified)
+                    new.setVariableOrder(self.orderedVariables)
+                    return new
                 }
             }
         }
 
-        return Power(leftSimplified, rightSimplified)
+        let new = Power(leftSimplified, rightSimplified)
+        new.setVariableOrder(self.orderedVariables)
+        return new
     }
 
     override public func hash(into hasher: inout Hasher) {

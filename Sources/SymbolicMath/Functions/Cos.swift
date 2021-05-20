@@ -76,7 +76,9 @@ public class Cos: Node, Function {
     }
 
     public override func simplify() -> Node {
-        return Cos(self.argument.simplify())
+        let new = Cos(self.argument.simplify())
+        new.setVariableOrder(self.orderedVariables)
+        return new
     }
 
     override public func hash(into hasher: inout Hasher) {

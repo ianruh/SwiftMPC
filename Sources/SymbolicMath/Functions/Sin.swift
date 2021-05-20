@@ -76,7 +76,9 @@ public class Sin: Node, Function {
     }
 
     public override func simplify() -> Node {
-        return Sin(self.argument.simplify())
+        let new = Sin(self.argument.simplify())
+        new.setVariableOrder(self.orderedVariables)
+        return new
     }
 
     override public func hash(into hasher: inout Hasher) {

@@ -77,7 +77,9 @@ public class AbsoluteValue: Node, Function {
     }
 
     public override func simplify() -> Node {
-        return AbsoluteValue(self.argument.simplify())
+        let new = AbsoluteValue(self.argument.simplify())
+        new.setVariableOrder(self.orderedVariables)
+        return new
     }
 
     override public func hash(into hasher: inout Hasher) {

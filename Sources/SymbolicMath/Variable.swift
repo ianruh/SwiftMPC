@@ -90,6 +90,7 @@ public class Variable: Node, ExpressibleByStringLiteral {
     }
 
     override public func simplify() -> Node {
+        // Don't need to set ordering
         return self
     }
 

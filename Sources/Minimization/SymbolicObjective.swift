@@ -85,13 +85,13 @@ public struct SymbolicObjective: Objective, VariableOrdered {
         self.parameterValues = optionalParameterValues
 
         // Save the objective node
-        self.objectiveNode = node
+        self.objectiveNode = node.simplify()
 
         // Save the constraints if provided
         if let constraints = optionalConstraints {
             // Handle an edge case where the symbolic constraints array is empty
             if(constraints.count > 0) {
-                self.symbolicConstraints = constraints
+                self.symbolicConstraints = constraints.simplify()
             } else {
                 self.symbolicConstraints = nil
             }
@@ -142,8 +142,8 @@ public struct SymbolicObjective: Objective, VariableOrdered {
                 return nil
             }
 
-            self.symbolicEqualityConstraintMatrix = equalityConstraintMatrix
-            self.symbolicEqualityConstraintVector = equalityConstraintVector
+            self.symbolicEqualityConstraintMatrix = equalityConstraintMatrix.simplify()
+            self.symbolicEqualityConstraintVector = equalityConstraintVector.simplify()
         } else {
             // Fall back to the symbolic equality constraints
             EQUALITY_CONSTRAINTS_IF: if let equalityConstraints = optionalEqualityConstraints {
@@ -214,8 +214,8 @@ public struct SymbolicObjective: Objective, VariableOrdered {
                     equalityMatrixRows.append(SymbolicVector(row))
                 }
 
-                self.symbolicEqualityConstraintMatrix = SymbolicMatrix(equalityMatrixRows)
-                self.symbolicEqualityConstraintVector = SymbolicVector(equalityVector)
+                self.symbolicEqualityConstraintMatrix = SymbolicMatrix(equalityMatrixRows).simplify()
+                self.symbolicEqualityConstraintVector = SymbolicVector(equalityVector).simplify()
             } else {
                 self.symbolicEqualityConstraintMatrix = nil
                 self.symbolicEqualityConstraintVector = nil
@@ -234,13 +234,13 @@ public struct SymbolicObjective: Objective, VariableOrdered {
         guard let gradient = self.objectiveNode.gradient() else {
             return nil
         }
-        self.symbolicGradient = gradient
+        self.symbolicGradient = gradient.simplify()
 
         // Try to construct the Hessian
         guard let hessian = self.objectiveNode.hessian() else {
             return nil
         }
-        self.symbolicHessian = hessian
+        self.symbolicHessian = hessian.simplify()
 
         if let _ = self.symbolicConstraints {
             // Set progenator constraints orders
@@ -263,7 +263,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
                     print("Unable to construct gradient of \(symbol)")
                     return nil
                 }
-                self.symbolicConstraintsGradient!.append(grad)
+                self.symbolicConstraintsGradient!.append(grad.simplify())
             }
 
             for symbol in constraints {
@@ -271,7 +271,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
                     print("Unable to construct hessian of \(symbol)")
                     return nil
                 }
-                self.symbolicConstraintsHessian!.append(hess)
+                self.symbolicConstraintsHessian!.append(hess.simplify())
             }
         }
 

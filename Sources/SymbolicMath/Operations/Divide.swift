@@ -160,9 +160,13 @@ public class Divide: Node, Operation {
         if(leftIsNum && rightIsNum) {
             let rightValue = (rightSimplified as! Number).value
             guard rightValue != 0.0 else {
-                return Divide(leftSimplified, rightSimplified)
+                let new = Divide(leftSimplified, rightSimplified)
+                new.setVariableOrder(self.orderedVariables)
+                return new
             }
-            return Number((leftSimplified as! Number).value / rightValue)
+            let new = Number((leftSimplified as! Number).value / rightValue)
+            new.setVariableOrder(self.orderedVariables)
+            return new
         }
 
         let leftIsDiv = leftSimplified as? Divide != nil
@@ -172,24 +176,36 @@ public class Divide: Node, Operation {
             // We want (a/b)/(c/d) --> (a*d)/(b*c)
             let leftDiv = leftSimplified as! Divide
             let rightDiv = rightSimplified as! Divide
-            return Divide(leftDiv.left * rightDiv.right, leftDiv.right * rightDiv.left).simplify()
+            let new = Divide(leftDiv.left * rightDiv.right, leftDiv.right * rightDiv.left).simplify()
+            new.setVariableOrder(self.orderedVariables)
+            return new
         } else if(leftIsDiv && !rightIsDiv) {
             // We want to simplify (a/b)/c --> a/(b*c)
             let leftDiv = leftSimplified as! Divide
-            return Divide(leftDiv.left, leftDiv.right * rightSimplified).simplify()
+            let new = Divide(leftDiv.left, leftDiv.right * rightSimplified).simplify()
+            new.setVariableOrder(self.orderedVariables)
+            return new
         } else if(!leftIsDiv && rightIsDiv) {
             // We want a/(b/c) --> (a*c)/b
             let rightDiv = rightSimplified as! Divide
-            return Divide(leftSimplified*rightDiv.right, rightDiv.left).simplify()
+            let new = Divide(leftSimplified*rightDiv.right, rightDiv.left).simplify()
+            new.setVariableOrder(self.orderedVariables)
+            return new
         } else {
             // Default case
             if(rightSimplified == Number(1)) {
-                return leftSimplified
+                let new = leftSimplified
+                new.setVariableOrder(self.orderedVariables)
+                return new
             } else if(leftSimplified == Number(0.0)) {
-                return Number(0.0)
+                let new = Number(0.0)
+                new.setVariableOrder(self.orderedVariables)
+                return new
             } else {
                 let simplifiedDiv: Divide = Divide(leftSimplified, rightSimplified)
-                return cancelTerms(simplifiedDiv)
+                let new = cancelTerms(simplifiedDiv)
+                new.setVariableOrder(self.orderedVariables)
+                return new
             }
         }
     }

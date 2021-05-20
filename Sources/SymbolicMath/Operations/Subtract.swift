@@ -109,10 +109,14 @@ public class Subtract: Node, Operation {
         let rightIsNum = rightSimplified as? Number != nil
 
         if(leftIsNum && rightIsNum) {
-            return Number((leftSimplified as! Number).value - (rightSimplified as! Number).value)
+            let new = Number((leftSimplified as! Number).value - (rightSimplified as! Number).value)
+            new.setVariableOrder(self.orderedVariables)
+            return new
         }
         
-        return Add(leftSimplified, Multiply(Number(-1), rightSimplified).simplify()).simplify()
+        let new = Add(leftSimplified, Multiply(Number(-1), rightSimplified).simplify()).simplify()
+        new.setVariableOrder(self.orderedVariables)
+        return new
     }
 
     override public func hash(into hasher: inout Hasher) {
