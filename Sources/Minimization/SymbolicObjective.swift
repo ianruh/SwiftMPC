@@ -17,16 +17,17 @@ public struct SymbolicObjective: Objective, VariableOrdered {
     public var symbolicHessian: SymbolicMatrix = []
 
     public var numConstraints: Int {
-        if let constraints = self.symbolicConstraints {
+        if let constraints = self.symbolicConstraintsVector {
             return constraints.count
         } else {
             return 0
         }
     }
 
-    public var symbolicConstraints: SymbolicVector?
-    public var symbolicConstraintsGradient: [SymbolicVector]?
-    public var symbolicConstraintsHessian: [SymbolicMatrix]?
+    public var symbolicConstraintsVector: SymbolicVector?
+    public var symbolicConstraintsValue: Node?
+    public var symbolicConstraintsGradient: SymbolicVector?
+    public var symbolicConstraintsHessian: SymbolicMatrix?
 
     public var symbolicEqualityConstraintMatrix: SymbolicMatrix? = nil
     public var symbolicEqualityConstraintVector: SymbolicVector? = nil
@@ -91,9 +92,9 @@ public struct SymbolicObjective: Objective, VariableOrdered {
         if let constraints = optionalConstraints {
             // Handle an edge case where the symbolic constraints array is empty
             if(constraints.count > 0) {
-                self.symbolicConstraints = constraints.simplify()
+                self.symbolicConstraintsVector = constraints.simplify()
             } else {
-                self.symbolicConstraints = nil
+                self.symbolicConstraintsVector = nil
             }
         }
 
@@ -242,20 +243,26 @@ public struct SymbolicObjective: Objective, VariableOrdered {
         }
         self.symbolicHessian = hessian.simplify()
 
-        if let _ = self.symbolicConstraints {
+        if let _ = self.symbolicConstraintsVector {
             // Set progenator constraints orders
             if let ordering = optionalOrdering {
-                self.symbolicConstraints!.setVariableOrder(ordering.union(self.orderedVariables))
+                self.symbolicConstraintsVector!.setVariableOrder(ordering.union(self.orderedVariables))
             } else {
-                self.symbolicConstraints!.setVariableOrder(self.orderedVariables)
+                self.symbolicConstraintsVector!.setVariableOrder(self.orderedVariables)
             }
         }
 
         // Construct derivatives of the constraints
-        if let constraints = self.symbolicConstraints {
+        if let constraints = self.symbolicConstraintsVector {
 
-            self.symbolicConstraintsGradient = []
-            self.symbolicConstraintsHessian = []
+            var symbolicConstraintValue: Node = Number(0)
+            var gradients: [SymbolicVector] = []
+            var hessians: [SymbolicMatrix] = []
+
+            // Construct the value
+            for symbol in constraints {
+                symbolicConstraintValue = symbolicConstraintValue + -1*Ln(-1*symbol)
+            }
 
             // Construct gradients
             for symbol in constraints {
@@ -263,16 +270,34 @@ public struct SymbolicObjective: Objective, VariableOrdered {
                     print("Unable to construct gradient of \(symbol)")
                     return nil
                 }
-                self.symbolicConstraintsGradient!.append(grad.simplify())
+                gradients.append(grad.simplify())
             }
 
+            // Construct hessian
             for symbol in constraints {
                 guard let hess = symbol.hessian() else {
                     print("Unable to construct hessian of \(symbol)")
                     return nil
                 }
-                self.symbolicConstraintsHessian!.append(hess.simplify())
+                hessians.append(hess.simplify())
             }
+
+            // Construct the final gradient
+            var symbolicConstraintGradient: SymbolicVector = zeros(self.orderedVariables.count).symbolic
+            for i in 0..<constraints.count {
+                symbolicConstraintGradient = symbolicConstraintGradient + (-1/constraints[i]).*gradients[i]
+            }
+
+            // Construct the final hessian
+            var symbolicConstraintHessian: SymbolicMatrix = zeros(self.orderedVariables.count, self.orderedVariables.count).symbolic
+            for i in 0..<constraints.count {
+                symbolicConstraintHessian = symbolicConstraintHessian + (1/constraints[i]**2 .* (gradients[i]*gradients[i])) + -1/constraints[i].*hessians[i]
+            }
+
+            // Save the value, gradient, and hessian
+            self.symbolicConstraintsValue = symbolicConstraintValue.simplify()
+            self.symbolicConstraintsGradient = symbolicConstraintGradient.simplify()
+            self.symbolicConstraintsHessian = symbolicConstraintHessian.simplify()
         }
 
         // Note: this needs to be done after the objective and constraints are saved, otherwise
@@ -289,18 +314,19 @@ public struct SymbolicObjective: Objective, VariableOrdered {
 
         // Propogate it to the children
         self.objectiveNode.setVariableOrder(newOrdering)
-        if let _ = self.symbolicConstraints {
-            self.symbolicConstraints!.setVariableOrder(newOrdering)
+        self.symbolicGradient.setVariableOrder(newOrdering)
+        self.symbolicHessian.setVariableOrder(newOrdering)
+        if let _ = self.symbolicConstraintsVector {
+            self.symbolicConstraintsVector!.setVariableOrder(newOrdering)
+        }
+        if let _ = self.symbolicConstraintsValue {
+            self.symbolicConstraintsValue!.setVariableOrder(newOrdering)
         }
         if let _ = self.symbolicConstraintsGradient {
-            for i in 0..<self.numConstraints {
-                self.symbolicConstraintsGradient![i].setVariableOrder(newOrdering)
-            }
+            self.symbolicConstraintsGradient!.setVariableOrder(newOrdering)
         }
         if let _ = self.symbolicConstraintsHessian {
-            for i in 0..<self.numConstraints {
-                self.symbolicConstraintsHessian![i].setVariableOrder(newOrdering)
-            }
+            self.symbolicConstraintsHessian!.setVariableOrder(newOrdering)
         }
     }
 
@@ -313,7 +339,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
     /// If 0, then it's tricky, but we'll call it infeasible to be safe
     public func startPoint() throws -> (primal: Vector, dual: Vector) {
         // We only need to find a strictly feasible point if we actually have inequality constraints
-        if let symbolicConstraints  = self.symbolicConstraints {
+        if let symbolicConstraints  = self.symbolicConstraintsVector {
             //  First check if the provided start points are strictly feasible
             if let startPrimal = self.startPrimal {
                 if(try symbolicConstraints.evaluate(startPrimal, withParameters: self.parameterValues) .<= 0.0) {
@@ -508,14 +534,29 @@ public struct SymbolicObjective: Objective, VariableOrdered {
     }
 
     @inlinable
-    public func inequalityConstraintsValue(_ x: Vector) -> [Double] {
+    public func inequalityConstraintsValue(_ x: Vector) -> Double {
         // Check that we actually have constraints
-        guard let constraints = self.symbolicConstraints else {
-            return [Double]()
+        guard let constraint = self.symbolicConstraintsValue else {
+            return 0.0
         }
 
         do {
-            return Array(try constraints.evaluate(x, withParameters: self.parameterValues))
+            return try constraint.evaluate(x, withParameters: self.parameterValues)
+        } catch {
+            // Don't print call stack here. We expect to get nan sometimes in the line search
+            return Double.nan
+        }
+    }
+
+    @inlinable
+    public func inequalityConstraintsGradient(_ x: Vector) -> Vector {
+        // Check that we actually have constraints
+        guard let constraintsGradient = self.symbolicConstraintsGradient else {
+            return zeros(self.numVariables)
+        }
+
+        do {
+            return try constraintsGradient.evaluate(x, withParameters: self.parameterValues)
         } catch {
             print(error)
             Thread.callStackSymbols.forEach{print($0)}
@@ -524,33 +565,17 @@ public struct SymbolicObjective: Objective, VariableOrdered {
     }
 
     @inlinable
-    public func inequalityConstraintsGradient(_ x: Vector) -> [Vector] {
-        // Check that we actually have constraints
-        guard let constraintsGradient = self.symbolicConstraintsGradient else {
-            return [Vector]()
-        }
-
-        do {
-            return try constraintsGradient.map({ try $0.evaluate(x, withParameters: self.parameterValues) })
-        } catch {
-            print(error)
-            Thread.callStackSymbols.forEach{print($0)}
-            return constraintsGradient.map({ _ in Array(repeating: Double.nan, count: self.numConstraints) })
-        }
-    }
-
-    @inlinable
-    public func inequalityConstraintsHessian(_ x: Vector) -> [Matrix] {
+    public func inequalityConstraintsHessian(_ x: Vector) -> Matrix {
         // Check that we actually have constraints
         guard let constraintsHessian = self.symbolicConstraintsHessian else {
-            return [Matrix]()
+            return zeros(self.numVariables, self.numVariables)
         }
 
         do {
-            return try constraintsHessian.map({ try $0.evaluate(x, withParameters: self.parameterValues) })
+            return try constraintsHessian.evaluate(x, withParameters: self.parameterValues)
         } catch {
             print("Unable to evaluate \(constraintsHessian) at \(x)")
-            return constraintsHessian.map({ _ in Matrix(self.numVariables, self.numVariables, Double.nan) })
+            return Matrix(self.numVariables, self.numVariables, Double.nan)
         }
     }
 }

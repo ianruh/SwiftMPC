@@ -38,11 +38,11 @@ public protocol Objective {
 
     //=========== Inequality Constraints ============
 
-    func inequalityConstraintsValue(_ x: Vector) -> [Double]
+    func inequalityConstraintsValue(_ x: Vector) -> Double
 
-    func inequalityConstraintsGradient(_ x: Vector) -> [Vector]
+    func inequalityConstraintsGradient(_ x: Vector) -> Vector
 
-    func inequalityConstraintsHessian(_ x: Vector) -> [Matrix]
+    func inequalityConstraintsHessian(_ x: Vector) -> Matrix
 
     //=============== Start Point ================
 
@@ -56,15 +56,15 @@ public extension Objective {
 
     //================= Place holders that should be overriden if there are constraints ================
 
-    func inequalityConstraintsValue(_ x: Vector) -> [Double] {
+    func inequalityConstraintsValue(_ x: Vector) -> Double {
         preconditionFailure("The Objective.inequalityConstraintsValue() method was called without an implementation. This likely means you need to set Objective.numConstraints = 0.")
     }
 
-    func inequalityConstraintsGradient(_ x: Vector) -> [Vector] {
+    func inequalityConstraintsGradient(_ x: Vector) -> Vector {
         preconditionFailure("The Objective.inequalityConstraintsGradient() method was called without an implementation. This likely means you need to set Objective.numConstraints = 0.")
     }
 
-    func inequalityConstraintsHessian(_ x: Vector) -> [Matrix] {
+    func inequalityConstraintsHessian(_ x: Vector) -> Matrix {
         preconditionFailure("The Objective.inequalityConstraintsHessian() method was called without an implementation. This likely means you need to set Objective.numConstraints = 0.")
     }
 

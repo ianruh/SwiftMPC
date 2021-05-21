@@ -25,10 +25,20 @@ public func sum(_ mat: [[Variable]]) -> Node {
     return sum(SymbolicMatrix(mat))
 }
 
+public func +(_ lhs: SymbolicMatrix, _ rhs: SymbolicMatrix) -> SymbolicMatrix {
+    return SymbolicMatrix(zip(lhs.vectors, rhs.vectors).map({ $0 + $1 }))
+}
+
 public func .*(_ lhs: SymbolicMatrix, _ rhs: Double) -> SymbolicMatrix {
     return SymbolicMatrix(lhs.vectors.map({ $0 .* rhs }))
 }
 public func .*(_ lhs: Double, _ rhs: SymbolicMatrix) -> SymbolicMatrix {
+    return SymbolicMatrix(rhs.vectors.map({ $0 .* lhs }))
+}
+public func .*(_ lhs: SymbolicMatrix, _ rhs: Node) -> SymbolicMatrix {
+    return SymbolicMatrix(lhs.vectors.map({ $0 .* rhs }))
+}
+public func .*(_ lhs: Node, _ rhs: SymbolicMatrix) -> SymbolicMatrix {
     return SymbolicMatrix(rhs.vectors.map({ $0 .* lhs }))
 }
 public func .**(_ lhs: SymbolicMatrix, _ rhs: Double) -> SymbolicMatrix {

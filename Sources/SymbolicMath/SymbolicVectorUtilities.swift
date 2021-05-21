@@ -11,10 +11,31 @@ public func sum(_ vec: [Variable]) -> Node {
     return sum(SymbolicVector(vec))
 }
 
+public func +(_ lhs: SymbolicVector, _ rhs: SymbolicVector) -> SymbolicVector {
+    return SymbolicVector(zip(lhs, rhs).map({ $0 + $1 }))
+}
+public func *(_ lhs: SymbolicVector, _ rhs: SymbolicVector) -> SymbolicMatrix {
+    var rows: [SymbolicVector] = []
+    for leftEl in lhs {
+        var row: [Node] = []
+        for rightEl in rhs {
+            row.append(leftEl * rightEl)
+        }
+        rows.append(SymbolicVector(row))
+    }
+    return SymbolicMatrix(rows)
+}
+
 public func .*(_ lhs: SymbolicVector, _ rhs: Double) -> SymbolicVector {
     return SymbolicVector(lhs.elements.map({ $0 * rhs }))
 }
 public func .*(_ lhs: Double, _ rhs: SymbolicVector) -> SymbolicVector {
+    return SymbolicVector(rhs.elements.map({ $0 * lhs }))
+}
+public func .*(_ lhs: SymbolicVector, _ rhs: Node) -> SymbolicVector {
+    return SymbolicVector(lhs.elements.map({ $0 * rhs }))
+}
+public func .*(_ lhs: Node, _ rhs: SymbolicVector) -> SymbolicVector {
     return SymbolicVector(rhs.elements.map({ $0 * lhs }))
 }
 public func .**(_ lhs: SymbolicVector, _ rhs: Double) -> SymbolicVector {

@@ -107,12 +107,12 @@ public extension SymbolicObjective {
         //====== Inequality Constraints ====
 
         // Constraints Value
-        if let symbolicConstraints = self.symbolicConstraints {
-            str += labelString("Inequality Constraints Values")
+        if let symbolicConstraintsValue = self.symbolicConstraintsValue {
+            str += labelString("Inequality Constraints Value")
             str += "\n"
-            str += "func inequalityConstraintsValue(_ \(stateVectorName): Vector) -> [Double] {\n"
+            str += "func inequalityConstraintsValue(_ \(stateVectorName): Vector) -> Double {\n"
             str += "return "
-            str += try symbolicConstraints.swiftCode(using: representation)
+            str += try symbolicConstraintsValue.swiftCode(using: representation)
             str += "\n"
             str += "}"
             str += "\n\n"
@@ -120,15 +120,11 @@ public extension SymbolicObjective {
 
         // Constraints Gradient
         if let symbolicConstraintsGradient = self.symbolicConstraintsGradient {
-            str += labelString("Inequality Constraints Gradients")
+            str += labelString("Inequality Constraints Gradient")
             str += "\n"
-            str += "func inequalityConstraintsGradient(_ \(stateVectorName): Vector) -> [Vector] {\n"
-            str += "return [\n"
-            for vector in symbolicConstraintsGradient {
-                str += try vector.swiftCode(using: representation)
-                str += ",\n"
-            }
-            str += "]\n"
+            str += "func inequalityConstraintsGradient(_ \(stateVectorName): Vector) -> Vector {\n"
+            str += "return "
+            str += try symbolicConstraintsGradient.swiftCode(using: representation)
             str += "}"
             str += "\n\n"
         }
@@ -137,13 +133,9 @@ public extension SymbolicObjective {
         if let symbolicConstraintsHessian = self.symbolicConstraintsHessian {
             str += labelString("Inequality Constraints Hessians")
             str += "\n"
-            str += "func inequalityConstraintsHessian(_ \(stateVectorName): Vector) -> [Matrix] {\n"
-            str += "return [\n"
-            for matrix in symbolicConstraintsHessian {
-                str += try matrix.swiftCode(using: representation)
-                str += ",\n"
-            }
-            str += "]\n"
+            str += "func inequalityConstraintsHessian(_ \(stateVectorName): Vector) -> Matrix {\n"
+            str += "return "
+            str += try symbolicConstraintsHessian.swiftCode(using: representation)
             str += "}"
             str += "\n\n"
         }

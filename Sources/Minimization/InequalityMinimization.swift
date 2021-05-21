@@ -7,8 +7,6 @@ public struct InequalitySolver {
 
     @usableFromInline
     internal var hasEqaulityConstraints: Bool = false
-    @usableFromInline
-    internal var hasInequalityConstraints: Bool = false
 
     public init() {}
 
@@ -80,47 +78,17 @@ public struct InequalitySolver {
 
     @inlinable
     internal func barrierValue(objective: Objective,  at x: Vector, t: Double) -> Double {
-        return t * objective.value(x) + augmentValue(objective: objective, at: x)
-    }
-
-    @inlinable
-    internal func augmentValue(objective: Objective, at x: Vector) -> Double {
-        return objective.inequalityConstraintsValue(x).reduce(0.0, {(currentSum, nextValue) in 
-            return currentSum - Double.log(-1*nextValue)
-        })
+        return t * objective.value(x) + objective.inequalityConstraintsValue(x)
     }
 
     @inlinable
     internal func barrierGradient(objective: Objective, at x: Vector, t: Double) -> Vector {
-        return t .* objective.gradient(x) + augmentGradient(objective: objective, at: x)
-    }
-
-    @inlinable
-    internal func augmentGradient(objective: Objective, at x: Vector) -> Vector {
-        let values = objective.inequalityConstraintsValue(x)
-        let gradients = objective.inequalityConstraintsGradient(x)
-        return zip(values, gradients).reduce(zeros(objective.numVariables), {(runningGradient, zippedValue) in
-            let (fiValue, fiGradient) = zippedValue
-            return runningGradient + -1/fiValue.*fiGradient
-        })
+        return t .* objective.gradient(x) + objective.inequalityConstraintsGradient(x)
     }
 
     @inlinable
     internal func barrierHessian(objective: Objective, at x: Vector, t: Double) -> Matrix {
-        return t .* objective.hessian(x) + augmentHessian(objective: objective, at: x)
-    }
-
-    @inlinable
-    internal func augmentHessian(objective: Objective, at x: Vector) -> Matrix {
-        let values = objective.inequalityConstraintsValue(x)
-        let gradients = objective.inequalityConstraintsGradient(x)
-        let hessians = objective.inequalityConstraintsHessian(x)
-        return zip(values, zip(gradients, hessians)).reduce(zeros(objective.numVariables, objective.numVariables), {(runningHessian, zippedValue) in 
-            let fiValue = zippedValue.0
-            let fiGradient = zippedValue.1.0
-            let fiHessian = zippedValue.1.1
-            return runningHessian + (1/Double.pow(fiValue,2) .* Matrix(fiGradient)*transpose(Matrix(fiGradient))) + -1/fiValue.*fiHessian
-        })
+        return t .* objective.hessian(x) + objective.inequalityConstraintsHessian(x)
     }
 
     public mutating func infeasibleInequalityMinimize(objective: Objective) throws -> (minimum: Double, point: Vector) {
@@ -138,11 +106,6 @@ public struct InequalitySolver {
                     throw MinimizationError.wrongNumberOfVariables("Equality constraint matrix has different number of rows than the equality constraint vector.")
                 }
             }
-        }
-
-        // Record if we have inequality. Assuming correct dimensionality
-        if(objective.numConstraints > 0) {
-            self.hasInequalityConstraints = true
         }
 
         // Get start point
