@@ -3,56 +3,24 @@ import LASwift
 
 public extension SymbolicObjective {
 
-
-    // /// Number of variables taken by the objective
-    // var numVariables: Int { get }
-
-    // /// Number of inequality constraints
-    // var numConstraints: Int { get }
-
-    // //==================== Objective =================
-
-    // /// The value of the objective at a given point
-    // ///
-    // /// - Parameter x: The point to evaluate the objective at
-    // /// - Returns: The value of teh objective
-    // func value(_ x: Vector) -> Double
-
-    // /// The value of the gradient at a given point
-    // ///
-    // /// - Parameter x: The point to evaulate the gradient at
-    // /// - Returns: The value of teh gradient
-    // func gradient(_ x: Vector) -> Vector
-
-    // /// The value of the Hessian at a given point.
-    // ///
-    // /// - Parameter x: The point to evaluate the Hessian at.
-    // /// - Returns: The value of the Hessian.
-    // func hessian(_ x: Vector) -> Matrix
-
-    // //================= Equality ================
-
-    // var equalityConstraintMatrix: Matrix? { get }
-
-    // var equalityConstraintVector: Vector? { get }
-
-    // //=========== Inequality Constraints ============
-
-    // func inequalityConstraintsValue(_ x: Vector) -> [Double]
-
-    // func inequalityConstraintsGradient(_ x: Vector) -> [Vector]
-
-    // func inequalityConstraintsHessian(_ x: Vector) -> [Matrix]
-
     func printSwiftCode(
             objectiveName: String,
-            stateVectorName: String = "x", 
+            stateVectorName: String = "x",
+            parameterRepresentations: Dictionary<Parameter, String> = [:],
             toFile file: String? = nil) throws {
+
         func labelString(_ str: String) -> String {
             return "//=================== \(str) ==================="
         }
 
+        for param in self.parameters {
+            guard parameterRepresentations.keys.contains(param) else {
+                throw MinimizationError.misc("No representation for the parameter \(param)")
+            }
+        }
+
         var representation: Dictionary<Node, String> = [:]
+        representation.merge(parameterRepresentations, uniquingKeysWith: {(current, _) in current}) // closure is useless
         for i in 0..<self.orderedVariables.count {
             representation[self.orderedVariables[i]] = "\(stateVectorName)[\(i)]"
         }
@@ -69,15 +37,15 @@ public extension SymbolicObjective {
         //====== Objective Declaration ====
 
         // Struct declearation
-        str += "struct \(objectiveName) {\n"
+        str += "extension \(objectiveName): Objective {\n"
 
         //====== Stored Properties ====
 
         str += "\n"
         // Number of variables
-        str += "let numVariables: Int = \(self.numVariables)\n"
+        str += "var numVariables: Int { return \(self.numVariables) }\n"
         // Number of constraints
-        str += "let numConstraints: Int = \(self.numConstraints)\n"
+        str += "var numConstraints: Int { return \(self.numConstraints) }\n"
 
         //====== Objective Properties ====
 
@@ -114,18 +82,24 @@ public extension SymbolicObjective {
         str += "\n\n"
 
         //====== Equality Constraint Properties ====
-        if let equalityMatrix = self.equalityConstraintMatrix {
-            if let equalityVector = self.equalityConstraintVector {
+        if let equalityMatrix = self.symbolicEqualityConstraintMatrix {
+            if let equalityVector = self.symbolicEqualityConstraintVector {
                 str += labelString("Equality Matrix Constraint")
                 str += "\n"
-                str += "let equalityConstraintMatrix: Matrix? = "
-                str += equalityMatrix.swiftCode()
+                str += "var equalityConstraintMatrix: Matrix? {\n"
+                str += "return "
+                str += try equalityMatrix.swiftCode(using: representation)
+                str += "\n"
+                str += "}"
                 str += "\n\n"
 
                 str += labelString("Equality Vector Constraint")
                 str += "\n"
-                str += "let equalityConstraintVector: Vector? = "
-                str += equalityVector.swiftCode()
+                str += "var equalityConstraintVector: Vector? {\n"
+                str += "return "
+                str += try equalityVector.swiftCode(using: representation)
+                str += "\n"
+                str += "}"
                 str += "\n\n"
             }
         }

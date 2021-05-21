@@ -85,6 +85,7 @@ public class Parameter: Node {
     }
 
     override public func simplify() -> Node {
+        // Don't need to set variable order
         return self
     }
 

@@ -1,6 +1,7 @@
 //
 // Created by Ian Ruh on 8/29/20.
 //
+import LASwift
 
 // We have node, variable, and number versions here.
 
@@ -17,6 +18,7 @@ precedencegroup ExponentiationPrecedence {
 //------------------------- Custom Operators --------------------
 
 infix operator ** : ExponentiationPrecedence
+infix operator .** : ExponentiationPrecedence
 infix operator ~ : AssignmentPrecedence
 infix operator ≈ : AssignmentPrecedence
 
@@ -146,4 +148,18 @@ public func >=(_ lhs: Number, _ rhs: Node) -> Node {
 }
 public func >=(_ lhs: Node, _ rhs: Number) -> Node {
     return Subtract(rhs, lhs)
+}
+
+
+public func <=(_ lhs: Double, _ rhs: Node) -> Node {
+    return Subtract(lhs.symbol, rhs)
+}
+public func <=(_ lhs: Node, _ rhs: Double) -> Node {
+    return Subtract(lhs, rhs.symbol)
+}
+public func >=(_ lhs: Double, _ rhs: Node) -> Node {
+    return Subtract(rhs, lhs.symbol)
+}
+public func >=(_ lhs: Node, _ rhs: Double) -> Node {
+    return Subtract(rhs.symbol, lhs)
 }
