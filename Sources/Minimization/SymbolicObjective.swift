@@ -86,13 +86,21 @@ public struct SymbolicObjective: Objective, VariableOrdered {
         self.parameterValues = optionalParameterValues
 
         // Save the objective node
+        #if NO_SIMPLIFY
+        self.objectiveNode = node
+        #else
         self.objectiveNode = node.simplify()
+        #endif
 
         // Save the constraints if provided
         if let constraints = optionalConstraints {
             // Handle an edge case where the symbolic constraints array is empty
             if(constraints.count > 0) {
+                #if NO_SIMPLIFY
+                self.symbolicConstraintsVector = constraints
+                #else
                 self.symbolicConstraintsVector = constraints.simplify()
+                #endif
             } else {
                 self.symbolicConstraintsVector = nil
             }
@@ -143,8 +151,13 @@ public struct SymbolicObjective: Objective, VariableOrdered {
                 return nil
             }
 
+            #if NO_SIMPLIFY
+            self.symbolicEqualityConstraintMatrix = equalityConstraintMatrix
+            self.symbolicEqualityConstraintVector = equalityConstraintVector
+            #else
             self.symbolicEqualityConstraintMatrix = equalityConstraintMatrix.simplify()
             self.symbolicEqualityConstraintVector = equalityConstraintVector.simplify()
+            #endif
         } else {
             // Fall back to the symbolic equality constraints
             EQUALITY_CONSTRAINTS_IF: if let equalityConstraints = optionalEqualityConstraints {
@@ -156,7 +169,9 @@ public struct SymbolicObjective: Objective, VariableOrdered {
                 }
 
                 // First, we'll simplify everything. Simplifying assign always results
-                // in another assign node
+                // in another assign node. We always simplify this, even if the NO_SIMPLIFY
+                // variable is set. Otherwise our shitty way detecting linear systems breaks because
+                // the additions aren't flattened.
                 let simplifiedConstraints: [Assign] = equalityConstraints.map({ $0.simplify() as! Assign })
                 var equalityMatrixRows: [SymbolicVector] = []
                 var equalityVector: [Node] = []
@@ -215,8 +230,13 @@ public struct SymbolicObjective: Objective, VariableOrdered {
                     equalityMatrixRows.append(SymbolicVector(row))
                 }
 
+                #if NO_SIMPLIFY
+                self.symbolicEqualityConstraintMatrix = SymbolicMatrix(equalityMatrixRows)
+                self.symbolicEqualityConstraintVector = SymbolicVector(equalityVector)
+                #else
                 self.symbolicEqualityConstraintMatrix = SymbolicMatrix(equalityMatrixRows).simplify()
                 self.symbolicEqualityConstraintVector = SymbolicVector(equalityVector).simplify()
+                #endif
             } else {
                 self.symbolicEqualityConstraintMatrix = nil
                 self.symbolicEqualityConstraintVector = nil
@@ -239,13 +259,21 @@ public struct SymbolicObjective: Objective, VariableOrdered {
         guard let gradient = self.objectiveNode.gradient() else {
             return nil
         }
+        #if NO_SIMPLIFY
+        self.symbolicGradient = gradient
+        #else
         self.symbolicGradient = gradient.simplify()
+        #endif
 
         // Try to construct the Hessian
         guard let hessian = self.objectiveNode.hessian() else {
             return nil
         }
+        #if NO_SIMPLIFY
+        self.symbolicHessian = hessian
+        #else
         self.symbolicHessian = hessian.simplify()
+        #endif
 
         if let _ = self.symbolicConstraintsVector {
             // Set progenator constraints orders
@@ -276,7 +304,11 @@ public struct SymbolicObjective: Objective, VariableOrdered {
                     print("Unable to construct gradient of \(symbol)")
                     return nil
                 }
+                #if NO_SIMPLIFY
+                gradients.append(grad)
+                #else
                 gradients.append(grad.simplify())
+                #endif
             }
 
             // Construct hessian
@@ -285,7 +317,11 @@ public struct SymbolicObjective: Objective, VariableOrdered {
                     print("Unable to construct hessian of \(symbol)")
                     return nil
                 }
+                #if NO_SIMPLIFY
+                hessians.append(hess)
+                #else
                 hessians.append(hess.simplify())
+                #endif
             }
 
             // Construct the final gradient
@@ -308,9 +344,15 @@ public struct SymbolicObjective: Objective, VariableOrdered {
             #endif
 
             // Save the value, gradient, and hessian
+            #if NO_SIMPLIFY
+            self.symbolicConstraintsValue = symbolicConstraintValue
+            self.symbolicConstraintsGradient = symbolicConstraintGradient
+            self.symbolicConstraintsHessian = symbolicConstraintHessian
+            #else
             self.symbolicConstraintsValue = symbolicConstraintValue.simplify()
             self.symbolicConstraintsGradient = symbolicConstraintGradient.simplify()
             self.symbolicConstraintsHessian = symbolicConstraintHessian.simplify()
+            #endif
         }
 
         // Note: this needs to be done after the objective and constraints are saved, otherwise

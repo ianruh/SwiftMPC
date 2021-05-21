@@ -12,6 +12,8 @@ public struct SymbolicVector: Collection, ExpressibleByArrayLiteral, VariableOrd
     public var startIndex: Index { return self.elements.startIndex }
     public var endIndex: Index { return self.elements.endIndex }
 
+    internal var isSimplified: Bool = false
+
     public var elements: [Node] = []
     public var _ordering: OrderedSet<Variable>? = nil
     public var variables: Set<Variable> {
@@ -82,8 +84,12 @@ public struct SymbolicVector: Collection, ExpressibleByArrayLiteral, VariableOrd
     }
 
     public func simplify() -> SymbolicVector {
+
+        if(self.isSimplified) { return self }
+
         var new = SymbolicVector(self.elements.map({ $0.simplify() }))
         new.setVariableOrder(self.orderedVariables)
+        new.isSimplified = true
         return new
     }
 }

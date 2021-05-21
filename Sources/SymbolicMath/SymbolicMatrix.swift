@@ -12,6 +12,8 @@ public struct SymbolicMatrix: Collection, ExpressibleByArrayLiteral, VariableOrd
     public var startIndex: Index { return self.vectors.startIndex }
     public var endIndex: Index { return self.vectors.endIndex }
 
+    internal var isSimplified: Bool = false
+
     public var rows: Int {
         return self.count
     }
@@ -143,8 +145,12 @@ public struct SymbolicMatrix: Collection, ExpressibleByArrayLiteral, VariableOrd
     }
 
     public func simplify() -> SymbolicMatrix {
+
+        if(self.isSimplified) { return self }
+
         var new = SymbolicMatrix(self.vectors.map({ $0.simplify() }))
         new.setVariableOrder(self.orderedVariables)
+        new.isSimplified = true
         return new
     }
 }
