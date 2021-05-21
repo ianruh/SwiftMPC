@@ -21,13 +21,13 @@ struct SpringsMPC {
 
     }
 
-    // mutating func runNumeric() throws -> (minimum: Double, point: Vector) {
+    mutating func runNumeric() throws -> (minimum: Double, point: Vector) {
         
-    //     let objective = SpringsNumericObjective()
+        let objective = SpringsNumericObjective()
 
-    //     return try self.solver.infeasibleInequalityMinimize(objective: objective)
+        return try self.solver.infeasibleInequalityMinimize(objective: objective)
 
-    // }
+    }
 
     mutating func codeGen(toFile fileName: String) throws {
         let objective = try self.constructSymbolicObjective()

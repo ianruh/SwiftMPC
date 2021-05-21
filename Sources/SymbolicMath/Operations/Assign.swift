@@ -87,8 +87,11 @@ public class Assign: Node, Operation {
     }
 
     public override func simplify() -> Node {
+        if(self.isSimplified) { return self }
+
         let new = Assign(self.left.simplify(), self.right.simplify())
         new.setVariableOrder(self.orderedVariables)
+        new.isSimplified = false
         return new
     }
 

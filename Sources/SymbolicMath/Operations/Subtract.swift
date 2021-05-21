@@ -101,6 +101,9 @@ public class Subtract: Node, Operation {
     }
 
     public override func simplify() -> Node {
+
+        if(self.isSimplified) { return self }
+
         let leftSimplified = self.left.simplify()
         let rightSimplified = self.right.simplify()
 
@@ -111,11 +114,13 @@ public class Subtract: Node, Operation {
         if(leftIsNum && rightIsNum) {
             let new = Number((leftSimplified as! Number).value - (rightSimplified as! Number).value)
             new.setVariableOrder(self.orderedVariables)
+            new.isSimplified = true
             return new
         }
         
         let new = Add(leftSimplified, Multiply(Number(-1), rightSimplified).simplify()).simplify()
         new.setVariableOrder(self.orderedVariables)
+        new.isSimplified = true
         return new
     }
 

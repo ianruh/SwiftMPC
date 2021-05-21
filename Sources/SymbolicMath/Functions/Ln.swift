@@ -50,9 +50,9 @@ public class Ln: Node, Function {
     @inlinable
     override public func evaluate(withValues values: [Node: Double]) throws -> Double {
         let value = try Double.log(self.argument.evaluate(withValues: values))
-        guard !value.isNaN else {
-            throw SymbolicMathError.undefinedValue("The ln(\(value)) is undefined.")
-        }
+        // guard !value.isNaN else {
+        //     throw SymbolicMathError.undefinedValue("The ln(\(value)) is undefined.")
+        // }
 
         return value
     }
@@ -83,8 +83,12 @@ public class Ln: Node, Function {
     }
 
     public override func simplify() -> Node {
+
+        if(self.isSimplified) { return self }
+
         let new = Ln(self.argument.simplify())
         new.setVariableOrder(self.orderedVariables)
+        new.isSimplified = true
         return new
     }
 

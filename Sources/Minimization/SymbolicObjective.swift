@@ -231,6 +231,10 @@ public struct SymbolicObjective: Objective, VariableOrdered {
             }
         }
 
+        #if DEBUG
+            printDebug("Constructing Objective Derivatives")
+        #endif
+
         // Try to construct the symbolic gradient
         guard let gradient = self.objectiveNode.gradient() else {
             return nil
@@ -255,14 +259,16 @@ public struct SymbolicObjective: Objective, VariableOrdered {
         // Construct derivatives of the constraints
         if let constraints = self.symbolicConstraintsVector {
 
+            #if DEBUG
+                printDebug("Constructing Constraint Derivatives")
+            #endif
+
             var symbolicConstraintValue: Node = Number(0)
             var gradients: [SymbolicVector] = []
             var hessians: [SymbolicMatrix] = []
 
             // Construct the value
-            for symbol in constraints {
-                symbolicConstraintValue = symbolicConstraintValue + -1*Ln(-1*symbol)
-            }
+            symbolicConstraintValue = Add(constraints.map({ -1*Ln(-1*$0) }))
 
             // Construct gradients
             for symbol in constraints {
@@ -283,16 +289,23 @@ public struct SymbolicObjective: Objective, VariableOrdered {
             }
 
             // Construct the final gradient
-            var symbolicConstraintGradient: SymbolicVector = zeros(self.orderedVariables.count).symbolic
-            for i in 0..<constraints.count {
-                symbolicConstraintGradient = symbolicConstraintGradient + (-1/constraints[i]).*gradients[i]
-            }
+            let symbolicConstraintGradient: SymbolicVector = zip(constraints, gradients).reduce(zeros(self.orderedVariables.count).symbolic, {(currentSum, nextPair) in
+                let const = nextPair.0
+                let grad = nextPair.1
+                return currentSum + (-1/const).*grad
+            })
 
             // Construct the final hessian
-            var symbolicConstraintHessian: SymbolicMatrix = zeros(self.orderedVariables.count, self.orderedVariables.count).symbolic
-            for i in 0..<constraints.count {
-                symbolicConstraintHessian = symbolicConstraintHessian + (1/constraints[i]**2 .* (gradients[i]*gradients[i])) + -1/constraints[i].*hessians[i]
-            }
+            let symbolicConstraintHessian: SymbolicMatrix = zip(constraints, zip(gradients, hessians)).reduce(zeros(self.orderedVariables.count, self.orderedVariables.count).symbolic, {(currentSum, nextTriple) in
+                let const = nextTriple.0
+                let grad = nextTriple.1.0
+                let hess = nextTriple.1.1
+                return currentSum + (1/const**2 .* (grad*grad)) + -1/const.*hess
+            })
+
+            #if DEBUG
+                printDebug("Simplifying Constraint Derivatives")
+            #endif
 
             // Save the value, gradient, and hessian
             self.symbolicConstraintsValue = symbolicConstraintValue.simplify()
@@ -544,6 +557,8 @@ public struct SymbolicObjective: Objective, VariableOrdered {
             return try constraint.evaluate(x, withParameters: self.parameterValues)
         } catch {
             // Don't print call stack here. We expect to get nan sometimes in the line search
+            print(error)
+            Thread.callStackSymbols.forEach{print($0)}
             return Double.nan
         }
     }

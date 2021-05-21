@@ -68,8 +68,12 @@ public class Exp: Node, Function {
     }
 
     public override func simplify() -> Node {
+
+        if(self.isSimplified) { return self }
+
         let new = Exp(self.argument.simplify())
         new.setVariableOrder(self.orderedVariables)
+        new.isSimplified = true
         return new
     }
 

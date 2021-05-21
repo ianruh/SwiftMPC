@@ -145,6 +145,8 @@ public class Add: Node, Operation {
 
     public override func simplify() -> Node {
 
+        if(self.isSimplified) { return self }
+
         func level(_  node: Add) -> Add {
             // Leveling of any addition operators to one operator
             var leveled: [Node] = []
@@ -247,6 +249,7 @@ public class Add: Node, Operation {
 
         let new = terminal(simplifiedAdd)
         new.setVariableOrder(self.orderedVariables)
+        new.isSimplified = true
         return new
     }
 

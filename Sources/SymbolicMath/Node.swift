@@ -72,6 +72,8 @@ public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdere
         return self as? Function != nil
     }
 
+    internal var isSimplified: Bool  = false
+
     //------------------------ Functions ------------------------
 
     public func setVariableOrder<C>(_ newOrdering: C) where C: Collection, C.Element == Variable {

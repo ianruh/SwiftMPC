@@ -141,6 +141,8 @@ public class Multiply: Node, Operation {
 
     public override func simplify() -> Node {
 
+        if(self.isSimplified) { return self }
+
         func level(_ node: Multiply) -> Multiply {
             // Level the operator to only one level of multipliation
             var leveled: [Node] = []
@@ -272,19 +274,23 @@ public class Multiply: Node, Operation {
         if(simplifiedMul.arguments.contains(Number(0))) {
             let new = Number(0)
             new.setVariableOrder(self.orderedVariables)
+            new.isSimplified = true
             return new
         } else if(simplifiedMul.arguments.count == 1) {
             let new = simplifiedMul.arguments[0]
             new.setVariableOrder(self.orderedVariables)
+            new.isSimplified = true
             return new
         } else if(simplifiedMul.arguments.count == 0) {
             let new = Number(1)
             new.setVariableOrder(self.orderedVariables)
+            new.isSimplified = true
             return new
         }
 
         let new = fractionProduct(simplifiedMul)
         new.setVariableOrder(self.orderedVariables)
+        new.isSimplified = true
         return new
     }
 

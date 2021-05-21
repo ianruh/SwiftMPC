@@ -12,11 +12,11 @@ func writeNumericObjective(_ mpc: StraightLineMPC) throws {
 
     try objective.printSwiftCode(
         objectiveName: "StraightLineNumericObjective",
-        toFile: "/Users/ianruh/Dev/Minimization/Sources/StraightLineMPC/StraightLineNumericObjective.swift"    
+        toFile: "/Users/ianruh/Dev/Minimization/Sources/StraightLineMPC/StraightLineNumericObjectiveExtension.swift"    
     )
 }
 
-// writeNumericObjective(mpc)
+// try writeNumericObjective(mpc)
 
 // let (min, pt): (Double, Vector) = try mpc.runSymbolic()
 let (min, pt): (Double, Vector) = try mpc.runNumeric()

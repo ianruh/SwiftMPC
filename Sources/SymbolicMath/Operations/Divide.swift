@@ -101,6 +101,9 @@ public class Divide: Node, Operation {
     }
     
     public override func simplify() -> Node {
+
+        if(self.isSimplified) { return self }
+
         func toMulPowers(_ node: Node) -> Multiply {
             switch node {
             case let mul as Multiply:
@@ -176,19 +179,25 @@ public class Divide: Node, Operation {
             // We want (a/b)/(c/d) --> (a*d)/(b*c)
             let leftDiv = leftSimplified as! Divide
             let rightDiv = rightSimplified as! Divide
-            let new = Divide(leftDiv.left * rightDiv.right, leftDiv.right * rightDiv.left).simplify()
+            // let new = Divide(leftDiv.left * rightDiv.right, leftDiv.right * rightDiv.left).simplify()
+            let new = cancelTerms(Divide(leftDiv.left * rightDiv.right, leftDiv.right * rightDiv.left))
             new.setVariableOrder(self.orderedVariables)
+            new.isSimplified = true
             return new
         } else if(leftIsDiv && !rightIsDiv) {
             // We want to simplify (a/b)/c --> a/(b*c)
             let leftDiv = leftSimplified as! Divide
-            let new = Divide(leftDiv.left, leftDiv.right * rightSimplified).simplify()
+            // let new = Divide(leftDiv.left, leftDiv.right * rightSimplified).simplify()
+            let new = Divide(leftDiv.left, leftDiv.right * rightSimplified)
             new.setVariableOrder(self.orderedVariables)
+            new.isSimplified = true
             return new
         } else if(!leftIsDiv && rightIsDiv) {
             // We want a/(b/c) --> (a*c)/b
             let rightDiv = rightSimplified as! Divide
-            let new = Divide(leftSimplified*rightDiv.right, rightDiv.left).simplify()
+            // let new = Divide(leftSimplified*rightDiv.right, rightDiv.left).simplify()
+            let new = Divide(leftSimplified*rightDiv.right, rightDiv.left)
+            new.isSimplified = true
             new.setVariableOrder(self.orderedVariables)
             return new
         } else {
@@ -196,15 +205,18 @@ public class Divide: Node, Operation {
             if(rightSimplified == Number(1)) {
                 let new = leftSimplified
                 new.setVariableOrder(self.orderedVariables)
+                new.isSimplified = true
                 return new
             } else if(leftSimplified == Number(0.0)) {
                 let new = Number(0.0)
+                new.isSimplified = true
                 new.setVariableOrder(self.orderedVariables)
                 return new
             } else {
                 let simplifiedDiv: Divide = Divide(leftSimplified, rightSimplified)
                 let new = cancelTerms(simplifiedDiv)
                 new.setVariableOrder(self.orderedVariables)
+                new.isSimplified = true
                 return new
             }
         }

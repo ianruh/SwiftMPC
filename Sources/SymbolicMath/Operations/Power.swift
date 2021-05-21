@@ -121,6 +121,9 @@ public class Power: Node, Operation {
     }
 
     public override func simplify() -> Node {
+
+        if(self.isSimplified) { return self }
+
         let leftSimplified = self.left.simplify()
         let rightSimplified = self.right.simplify()
 
@@ -130,10 +133,12 @@ public class Power: Node, Operation {
         if(rightIsNum && (rightSimplified as! Number) == Number(1)) {
             let new = leftSimplified
             new.setVariableOrder(self.orderedVariables)
+            new.isSimplified = true
             return new
         } else if(rightIsNum && (rightSimplified as! Number) == Number(0)) {
             let new = Number(1)
             new.setVariableOrder(self.orderedVariables)
+            new.isSimplified = true
             return new
         } else if(leftIsNum && rightIsNum) {
             // Explanation for the weirdness here: https://github.com/apple/swift-numerics/pull/82
@@ -142,15 +147,18 @@ public class Power: Node, Operation {
             if(leftValue > 0) {
                 let new = Number(Double.pow(leftValue, rightValue))
                 new.setVariableOrder(self.orderedVariables)
+                new.isSimplified = true
                 return new
             } else {
                 if let rightValueInt = Int(exactly: rightValue) {
                     let new = Number(Double.pow(leftValue, rightValueInt))
                     new.setVariableOrder(self.orderedVariables)
+                    new.isSimplified = true
                     return new
                 } else {
                     let new = Power(leftSimplified, rightSimplified)
                     new.setVariableOrder(self.orderedVariables)
+                    new.isSimplified = true
                     return new
                 }
             }
@@ -158,6 +166,7 @@ public class Power: Node, Operation {
 
         let new = Power(leftSimplified, rightSimplified)
         new.setVariableOrder(self.orderedVariables)
+        new.isSimplified = true
         return new
     }
 
@@ -168,6 +177,15 @@ public class Power: Node, Operation {
     }
 
     override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
-        return "Double.pow(\(try self.left.swiftCode(using: representations)), \(try self.right.swiftCode(using: representations)))"
+
+        // You can think [this issue](https://github.com/apple/swift-numerics/pull/82) for the weirdness here.
+        guard let rightSideNumber = self.right as? Number else {
+            throw SymbolicMathError.misc("The exponent for a power must be a number, not \(self.right)(\(self.right.typeIdentifier))")
+        }
+        guard let rightSide: Int = Int(exactly: try rightSideNumber.evaluate(withValues: [:])) else {
+            throw SymbolicMathError.misc("Power must be an integer, not \(rightSideNumber)")
+        }
+
+        return "Double.pow(\(try self.left.swiftCode(using: representations)), \(rightSide))"
     }
 }

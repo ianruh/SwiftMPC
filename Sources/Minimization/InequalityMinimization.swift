@@ -47,7 +47,7 @@ public struct InequalitySolver {
                             dualDirection: Vector,
                             startPrimal: Vector,
                             startDual: Vector,
-                            t: Double) -> Double {
+                            t: Double) throws -> Double {
         var s = 1.0 // Starting line search length
 
         var shiftedNorm = self.residualNorm(objective: objective,
@@ -65,6 +65,7 @@ public struct InequalitySolver {
         // e.g. if our barrier is -log(-(0.1 - x)), then the gradient is still defined
         // even when the objective isn't. So, we need to make sure our objective always
         // stays defined (e.g. is not NaN)
+        var numIterations: Int = 0
         while(shiftedNorm > (1-self.hyperParameters.lineSearchAlpha*s)*currentNorm || shiftedNorm.isNaN || shiftedValue.isNaN) {
             s = self.hyperParameters.lineSearchBeta*s
             shiftedNorm = self.residualNorm(objective: objective,
@@ -72,6 +73,10 @@ public struct InequalitySolver {
                     dual: startDual + s.*dualDirection,
                     t: t)
             shiftedValue = self.barrierValue(objective: objective, at: startPrimal + s.*primalDirection, t: t)
+            numIterations += 1
+            if(numIterations > self.hyperParameters.lineSearchMaximumIterations) {
+                throw MinimizationError.misc("Reached maximum number of line search iterations")
+            }
         }
         return s
     }
@@ -161,7 +166,7 @@ public struct InequalitySolver {
                 // again when actually calculating it. This would be a good place for memoization
 
                 // Not really the step length as the newton step direction isn't normalized
-                let stepLength = infeasibleLinesearch(
+                let stepLength = try infeasibleLinesearch(
                         objective: objective,
                         primalDirection: stepDirectionPrimal,
                         dualDirection: stepDirectionDual,
@@ -227,6 +232,7 @@ public struct InequalitySolver {
         // Line Search
         public var lineSearchAlpha: Double = 0.25
         public var lineSearchBeta: Double = 0.5
+        public var lineSearchMaximumIterations: Int = 100
 
         // Misc
         public var valueThreshold: Double = -1*Double.infinity

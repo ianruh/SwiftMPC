@@ -76,8 +76,12 @@ public class Sin: Node, Function {
     }
 
     public override func simplify() -> Node {
+
+        if(self.isSimplified) { return self }
+
         let new = Sin(self.argument.simplify())
         new.setVariableOrder(self.orderedVariables)
+        new.isSimplified = true
         return new
     }
 
