@@ -6,7 +6,7 @@
         "repositoryURL": "https://github.com/ianruh/LASwift.git",
         "state": {
           "branch": "linux",
-          "revision": "85e69c157fd6126882842bc52222d1a2ec8dca58",
+          "revision": "1bf143f5441711ba62394bfc0c8cbfb6ffc25cdd",
           "version": null
         }
       },
@@ -56,21 +56,12 @@
         }
       },
       {
-        "package": "swift-numerics",
-        "repositoryURL": "https://github.com/apple/swift-numerics.git",
-        "state": {
-          "branch": null,
-          "revision": "6583ac70c326c3ee080c1d42d9ca3361dca816cd",
-          "version": "0.1.0"
-        }
-      },
-      {
         "package": "swift-system",
         "repositoryURL": "https://github.com/apple/swift-system",
         "state": {
           "branch": null,
-          "revision": "8ffa04c0a0592e6f4f9c30926dedd8fa1c5371f9",
-          "version": "0.0.1"
+          "revision": "2bc160bfe34d843ae5ff47168080add24dfd7eac",
+          "version": "0.0.2"
         }
       }
     ]

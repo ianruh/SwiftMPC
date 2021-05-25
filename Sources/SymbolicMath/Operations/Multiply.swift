@@ -231,12 +231,12 @@ public class Multiply: Node, Operation {
                 var j = i + 1
                 while(j < args.count) {
                     if(args[j] == current) {
-                        exponent = Add(exponent, Number(1))
+                        exponent = exponent + Number(1)
                         args.remove(at: args.startIndex + j)
                         j -= 1
                     } else if let pow = args[j] as? Power {
                         if(pow.left == current) {
-                            exponent = Add(exponent, pow.right)
+                            exponent = exponent + pow.right
                             args.remove(at: args.startIndex + j)
                             j -= 1
                         }
