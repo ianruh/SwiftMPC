@@ -204,7 +204,8 @@ public class Multiply: Node, Operation {
                 }
             } else if(bottoms.count == 1) {
                 if(tops.count == 1) {
-                    return Divide(tops[0], bottoms[0]).simplify()
+                    let temp = Divide(tops[0], bottoms[0]).simplify()
+                    return temp
                 } else {
                     return Divide(Multiply(tops).simplify(), bottoms[0]).simplify()
                 }
@@ -218,34 +219,39 @@ public class Multiply: Node, Operation {
         }
 
         func combineLike(_ node: Multiply) -> Multiply {
-            var args = node.arguments
+            let args = node.arguments
             var reducedTerms: [Node] = []
-            var i = 0
-            while(i < args.count) {
-                var current = args[i]
-                var exponent: Node = Number(1)
-                if let pow = current as? Power {
-                    current = pow.left
-                    exponent = pow.right
-                }
-                var j = i + 1
-                while(j < args.count) {
-                    if(args[j] == current) {
-                        exponent = exponent + Number(1)
-                        args.remove(at: args.startIndex + j)
-                        j -= 1
-                    } else if let pow = args[j] as? Power {
-                        if(pow.left == current) {
-                            exponent = exponent + pow.right
-                            args.remove(at: args.startIndex + j)
-                            j -= 1
-                        }
-                    }
-                    j += 1
-                }
 
-                reducedTerms.append(Power(current, exponent).simplify())
-                i += 1
+            // Base: exponent
+            var termsDict: Dictionary<Node, Node> = [:]
+            args.forEach({arg in
+                if let pow = arg as? Power {
+                    let base = pow.left
+                    let exponent = pow.right
+                    if(termsDict.keys.contains(base)) {
+                        termsDict[base] = termsDict[base]! + exponent
+                    } else {
+                        termsDict[base] = exponent
+                    }
+                } else {
+                    if(termsDict.keys.contains(arg)) {
+                        termsDict[arg] = termsDict[arg]! + Number(1)
+                    } else {
+                        termsDict[arg] = Number(1)
+                    }
+                }
+            })
+
+            for (base, exponent) in termsDict {
+                if(exponent ==  Number(1)) {
+                    reducedTerms.append(base)
+                } else if(exponent == Number(0)) {
+                    continue
+                } else {
+                    let temp = Power(base, exponent.simplify())
+                    temp.isSimplified = true
+                    reducedTerms.append(temp)
+                }
             }
 
             return Multiply(reducedTerms)

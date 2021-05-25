@@ -185,34 +185,39 @@ public class Add: Node, Operation {
         }
 
         func combineLike(_ node: Add) -> Add {
-            var args = node.arguments
+            let args = node.arguments
             var reducedTerms: [Node] = []
-            var i = 0
-            while(i < args.count) {
-                var current = args[i]
-                var multiple: Node = Number(1)
-                if let mul = current as? Multiply {
-                    current = mul.arguments[0]
-                    multiple = Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count])).simplify()
-                }
-                var j = i + 1
-                while(j < args.count) {
-                    if(args[j] == current) {
-                        multiple = Add(multiple, Number(1))
-                        args.remove(at: args.startIndex + j)
-                        j -= 1
-                    } else if let mul = args[j] as? Multiply {
-                        if(current == mul.arguments[0]) {
-                            multiple = Add(multiple, Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count])).simplify())
-                            args.remove(at: args.startIndex + j)
-                            j -= 1
+
+            var termsDict: Dictionary<Node, Node> = [:]
+            args.forEach({arg in
+                if let mul = arg as? Multiply {
+                    if(mul.arguments.count > 1) {
+                        if let term = termsDict[mul.arguments[0]] {
+                            termsDict[mul.arguments[0]] = term + Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count]))
+                        } else {
+                            termsDict[mul.arguments[0]] = Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count]))
+                        }
+                    } else {
+                        if let term = termsDict[mul.arguments[0]] {
+                            termsDict[mul.arguments[0]] = term + Number(1)
+                        } else {
+                            termsDict[mul.arguments[0]] = Number(1)
                         }
                     }
-                    j += 1
+                } else {
+                    if let term = termsDict[arg] {
+                        termsDict[arg] = term + Number(1)
+                    } else {
+                        termsDict[arg] = Number(1)
+                    }
                 }
-
-                reducedTerms.append(Multiply(current, multiple).simplify())
-                i += 1
+            })
+            for (base, multiple) in termsDict {
+                if(multiple == Number(1)) {
+                    reducedTerms.append(base)
+                } else {
+                    reducedTerms.append(base * multiple.simplify())
+                }
             }
 
             return Add(reducedTerms)
