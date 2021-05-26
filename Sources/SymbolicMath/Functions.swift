@@ -19,7 +19,7 @@ public protocol Function: Operation {
 extension Function {
 
     public var precedence: OperationPrecedence {
-        OperationPrecedence(higherThan: Factorial().precedence)
+        OperationPrecedence(higherThan: Factorial(Node()).precedence)
     }
     public var type: OperationType {
         .function

@@ -1,5 +1,6 @@
 import Foundation
 import Numerics
+import Collections
 
 /// Assign one node to the other.
 public class Assign: Node, Operation {
@@ -21,14 +22,6 @@ public class Assign: Node, Operation {
     override public var latex: String {
         return "\(self.left.latex)=\(self.right.latex)"
     }
-    
-    override public var variables: Set<Variable> {
-        return self.left.variables + self.right.variables
-    }
-
-    override public var parameters: Set<Parameter> {
-        return self.left.parameters + self.right.parameters
-    }
 
     override public var derivatives: Set<Derivative> {
         return self.left.derivatives + self.right.derivatives
@@ -43,12 +36,10 @@ public class Assign: Node, Operation {
     required public init(_ params: [Node]) {
         self.left = params[0]
         self.right = params[1]
-    }
-
-    override required public init() {
-        self.left = Node()
-        self.right = Node()
         super.init()
+        self.variables = self.left.variables + self.right.variables
+        self.orderedVariables = OrderedSet<Variable>(self.variables.sorted())
+        self.parameters = self.left.parameters + self.right.parameters
     }
     
     public func factory(_ params: [Node]) -> Node {
@@ -90,7 +81,7 @@ public class Assign: Node, Operation {
         if(self.isSimplified) { return self }
 
         let new = Assign(self.left.simplify(), self.right.simplify())
-        new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(self.orderedVariables)
         new.isSimplified = false
         return new
     }

@@ -1,9 +1,10 @@
 import Numerics
+import Collections
 
 /// Add one node to the other.
 public class Add: Node, Operation {
     
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Assign().precedence)
+    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Assign(Node(), Node()).precedence)
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .left
     public let identifier: String = "+"
@@ -48,26 +49,6 @@ public class Add: Node, Operation {
     override public var latex: String {
         return self.description
     }
-    
-    override public var variables: Set<Variable> {
-        var variables: Set<Variable> = []
-        
-        for arg in self.arguments {
-            variables = variables + arg.variables
-        }
-
-        return variables
-    }
-
-    override public var parameters: Set<Parameter> {
-        var parameters: Set<Parameter> = []
-        
-        for arg in self.arguments {
-            parameters = parameters.union(arg.parameters)
-        }
-
-        return parameters
-    }
 
     override public var derivatives: Set<Derivative> {
         var derivatives: Set<Derivative> = []
@@ -87,12 +68,20 @@ public class Add: Node, Operation {
     
     required public init(_ params: [Node]) {
         self.arguments = params
+        super.init()
+        self.variables = self.arguments.reduce(Set<Variable>(), {(currentSet, nextArg) in
+            return currentSet + nextArg.variables
+        })
+        self.orderedVariables = OrderedSet<Variable>(self.variables.sorted())
+        self.parameters = self.arguments.reduce(Set<Parameter>(), {(currentSet, nextArg) in
+            return currentSet + nextArg.parameters
+        })
     }
 
-    override required public init() {
-        self.arguments = []
-        super.init()
-    }
+    // override required public init() {
+    //     self.arguments = []
+    //     super.init()
+    // }
 
     public convenience init(_ params: Node...) {
         self.init(params)
@@ -253,7 +242,7 @@ public class Add: Node, Operation {
         simplifiedAdd = removeZero(simplifiedAdd)
 
         let new = terminal(simplifiedAdd)
-        new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(self.orderedVariables)
         new.isSimplified = true
         return new
     }

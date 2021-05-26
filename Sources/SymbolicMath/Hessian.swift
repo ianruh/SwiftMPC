@@ -33,7 +33,7 @@ public extension Node {
 
         // Set the ordering on the hessian matrix. It Inherits the ordering
         // from the original node.
-        hessianMatrix.setVariableOrder(self.orderedVariables)
+        try! hessianMatrix.setVariableOrder(self.orderedVariables)
 
         return hessianMatrix
     }

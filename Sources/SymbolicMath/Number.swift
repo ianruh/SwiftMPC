@@ -10,14 +10,6 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
         return "\(self.value)"
     }
 
-    override public var variables: Set<Variable> {
-        return []
-    }
-
-    override public var parameters: Set<Parameter> {
-        return []
-    }
-
     override public var derivatives: Set<Derivative> {
         return []
     }
@@ -36,6 +28,10 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
 
     public init(_ num: Double) {
         self.value = num
+        super.init()
+        self.variables = []
+        self.orderedVariables = []
+        self.parameters = []
     }
 
     required public convenience init(integerLiteral value: Int) {

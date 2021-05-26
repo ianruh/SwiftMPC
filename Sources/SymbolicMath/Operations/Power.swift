@@ -1,10 +1,11 @@
 import Foundation
 import Numerics
+import Collections
 
 /// Power of one node to the other.
 public class Power: Node, Operation {
     
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Negative().precedence)
+    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Negative(Node()).precedence)
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .right
     public let identifier: String = "^"
@@ -41,14 +42,6 @@ public class Power: Node, Operation {
         }
         return "\(leftString)^{\(self.right.latex)}"
     }
-    
-    override public var variables: Set<Variable> {
-        return self.left.variables + self.right.variables
-    }
-
-    override public var parameters: Set<Parameter> {
-        return self.left.parameters + self.right.parameters
-    }
 
     override public var derivatives: Set<Derivative> {
         return self.left.derivatives + self.right.derivatives
@@ -60,20 +53,17 @@ public class Power: Node, Operation {
         return "power\(hasher.finalize())"
     }
     
-    required public init(_ params: [Node]) {
-        self.left = params[0]
-        self.right = params[1]
+    required public convenience init(_ params: [Node]) {
+        self.init(params[0], params[1])
     }
 
     public init(_ left: Node, _ right: Node) {
         self.left = left
         self.right = right
-    }
-
-    override required public init() {
-        self.left = Node()
-        self.right = Node()
         super.init()
+        self.variables = self.left.variables + self.right.variables
+        self.orderedVariables = OrderedSet<Variable>(self.variables.sorted())
+        self.parameters = self.left.parameters + self.right.parameters
     }
     
     @inlinable
@@ -132,12 +122,12 @@ public class Power: Node, Operation {
 
         if(rightIsNum && (rightSimplified as! Number) == Number(1)) {
             let new = leftSimplified
-            new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(self.orderedVariables)
             new.isSimplified = true
             return new
         } else if(rightIsNum && (rightSimplified as! Number) == Number(0)) {
             let new = Number(1)
-            new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(self.orderedVariables)
             new.isSimplified = true
             return new
         } else if(leftIsNum && rightIsNum) {
@@ -146,18 +136,18 @@ public class Power: Node, Operation {
             let rightValue = (rightSimplified as! Number).value
             if(leftValue > 0) {
                 let new = Number(Double.pow(leftValue, rightValue))
-                new.setVariableOrder(self.orderedVariables)
+                try!  new.setVariableOrder(self.orderedVariables)
                 new.isSimplified = true
                 return new
             } else {
                 if let rightValueInt = Int(exactly: rightValue) {
                     let new = Number(Double.pow(leftValue, rightValueInt))
-                    new.setVariableOrder(self.orderedVariables)
+                    try! new.setVariableOrder(self.orderedVariables)
                     new.isSimplified = true
                     return new
                 } else {
                     let new = Power(leftSimplified, rightSimplified)
-                    new.setVariableOrder(self.orderedVariables)
+                    try! new.setVariableOrder(self.orderedVariables)
                     new.isSimplified = true
                     return new
                 }
@@ -165,7 +155,7 @@ public class Power: Node, Operation {
         }
 
         let new = Power(leftSimplified, rightSimplified)
-        new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(self.orderedVariables)
         new.isSimplified = true
         return new
     }

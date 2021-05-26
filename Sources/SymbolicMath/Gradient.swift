@@ -17,7 +17,7 @@ public extension Node {
 
         // Set the ordering on the gradient vector. It inherits the ordering from
         // the original node
-        gradVector.setVariableOrder(self.orderedVariables)
+        try! gradVector.setVariableOrder(self.orderedVariables)
 
         return gradVector
     }

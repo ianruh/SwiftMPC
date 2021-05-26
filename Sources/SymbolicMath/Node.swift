@@ -8,14 +8,14 @@
 import OrderedCollections
 import LASwift
 
-public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdered {
+public class Node: CustomStringConvertible, Comparable, Hashable {
 
     //------------------------ Properties ------------------------
 
     /// The node's unqie identifier
     lazy public var id: Id = Id()
 
-    public var _ordering: OrderedSet<Variable>? = nil
+    public var orderedVariables: OrderedSet<Variable> = []
 
     /// A string representation of the node. This should be overridden.
     public var description: String {
@@ -28,14 +28,10 @@ public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdere
     }
 
     /// The set of variables in the node. This should be overridden.
-    public var variables: Set<Variable> {
-        preconditionFailure("variables should be overridden")
-    }
+    public var variables: Set<Variable> = []
 
     /// The set of variables in the node. This should be overridden.
-    public var parameters: Set<Parameter> {
-        preconditionFailure("parameters should be overridden")
-    }
+    public var parameters: Set<Parameter> = []
 
     /// The set of derivatives in the node. This should be overridden.
     public var derivatives: Set<Derivative> {
@@ -44,7 +40,7 @@ public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdere
 
     /// The type identifier of the class. This should be overridden.
     public var typeIdentifier: String {
-        preconditionFailure("variables should be overridden")
+        preconditionFailure("typeIdentifier should be overridden")
     }
 
     /// Determine if the node is basic
@@ -76,8 +72,13 @@ public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdere
 
     //------------------------ Functions ------------------------
 
-    public func setVariableOrder<C>(_ newOrdering: C) where C: Collection, C.Element == Variable {
-        self._ordering = OrderedSet<Variable>(newOrdering)
+    public func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection, C.Element == Variable {
+        try self.variables.forEach({ variable in 
+            guard newOrdering.contains(variable) else {
+                throw SymbolicMathError.misc("New ordering \(newOrdering) does not contain variable \(variable).")
+            }
+        })
+        self.orderedVariables = OrderedSet<Variable>(newOrdering)
     }
 
     /// Evaluate the node. This should be overridden.

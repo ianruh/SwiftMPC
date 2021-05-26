@@ -18,14 +18,6 @@ public class Variable: Node, ExpressibleByStringLiteral {
     override public var latex: String {
         return "\(self.string)"
     }
-    
-    override public var variables: Set<Variable> {
-        return [self]
-    }
-
-    override public var parameters: Set<Parameter> {
-        return []
-    }
 
     override public var derivatives: Set<Derivative> {
         return []
@@ -41,6 +33,10 @@ public class Variable: Node, ExpressibleByStringLiteral {
     
     public required init(stringLiteral str: String) {
         self.string = str
+        super.init()
+        self.variables = [self]
+        self.orderedVariables = [self]
+        self.parameters = []
     }
 
     /// Initialize a variable using a string. The initial value is only used if the variable is the dependent variable in an ODE.

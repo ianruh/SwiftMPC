@@ -1,10 +1,11 @@
 import Foundation
 import Numerics
+import Collections
 
 /// Multiply one node by the other.
 public class Multiply: Node, Operation {
     
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Add().precedence)
+    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Add(Node()).precedence)
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .left
     public let identifier: String = "*"
@@ -44,26 +45,6 @@ public class Multiply: Node, Operation {
     override public var latex: String {
         return self.description
     }
-    
-    override public var variables: Set<Variable> {
-        var variables: Set<Variable> = []
-        
-        for arg in self.arguments {
-            variables = variables + arg.variables
-        }
-
-        return variables
-    }
-
-    override public var parameters: Set<Parameter> {
-        var parameters: Set<Parameter> = []
-        
-        for arg in self.arguments {
-            parameters = parameters + arg.parameters
-        }
-
-        return parameters
-    }
 
     override public var derivatives: Set<Derivative> {
         var derivatives: Set<Derivative> = []
@@ -83,11 +64,14 @@ public class Multiply: Node, Operation {
     
     required public init(_ params: [Node]) {
         self.arguments = params
-    }
-
-    override required public init() {
-        self.arguments = []
         super.init()
+        self.variables = self.arguments.reduce(Set<Variable>(), {(currentSet, nextArg) in
+            return currentSet + nextArg.variables
+        })
+        self.orderedVariables = OrderedSet<Variable>(self.variables.sorted())
+        self.parameters = self.arguments.reduce(Set<Parameter>(), {(currentSet, nextArg) in 
+            return  currentSet + nextArg.parameters
+        })
     }
 
     public convenience init(_ params: Node...) {
@@ -279,23 +263,23 @@ public class Multiply: Node, Operation {
 
         if(simplifiedMul.arguments.contains(Number(0))) {
             let new = Number(0)
-            new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(self.orderedVariables)
             new.isSimplified = true
             return new
         } else if(simplifiedMul.arguments.count == 1) {
             let new = simplifiedMul.arguments[0]
-            new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(self.orderedVariables)
             new.isSimplified = true
             return new
         } else if(simplifiedMul.arguments.count == 0) {
             let new = Number(1)
-            new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(self.orderedVariables)
             new.isSimplified = true
             return new
         }
 
         let new = fractionProduct(simplifiedMul)
-        new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(self.orderedVariables)
         new.isSimplified = true
         return new
     }

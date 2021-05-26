@@ -294,7 +294,7 @@ final class SymbolicMathTests: XCTestCase {
             let z = Variable("z")
 
             let eq = 3*x**2 + 2*y**2 + z**2
-            eq.setVariableOrder([x, y, z])
+            try! eq.setVariableOrder([x, y, z])
 
             let expectedGradient: Vector = [6.0, 4.0, 2.0]
 
@@ -312,7 +312,7 @@ final class SymbolicMathTests: XCTestCase {
             let z = Variable("z")
 
             let eq = x - y
-            eq.setVariableOrder([x, y, z])
+            try! eq.setVariableOrder([x, y, z])
 
             let expectedGradient: Vector = [1.0, -1.0, 0.0]
 
@@ -363,7 +363,7 @@ final class SymbolicMathTests: XCTestCase {
         do {
             let ordering: OrderedSet<Variable> = [x, y, z]
             let evalPoint: Vector = [1.0, 1.0, 1.0]
-            eq.setVariableOrder(ordering)
+            try! eq.setVariableOrder(ordering)
 
             let expectedGradient: Vector = [6.0, 4.0, 2.0]
             let expectedHessian = Matrix([
@@ -398,7 +398,7 @@ final class SymbolicMathTests: XCTestCase {
         do {
             let ordering: OrderedSet<Variable> = [z, y, x]
             let evalPoint: Vector = [1.0, 1.0, 1.0]
-            eq.setVariableOrder(ordering)
+            try! eq.setVariableOrder(ordering)
 
             let expectedGradient: Vector = [2.0, 4.0, 6.0]
             let expectedHessian = Matrix([
@@ -434,7 +434,7 @@ final class SymbolicMathTests: XCTestCase {
             eq = x**2
             let ordering: OrderedSet<Variable> = [y, x, z]
             let evalPoint: Vector = [1.0, 1.0, 1.0]
-            eq.setVariableOrder(ordering)
+            try! eq.setVariableOrder(ordering)
 
             let expectedGradient: Vector = [0.0, 2.0, 0.0]
             let expectedHessian = Matrix([

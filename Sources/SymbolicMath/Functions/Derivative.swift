@@ -1,4 +1,5 @@
 import RealModule
+import Collections
 
 public class Derivative: Node, Function {
     public let identifier: String = "d"
@@ -24,17 +25,6 @@ public class Derivative: Node, Function {
         return "\\frac{d \(topStr)}{d \(bottomStr)}"
     }
 
-    // TODO: Rename all of the variables properties to solvableVariables or some such thing
-    override public var variables: Set<Variable> {
-        // The variables in the top and the bottom aren't actually solvable, so we don't return them.
-        // return self.diffOf.variables + self.withRespectTo.variables
-        return []
-    }
-
-    override public var parameters: Set<Parameter> {
-        return self.diffOf.parameters.union(self.withRespectTo.parameters)
-    }
-
     override public var derivatives: Set<Derivative> {
         return [self]
     }
@@ -48,14 +38,14 @@ public class Derivative: Node, Function {
     required public init(_ params: [Node]) {
         self.diffOf = params[0]
         self.withRespectTo = params[1]
+        super.init()
+        self.variables = self.diffOf.variables + self.withRespectTo.variables
+        self.orderedVariables = OrderedSet<Variable>(self.variables.sorted())
+        self.parameters = self.diffOf.parameters + self.withRespectTo.parameters
     }
 
     public convenience init(of: Node, wrt: Node) {
         self.init([of, wrt])
-    }
-
-    override required public convenience init() {
-        self.init([Node(), Node()])
     }
 
     /// Attempt to evaluate symbolically, fall back on numerically, then fail. Prints an err message in debug mode if symolic evalutaion fails.
@@ -119,12 +109,12 @@ public class Derivative: Node, Function {
         if let newNode = differentiate(self.diffOf.simplify(), wrt: self.withRespectTo.simplify()) {
             if let _ = newNode as? Derivative {
                 // To prevent recursion
-                newNode.setVariableOrder(self.orderedVariables)
+                try! newNode.setVariableOrder(self.orderedVariables)
                 newNode.isSimplified = true
                 return newNode
             } else {
                 let new = newNode.simplify()
-                new.setVariableOrder(self.orderedVariables)
+                try! new.setVariableOrder(self.orderedVariables)
                 new.isSimplified = true
                 return new
             }

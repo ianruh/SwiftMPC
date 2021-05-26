@@ -1,10 +1,11 @@
 import Foundation
 import Numerics
+import Collections
 
 /// Factorial of a node.
 public class Factorial: Node, Operation {
     
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Power().precedence)
+    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Power(Node(), Node()).precedence)
     public let type: OperationType = .postfix
     public let associativity: OperationAssociativity = .none
     public let identifier: String = "!"
@@ -33,14 +34,6 @@ public class Factorial: Node, Operation {
         
         return "\(self.argument.latex)!"
     }
-    
-    override public var variables: Set<Variable> {
-        return self.argument.variables
-    }
-
-    override public var parameters: Set<Parameter> {
-        return self.argument.parameters
-    }
 
     override public var derivatives: Set<Derivative> {
         return self.argument.derivatives
@@ -52,17 +45,16 @@ public class Factorial: Node, Operation {
         return "factorial\(hasher.finalize())"
     }
     
-    required public init(_ params: [Node]) {
-        self.argument = params[0]
+    required public convenience init(_ params: [Node]) {
+        self.init(params[0])
     }
 
     public init(_ param: Node) {
         self.argument = param
-    }
-
-    override required public init() {
-        self.argument = Node()
         super.init()
+        self.variables = self.argument.variables
+        self.orderedVariables = self.argument.orderedVariables
+        self.parameters = self.argument.parameters
     }
     
     @inlinable
@@ -100,7 +92,7 @@ public class Factorial: Node, Operation {
         if(self.isSimplified) { return self }
 
         let new = Factorial(self.argument.simplify())
-        new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(self.orderedVariables)
         new.isSimplified = true
         return new
     }

@@ -17,14 +17,6 @@ public class Parameter: Node {
     override public var latex: String {
         return "\(self.name)"
     }
-    
-    override public var variables: Set<Variable> {
-        return []
-    }
-
-    override public var parameters: Set<Parameter> {
-        return [self]
-    }
 
     override public var derivatives: Set<Derivative> {
         return []
@@ -45,6 +37,10 @@ public class Parameter: Node {
     ///   - initialValue: Initial value of the variable in an ODE. Won't be used and doesn't need to be specified if it is not the independent variable in an ODE.
     public init(_ str: String) {
         self.name = str
+        super.init()
+        self.variables = []
+        self.orderedVariables = []
+        self.parameters = [self]
     }
 
     override public convenience init() {

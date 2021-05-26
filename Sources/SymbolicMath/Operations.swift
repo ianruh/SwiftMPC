@@ -52,7 +52,6 @@ public protocol Operation: Node {
     var identifier: String {get}
     
     init(_ params: [Node])
-    init()
 }
 
 extension Operation {

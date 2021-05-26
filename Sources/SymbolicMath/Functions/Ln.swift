@@ -1,4 +1,5 @@
 import RealModule
+import Collections
 
 /// The natural ln function
 ///
@@ -17,14 +18,6 @@ public class Ln: Node, Function {
         return "\\ln(\(self.argument.latex))"
     }
 
-    override public var variables: Set<Variable> {
-        return self.argument.variables
-    }
-
-    override public var parameters: Set<Parameter> {
-        return self.argument.parameters
-    }
-
     override public var derivatives: Set<Derivative> {
         return self.argument.derivatives
     }
@@ -37,14 +30,14 @@ public class Ln: Node, Function {
 
     required public init(_ params: [Node]) {
         self.argument = params[0]
+        super.init()
+        self.variables = self.argument.variables
+        self.orderedVariables = self.argument.orderedVariables
+        self.parameters = self.argument.parameters
     }
 
     public convenience init(_ param: Node) {
         self.init([param])
-    }
-
-    override required public convenience init() {
-        self.init([Node()])
     }
 
     @inlinable
@@ -87,7 +80,7 @@ public class Ln: Node, Function {
         if(self.isSimplified) { return self }
 
         let new = Ln(self.argument.simplify())
-        new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(self.orderedVariables)
         new.isSimplified = true
         return new
     }

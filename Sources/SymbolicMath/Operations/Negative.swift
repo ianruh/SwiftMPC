@@ -1,9 +1,10 @@
 import Foundation
 import Numerics
+import Collections
 
 /// A negative number
 public class Negative: Node, Operation {
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Multiply().precedence)
+    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Multiply(Node()).precedence)
     public let type: OperationType = .prefix
     public let associativity: OperationAssociativity = .none
     public let identifier: String = "-"
@@ -18,14 +19,6 @@ public class Negative: Node, Operation {
     override public var latex: String {
         return "-\(self.argument.latex)"
     }
-    
-    override public var variables: Set<Variable> {
-        return self.argument.variables
-    }
-
-    override public var parameters: Set<Parameter> {
-        return self.argument.parameters
-    }
 
     override public var derivatives: Set<Derivative> {
         return self.argument.derivatives
@@ -39,11 +32,10 @@ public class Negative: Node, Operation {
     
     required public init(_ params: [Node]) {
         self.argument = params[0]
-    }
-
-    override required public init() {
-        self.argument = Node()
         super.init()
+        self.variables = self.argument.variables
+        self.orderedVariables = self.argument.orderedVariables
+        self.parameters = self.argument.parameters
     }
     
     public func factory(_ params: [Node]) -> Node {
@@ -84,7 +76,7 @@ public class Negative: Node, Operation {
         if(self.isSimplified) { return self }
 
         let new = Multiply(Number(-1), self.argument.simplify())
-        new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(self.orderedVariables)
         new.isSimplified =  true
         return new
     }

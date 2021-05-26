@@ -4,13 +4,13 @@ import SymbolicMath
 import Collections
 import Foundation
 
-public struct SymbolicObjective: Objective, VariableOrdered {
+public struct SymbolicObjective: Objective {
 
     public let variables: Set<Variable>
     public var numVariables: Int {
         return self.variables.count
     }
-    public var _ordering: OrderedSet<Variable>?
+    public var orderedVariables: OrderedSet<Variable>
 
     public var objectiveNode: Node
     public var symbolicGradient: SymbolicVector = []
@@ -112,12 +112,19 @@ public struct SymbolicObjective: Objective, VariableOrdered {
 
         // Set the ordering of the objective if provided
         // Needs to be done before the gradient and Hessian are constructed
-        if let ordering = optionalOrdering {
-            // self.objectiveNode.setVariableOrder(ordering.union(self.orderedVariables))
-            self.setVariableOrder(ordering.union(self.orderedVariables))
-        } else {
-            // self.objectiveNode.setVariableOrder(self.orderedVariables)
-            self.setVariableOrder(self.orderedVariables)
+        // We also need to initialize the ordering to the variables sorted
+        self.orderedVariables = OrderedSet<Variable>(allVariables.sorted())
+        do {
+            if let ordering = optionalOrdering {
+                // self.objectiveNode.setVariableOrder(ordering.union(self.orderedVariables))
+                try self.setVariableOrder(ordering.union(self.orderedVariables))
+            } else {
+                // self.objectiveNode.setVariableOrder(self.orderedVariables)
+                try  self.setVariableOrder(self.orderedVariables)
+            }
+        } catch {
+            print(error)
+            return nil
         }
 
         // The symbolic equality constraint matrix and vector are not allowed to have any variables
@@ -276,11 +283,16 @@ public struct SymbolicObjective: Objective, VariableOrdered {
         #endif
 
         if let _ = self.symbolicConstraintsVector {
-            // Set progenator constraints orders
-            if let ordering = optionalOrdering {
-                self.symbolicConstraintsVector!.setVariableOrder(ordering.union(self.orderedVariables))
-            } else {
-                self.symbolicConstraintsVector!.setVariableOrder(self.orderedVariables)
+            do {
+                // Set progenator constraints orders
+                if let ordering = optionalOrdering {
+                    try self.symbolicConstraintsVector!.setVariableOrder(ordering.union(self.orderedVariables))
+                } else {
+                    try self.symbolicConstraintsVector!.setVariableOrder(self.orderedVariables)
+                }
+            } catch {
+                print(error)
+                return nil
             }
         }
 
@@ -357,31 +369,41 @@ public struct SymbolicObjective: Objective, VariableOrdered {
 
         // Note: this needs to be done after the objective and constraints are saved, otherwise
         // their ordering won't get set by SymbolicObjective.setVariableOrder
-        if let ordering = optionalOrdering {
-            self.setVariableOrder(ordering.union(self.orderedVariables))
-        } else {
-            self.setVariableOrder(self.orderedVariables)
+        do {
+            if let ordering = optionalOrdering {
+                try self.setVariableOrder(ordering.union(self.orderedVariables))
+            } else {
+                try self.setVariableOrder(self.orderedVariables)
+            }
+        } catch {
+            print(error)
+            return nil
         }
     }
 
-    public mutating func setVariableOrder<C>(_ newOrdering: C) where C: Collection, C.Element == Variable {
-        self._ordering = OrderedSet<Variable>(newOrdering)
+    public mutating func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection, C.Element == Variable {
+        try self.variables.forEach({ variable in
+            guard newOrdering.contains(variable) else {
+                throw MinimizationError.misc("New ordering \(newOrdering) does not contain variable \(variable)")
+            }
+        })
+        self.orderedVariables = OrderedSet<Variable>(newOrdering)
 
         // Propogate it to the children
-        self.objectiveNode.setVariableOrder(newOrdering)
-        self.symbolicGradient.setVariableOrder(newOrdering)
-        self.symbolicHessian.setVariableOrder(newOrdering)
+        try self.objectiveNode.setVariableOrder(newOrdering)
+        try self.symbolicGradient.setVariableOrder(newOrdering)
+        try self.symbolicHessian.setVariableOrder(newOrdering)
         if let _ = self.symbolicConstraintsVector {
-            self.symbolicConstraintsVector!.setVariableOrder(newOrdering)
+            try self.symbolicConstraintsVector!.setVariableOrder(newOrdering)
         }
         if let _ = self.symbolicConstraintsValue {
-            self.symbolicConstraintsValue!.setVariableOrder(newOrdering)
+            try self.symbolicConstraintsValue!.setVariableOrder(newOrdering)
         }
         if let _ = self.symbolicConstraintsGradient {
-            self.symbolicConstraintsGradient!.setVariableOrder(newOrdering)
+            try self.symbolicConstraintsGradient!.setVariableOrder(newOrdering)
         }
         if let _ = self.symbolicConstraintsHessian {
-            self.symbolicConstraintsHessian!.setVariableOrder(newOrdering)
+            try self.symbolicConstraintsHessian!.setVariableOrder(newOrdering)
         }
     }
 
@@ -455,8 +477,8 @@ public struct SymbolicObjective: Objective, VariableOrdered {
             unusedVariables.forEach({ shrunkAmbientOrdering.remove($0) })
 
             // Set the inequality constraints ordering
-            newConstraintsSymbolicVector.setVariableOrder(ordering)
-            originalConstraintsSymbolicVector.setVariableOrder(shrunkAmbientOrdering)
+            try! newConstraintsSymbolicVector.setVariableOrder(ordering)
+            try! originalConstraintsSymbolicVector.setVariableOrder(shrunkAmbientOrdering)
 
             // Remove the columns from the equality matrix. Need to introduce intermediary though
             var shrunkEqualityMatrix: Matrix? = self.equalityConstraintMatrix

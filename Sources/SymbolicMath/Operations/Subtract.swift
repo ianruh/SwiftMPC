@@ -1,10 +1,11 @@
 import Foundation
 import Numerics
+import Collections
 
 /// Subtract one node from the other.
 public class Subtract: Node, Operation {
     
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Assign().precedence)
+    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Assign(Node(), Node()).precedence)
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .left
     public let identifier: String = "-"
@@ -35,14 +36,6 @@ public class Subtract: Node, Operation {
     override public var latex: String {
         return self.description
     }
-    
-    override public var variables: Set<Variable> {
-        return self.left.variables + self.right.variables
-    }
-
-    override public var parameters: Set<Parameter> {
-        return self.left.parameters + self.right.parameters
-    }
 
     override public var derivatives: Set<Derivative> {
         return self.left.derivatives + self.right.derivatives
@@ -57,12 +50,10 @@ public class Subtract: Node, Operation {
     required public init(_ params: [Node]) {
         self.left = params[0]
         self.right = params[1]
-    }
-
-    override required public init() {
-        self.left = Node()
-        self.right = Node()
         super.init()
+        self.variables = self.left.variables + self.right.variables
+        self.orderedVariables = OrderedSet<Variable>(self.variables.sorted())
+        self.parameters = self.left.parameters + self.right.parameters
     }
     
     public func factory(_ params: [Node]) -> Node {
@@ -113,13 +104,13 @@ public class Subtract: Node, Operation {
 
         if(leftIsNum && rightIsNum) {
             let new = Number((leftSimplified as! Number).value - (rightSimplified as! Number).value)
-            new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(self.orderedVariables)
             new.isSimplified = true
             return new
         }
         
         let new = Add(leftSimplified, Multiply(Number(-1), rightSimplified).simplify()).simplify()
-        new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(self.orderedVariables)
         new.isSimplified = true
         return new
     }
