@@ -10,10 +10,10 @@ struct SpringsNumericObjective {
     var warmStartDual: Vector? = nil
 
     func startPoint() throws -> (primal: Vector, dual: Vector) {
-        var primal = ones(self.numVariables).*0.3
-        var dual = ones(self.equalityConstraintMatrix!.rows)
-//        var primal = ones(1)
-//        var dual = ones(1)
+        // var primal = ones(self.numVariables).*0.3
+        // var dual = ones(self.equalityConstraintMatrix!.rows)
+       var primal = ones(1)
+       var dual = ones(1)
 
         if let warmStartPrimal = self.warmStartPrimal {
             primal = warmStartPrimal

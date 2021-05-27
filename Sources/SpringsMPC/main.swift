@@ -1,7 +1,7 @@
 import LASwift
 
 var mpc = SpringsMPC()
-mpc.numTimeHorizonSteps = 20
+mpc.numTimeHorizonSteps = 10
 
 try mpc.codeGen(toFile: "/Users/ianruh/Dev/Minimization/Sources/SpringsMPC/SpringsNumericObjectiveExtension.swift")
 
