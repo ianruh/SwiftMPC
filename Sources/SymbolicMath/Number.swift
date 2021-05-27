@@ -30,7 +30,6 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
         self.value = num
         super.init()
         self.variables = []
-        self.orderedVariables = []
         self.parameters = []
     }
 

@@ -4,7 +4,9 @@ import Collections
 
 /// A negative number
 public class Negative: Node, Operation {
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Multiply(Node()).precedence)
+
+    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Multiply.staticPrecedence)
+    public let precedence: OperationPrecedence = Negative.staticPrecedence
     public let type: OperationType = .prefix
     public let associativity: OperationAssociativity = .none
     public let identifier: String = "-"
@@ -34,7 +36,6 @@ public class Negative: Node, Operation {
         self.argument = params[0]
         super.init()
         self.variables = self.argument.variables
-        self.orderedVariables = self.argument.orderedVariables
         self.parameters = self.argument.parameters
     }
     

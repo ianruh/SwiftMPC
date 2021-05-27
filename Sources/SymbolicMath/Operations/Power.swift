@@ -5,7 +5,8 @@ import Collections
 /// Power of one node to the other.
 public class Power: Node, Operation {
     
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Negative(Node()).precedence)
+    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Negative.staticPrecedence)
+    public let precedence: OperationPrecedence = Power.staticPrecedence
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .right
     public let identifier: String = "^"
@@ -62,7 +63,6 @@ public class Power: Node, Operation {
         self.right = right
         super.init()
         self.variables = self.left.variables + self.right.variables
-        self.orderedVariables = OrderedSet<Variable>(self.variables.sorted())
         self.parameters = self.left.parameters + self.right.parameters
     }
     

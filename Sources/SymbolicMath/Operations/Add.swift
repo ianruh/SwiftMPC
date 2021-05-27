@@ -4,7 +4,8 @@ import Collections
 /// Add one node to the other.
 public class Add: Node, Operation {
     
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Assign(Node(), Node()).precedence)
+    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Assign.staticPrecedence)
+    public let precedence: OperationPrecedence = Add.staticPrecedence
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .left
     public let identifier: String = "+"
@@ -72,7 +73,6 @@ public class Add: Node, Operation {
         self.variables = self.arguments.reduce(Set<Variable>(), {(currentSet, nextArg) in
             return currentSet + nextArg.variables
         })
-        self.orderedVariables = OrderedSet<Variable>(self.variables.sorted())
         self.parameters = self.arguments.reduce(Set<Parameter>(), {(currentSet, nextArg) in
             return currentSet + nextArg.parameters
         })

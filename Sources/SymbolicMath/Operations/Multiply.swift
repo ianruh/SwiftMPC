@@ -5,7 +5,8 @@ import Collections
 /// Multiply one node by the other.
 public class Multiply: Node, Operation {
     
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Add(Node()).precedence)
+    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Add.staticPrecedence)
+    public let precedence: OperationPrecedence = Multiply.staticPrecedence
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .left
     public let identifier: String = "*"
@@ -68,7 +69,6 @@ public class Multiply: Node, Operation {
         self.variables = self.arguments.reduce(Set<Variable>(), {(currentSet, nextArg) in
             return currentSet + nextArg.variables
         })
-        self.orderedVariables = OrderedSet<Variable>(self.variables.sorted())
         self.parameters = self.arguments.reduce(Set<Parameter>(), {(currentSet, nextArg) in 
             return  currentSet + nextArg.parameters
         })

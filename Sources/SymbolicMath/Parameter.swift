@@ -39,7 +39,6 @@ public class Parameter: Node {
         self.name = str
         super.init()
         self.variables = []
-        self.orderedVariables = []
         self.parameters = [self]
     }
 

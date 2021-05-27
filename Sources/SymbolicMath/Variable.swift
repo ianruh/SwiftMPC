@@ -35,7 +35,6 @@ public class Variable: Node, ExpressibleByStringLiteral {
         self.string = str
         super.init()
         self.variables = [self]
-        self.orderedVariables = [self]
         self.parameters = []
     }
 

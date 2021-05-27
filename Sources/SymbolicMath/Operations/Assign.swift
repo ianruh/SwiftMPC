@@ -5,7 +5,8 @@ import Collections
 /// Assign one node to the other.
 public class Assign: Node, Operation {
     // Nil means is the lowest possible precedence
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: nil)
+    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: nil)
+    public let precedence: OperationPrecedence = Assign.staticPrecedence
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .none
     public let identifier: String = "="
@@ -38,7 +39,6 @@ public class Assign: Node, Operation {
         self.right = params[1]
         super.init()
         self.variables = self.left.variables + self.right.variables
-        self.orderedVariables = OrderedSet<Variable>(self.variables.sorted())
         self.parameters = self.left.parameters + self.right.parameters
     }
     

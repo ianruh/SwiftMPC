@@ -32,7 +32,6 @@ public class Ln: Node, Function {
         self.argument = params[0]
         super.init()
         self.variables = self.argument.variables
-        self.orderedVariables = self.argument.orderedVariables
         self.parameters = self.argument.parameters
     }
 

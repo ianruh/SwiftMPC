@@ -40,7 +40,6 @@ public class Derivative: Node, Function {
         self.withRespectTo = params[1]
         super.init()
         self.variables = self.diffOf.variables + self.withRespectTo.variables
-        self.orderedVariables = OrderedSet<Variable>(self.variables.sorted())
         self.parameters = self.diffOf.parameters + self.withRespectTo.parameters
     }
 

@@ -4,7 +4,8 @@ import  Collections
 /// Divide one node by the other.
 public class Divide: Node, Operation {
     
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Add(Node()).precedence)
+    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Add.staticPrecedence)
+    public let precedence: OperationPrecedence = Divide.staticPrecedence
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .left
     public let identifier: String = "/"
@@ -55,7 +56,6 @@ public class Divide: Node, Operation {
         self.right = right
         super.init()
         self.variables = self.left.variables + self.right.variables
-        self.orderedVariables = OrderedSet<Variable>(self.variables.sorted())
         self.parameters = self.left.parameters + self.right.parameters
     }
     

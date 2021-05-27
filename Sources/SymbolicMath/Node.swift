@@ -15,7 +15,21 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
     /// The node's unqie identifier
     lazy public var id: Id = Id()
 
-    public var orderedVariables: OrderedSet<Variable> = []
+    private var _ordering: OrderedSet<Variable>? = nil
+    public var orderedVariables: OrderedSet<Variable> {
+        get {
+            if let ordering = self._ordering {
+                return ordering
+            } else {
+                let simpleOrdering = OrderedSet<Variable>(self.variables.sorted())
+                self._ordering = simpleOrdering
+                return simpleOrdering
+            }
+        }
+        set {
+            self._ordering = newValue
+        }
+    }
 
     /// A string representation of the node. This should be overridden.
     public var description: String {

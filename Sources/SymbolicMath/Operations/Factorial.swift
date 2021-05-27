@@ -5,7 +5,8 @@ import Collections
 /// Factorial of a node.
 public class Factorial: Node, Operation {
     
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Power(Node(), Node()).precedence)
+    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Power.staticPrecedence)
+    public let precedence: OperationPrecedence = Factorial.staticPrecedence
     public let type: OperationType = .postfix
     public let associativity: OperationAssociativity = .none
     public let identifier: String = "!"
@@ -53,7 +54,6 @@ public class Factorial: Node, Operation {
         self.argument = param
         super.init()
         self.variables = self.argument.variables
-        self.orderedVariables = self.argument.orderedVariables
         self.parameters = self.argument.parameters
     }
     

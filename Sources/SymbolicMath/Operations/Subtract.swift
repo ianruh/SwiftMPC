@@ -5,7 +5,8 @@ import Collections
 /// Subtract one node from the other.
 public class Subtract: Node, Operation {
     
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Assign(Node(), Node()).precedence)
+    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Assign.staticPrecedence)
+    public let precedence: OperationPrecedence = Subtract.staticPrecedence
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .left
     public let identifier: String = "-"
@@ -52,7 +53,6 @@ public class Subtract: Node, Operation {
         self.right = params[1]
         super.init()
         self.variables = self.left.variables + self.right.variables
-        self.orderedVariables = OrderedSet<Variable>(self.variables.sorted())
         self.parameters = self.left.parameters + self.right.parameters
     }
     
