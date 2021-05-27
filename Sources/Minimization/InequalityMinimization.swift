@@ -96,7 +96,7 @@ public struct InequalitySolver {
         return t .* objective.hessian(x) + objective.inequalityConstraintsHessian(x)
     }
 
-    public mutating func infeasibleInequalityMinimize(objective: Objective) throws -> (minimum: Double, point: Vector) {
+    public mutating func infeasibleInequalityMinimize(objective: Objective) throws -> (minimum: Double, primal: Vector, dual: Vector) {
 
         if let equalityConstraintMatrix =  objective.equalityConstraintMatrix {
             if let equalityConstraintVector = objective.equalityConstraintVector {
@@ -213,7 +213,7 @@ public struct InequalitySolver {
             printDebug("Objective Value: \(objective.value(currentPoint))")
         #endif
 
-        return (minimum: minimum, point: currentPoint)
+        return (minimum: minimum, primal: currentPoint, dual: currentDual)
     }
 
     public struct HyperParameters {

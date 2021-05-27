@@ -11,9 +11,14 @@ extension SpringsMPC {
         let x = Variable.matrix("x", rows: 6, cols: self.numTimeHorizonSteps)
         let v = Variable.matrix("v", rows: 6, cols: self.numTimeHorizonSteps)
         let a = Variable.matrix("a", rows: 6, cols: self.numTimeHorizonSteps)
+        // Save the state variable
+        self.symbolicPositionMatrix = x
+        self.symbolicVelocityMatrix = v
 
         //==== Control Variables ====
         let u = Variable.matrix("u", rows: 3, cols: self.numTimeHorizonSteps)
+        // Save the control variables
+        self.symbolicControlMatrix = u
 
         //==== Variable Ordering ====
         var ordering: OrderedSet<Variable> = []
@@ -58,33 +63,33 @@ extension SpringsMPC {
         // Position and Velcoity
         for t in 1..<self.numTimeHorizonSteps {
             // Mass 1
-            eqConstraints.append( x[0,t] ≈ x[0,t-1] + v[0,t-1]*self.dt )
-            eqConstraints.append( v[0,t] ≈ v[0,t-1] + a[0,t-1]*self.dt )
+            eqConstraints.append( x[0,t] ≈ x[0,t-1] + v[0,t-1]*self.mpc_dt )
+            eqConstraints.append( v[0,t] ≈ v[0,t-1] + a[0,t-1]*self.mpc_dt )
             eqConstraints.append( a[0,t] ≈ (0      - x[0,t]) + (x[1,t] - x[0,t]) + u[0,t] )
 
             // Mass 2
-            eqConstraints.append( x[1,t] ≈ x[1,t-1] + v[1,t-1]*self.dt )
-            eqConstraints.append( v[1,t] ≈ v[1,t-1] + a[1,t-1]*self.dt )
+            eqConstraints.append( x[1,t] ≈ x[1,t-1] + v[1,t-1]*self.mpc_dt )
+            eqConstraints.append( v[1,t] ≈ v[1,t-1] + a[1,t-1]*self.mpc_dt )
             eqConstraints.append( a[1,t] ≈ (x[0,t] - x[1,t]) + (x[2,t] - x[1,t]) - u[0,t] )
 
             // Mass 3
-            eqConstraints.append( x[2,t] ≈ x[2,t-1] + v[2,t-1]*self.dt )
-            eqConstraints.append( v[2,t] ≈ v[2,t-1] + a[2,t-1]*self.dt )
+            eqConstraints.append( x[2,t] ≈ x[2,t-1] + v[2,t-1]*self.mpc_dt )
+            eqConstraints.append( v[2,t] ≈ v[2,t-1] + a[2,t-1]*self.mpc_dt )
             eqConstraints.append( a[2,t] ≈ (x[1,t] - x[2,t]) + (x[3,t] - x[2,t]) + u[1,t] )
 
             // Mass 4
-            eqConstraints.append( x[3,t] ≈ x[3,t-1] + v[3,t-1]*self.dt )
-            eqConstraints.append( v[3,t] ≈ v[3,t-1] + a[3,t-1]*self.dt )
+            eqConstraints.append( x[3,t] ≈ x[3,t-1] + v[3,t-1]*self.mpc_dt )
+            eqConstraints.append( v[3,t] ≈ v[3,t-1] + a[3,t-1]*self.mpc_dt )
             eqConstraints.append( a[3,t] ≈ (x[2,t] - x[3,t]) + (x[4,t] - x[3,t]) + u[2,t] )
 
             // Mass 5
-            eqConstraints.append( x[4,t] ≈ x[4,t-1] + v[4,t-1]*self.dt )
-            eqConstraints.append( v[4,t] ≈ v[4,t-1] + a[4,t-1]*self.dt )
+            eqConstraints.append( x[4,t] ≈ x[4,t-1] + v[4,t-1]*self.mpc_dt )
+            eqConstraints.append( v[4,t] ≈ v[4,t-1] + a[4,t-1]*self.mpc_dt )
             eqConstraints.append( a[4,t] ≈ (x[3,t] - x[4,t]) + (x[5,t] - x[4,t]) - u[1,t] )
 
             // Mass 6
-            eqConstraints.append( x[5,t] ≈ x[5,t-1] + v[5,t-1]*self.dt )
-            eqConstraints.append( v[5,t] ≈ v[5,t-1] + a[5,t-1]*self.dt )
+            eqConstraints.append( x[5,t] ≈ x[5,t-1] + v[5,t-1]*self.mpc_dt )
+            eqConstraints.append( v[5,t] ≈ v[5,t-1] + a[5,t-1]*self.mpc_dt )
             eqConstraints.append( a[5,t] ≈ (x[4,t] - x[5,t]) + (0      - x[5,t]) - u[2,t] )
         }
 

@@ -30,7 +30,7 @@ final class BenchmarkTests: XCTestCase {
 
             var solver = InequalitySolver()
             solver.hyperParameters.residualEpsilon = 1e-8
-            let (_, pt) = try solver.infeasibleInequalityMinimize(objective: objective)
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
             XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
         } catch {
@@ -62,7 +62,7 @@ final class BenchmarkTests: XCTestCase {
 
             var solver = InequalitySolver()
             solver.hyperParameters.residualEpsilon = 1e-8
-            let (_, pt) = try solver.infeasibleInequalityMinimize(objective: objective)
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
             XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
         } catch {
@@ -94,7 +94,7 @@ final class BenchmarkTests: XCTestCase {
 
             var solver = InequalitySolver()
             solver.hyperParameters.residualEpsilon = 1e-8
-            let (_, pt) = try solver.infeasibleInequalityMinimize(objective: objective)
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
             XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
         } catch {
@@ -129,7 +129,7 @@ final class BenchmarkTests: XCTestCase {
 
             var solver = InequalitySolver()
             solver.hyperParameters.residualEpsilon = 1e-8
-            let (_, pt) = try solver.infeasibleInequalityMinimize(objective: objective)
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
             XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
         } catch {

@@ -10,7 +10,7 @@ build:
 	swift build -c release --build-tests $(WHOLE_MODULE) $(UNCHECKED) $(FAST_MATH) $(COMPILER_OPT)
 
 build-debug:
-	swift build --build-tests $(DEBUG) $(NO_SIMPLIFY)
+	swift build --build-tests $(DEBUG)
 
 run:
 	swift run -c release --build-tests $(WHOLE_MODULE) $(UNCHECKED) $(FAST_MATH) $(COMPILER_OPT)

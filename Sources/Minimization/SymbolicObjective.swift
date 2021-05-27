@@ -494,7 +494,7 @@ public struct SymbolicObjective: Objective, VariableOrdered {
 
             var solver = InequalitySolver()
             solver.hyperParameters.valueThreshold = 0.0
-            let (min, pt) = try solver.infeasibleInequalityMinimize(objective: newObjective)
+            let (min, pt, _) = try solver.infeasibleInequalityMinimize(objective: newObjective)
 
             // Min should be negative if we have a feasible point
             guard min < 0.0 else {

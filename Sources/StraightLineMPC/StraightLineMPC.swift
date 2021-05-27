@@ -17,7 +17,9 @@ struct StraightLineMPC {
         
         let objective = try self.symbolicObjective()
 
-        return try self.solver.infeasibleInequalityMinimize(objective: objective)
+        let (min, pt, _) = try self.solver.infeasibleInequalityMinimize(objective: objective)
+
+        return (minimum: min, point: pt)
 
     }
 
@@ -25,7 +27,9 @@ struct StraightLineMPC {
         
         let objective = StraightLineNumericObjective()
 
-        return try self.solver.infeasibleInequalityMinimize(objective: objective)
+        let (min, pt, _) = try self.solver.infeasibleInequalityMinimize(objective: objective)
+
+        return (minimum: min, point: pt)
 
     }
 
