@@ -24,6 +24,24 @@ public class Assign: Node, Operation {
         return "\(self.left.latex)=\(self.right.latex)"
     }
 
+    override public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = self.left.variables + self.right.variables
+            return self._variables!
+        }
+    }
+
+    override public var parameters: Set<Parameter> {
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = self.left.parameters + self.right.parameters
+            return self._parameters!
+        }
+    }
+
     override public var derivatives: Set<Derivative> {
         return self.left.derivatives + self.right.derivatives
     }
@@ -37,9 +55,6 @@ public class Assign: Node, Operation {
     required public init(_ params: [Node]) {
         self.left = params[0]
         self.right = params[1]
-        super.init()
-        self.variables = self.left.variables + self.right.variables
-        self.parameters = self.left.parameters + self.right.parameters
     }
     
     public func factory(_ params: [Node]) -> Node {
@@ -81,7 +96,7 @@ public class Assign: Node, Operation {
         if(self.isSimplified) { return self }
 
         let new = Assign(self.left.simplify(), self.right.simplify())
-        try! new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(from: self)
         new.isSimplified = false
         return new
     }

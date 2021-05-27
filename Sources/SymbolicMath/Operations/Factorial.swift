@@ -36,6 +36,24 @@ public class Factorial: Node, Operation {
         return "\(self.argument.latex)!"
     }
 
+    override public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = self.argument.variables
+            return self._variables!
+        }
+    }
+
+    override public var parameters: Set<Parameter> {
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = self.argument.parameters
+            return self._parameters!
+        }
+    }
+
     override public var derivatives: Set<Derivative> {
         return self.argument.derivatives
     }
@@ -52,9 +70,6 @@ public class Factorial: Node, Operation {
 
     public init(_ param: Node) {
         self.argument = param
-        super.init()
-        self.variables = self.argument.variables
-        self.parameters = self.argument.parameters
     }
     
     @inlinable
@@ -92,7 +107,7 @@ public class Factorial: Node, Operation {
         if(self.isSimplified) { return self }
 
         let new = Factorial(self.argument.simplify())
-        try! new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(from: self)
         new.isSimplified = true
         return new
     }

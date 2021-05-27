@@ -26,6 +26,24 @@ public class Parameter: Node {
         return self.name
     }
 
+    override public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = []
+            return self._variables!
+        }
+    }
+
+    override public var parameters: Set<Parameter> {
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = [self]
+            return self._parameters!
+        }
+    }
+
     public static func ==(_ lhs: Parameter, _ rhs: Parameter) -> Bool {
         return lhs.name == rhs.name
     }
@@ -37,9 +55,6 @@ public class Parameter: Node {
     ///   - initialValue: Initial value of the variable in an ODE. Won't be used and doesn't need to be specified if it is not the independent variable in an ODE.
     public init(_ str: String) {
         self.name = str
-        super.init()
-        self.variables = []
-        self.parameters = [self]
     }
 
     override public convenience init() {

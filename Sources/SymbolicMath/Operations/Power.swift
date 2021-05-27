@@ -44,6 +44,24 @@ public class Power: Node, Operation {
         return "\(leftString)^{\(self.right.latex)}"
     }
 
+    override public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = self.left.variables + self.right.variables
+            return self._variables!
+        }
+    }
+
+    override public var parameters: Set<Parameter> {
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = self.left.parameters + self.right.parameters
+            return self._parameters!
+        }
+    }
+
     override public var derivatives: Set<Derivative> {
         return self.left.derivatives + self.right.derivatives
     }
@@ -61,9 +79,6 @@ public class Power: Node, Operation {
     public init(_ left: Node, _ right: Node) {
         self.left = left
         self.right = right
-        super.init()
-        self.variables = self.left.variables + self.right.variables
-        self.parameters = self.left.parameters + self.right.parameters
     }
     
     @inlinable
@@ -122,12 +137,12 @@ public class Power: Node, Operation {
 
         if(rightIsNum && (rightSimplified as! Number) == Number(1)) {
             let new = leftSimplified
-            try! new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(from: self)
             new.isSimplified = true
             return new
         } else if(rightIsNum && (rightSimplified as! Number) == Number(0)) {
             let new = Number(1)
-            try! new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(from: self)
             new.isSimplified = true
             return new
         } else if(leftIsNum && rightIsNum) {
@@ -136,18 +151,18 @@ public class Power: Node, Operation {
             let rightValue = (rightSimplified as! Number).value
             if(leftValue > 0) {
                 let new = Number(Double.pow(leftValue, rightValue))
-                try!  new.setVariableOrder(self.orderedVariables)
+                try!  new.setVariableOrder(from: self)
                 new.isSimplified = true
                 return new
             } else {
                 if let rightValueInt = Int(exactly: rightValue) {
                     let new = Number(Double.pow(leftValue, rightValueInt))
-                    try! new.setVariableOrder(self.orderedVariables)
+                    try! new.setVariableOrder(from: self)
                     new.isSimplified = true
                     return new
                 } else {
                     let new = Power(leftSimplified, rightSimplified)
-                    try! new.setVariableOrder(self.orderedVariables)
+                    try! new.setVariableOrder(from: self)
                     new.isSimplified = true
                     return new
                 }

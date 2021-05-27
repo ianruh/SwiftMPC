@@ -25,6 +25,24 @@ public class Derivative: Node, Function {
         return "\\frac{d \(topStr)}{d \(bottomStr)}"
     }
 
+    override public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = self.diffOf.variables + self.withRespectTo.variables
+            return self._variables!
+        }
+    }
+
+    override public var parameters: Set<Parameter> {
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = self.diffOf.parameters + self.withRespectTo.parameters
+            return self._parameters!
+        }
+    }
+
     override public var derivatives: Set<Derivative> {
         return [self]
     }
@@ -38,9 +56,6 @@ public class Derivative: Node, Function {
     required public init(_ params: [Node]) {
         self.diffOf = params[0]
         self.withRespectTo = params[1]
-        super.init()
-        self.variables = self.diffOf.variables + self.withRespectTo.variables
-        self.parameters = self.diffOf.parameters + self.withRespectTo.parameters
     }
 
     public convenience init(of: Node, wrt: Node) {
@@ -108,12 +123,12 @@ public class Derivative: Node, Function {
         if let newNode = differentiate(self.diffOf.simplify(), wrt: self.withRespectTo.simplify()) {
             if let _ = newNode as? Derivative {
                 // To prevent recursion
-                try! newNode.setVariableOrder(self.orderedVariables)
+                try! newNode.setVariableOrder(from: self)
                 newNode.isSimplified = true
                 return newNode
             } else {
                 let new = newNode.simplify()
-                try! new.setVariableOrder(self.orderedVariables)
+                try! new.setVariableOrder(from: self)
                 new.isSimplified = true
                 return new
             }

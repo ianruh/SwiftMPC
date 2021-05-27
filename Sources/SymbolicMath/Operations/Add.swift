@@ -51,6 +51,28 @@ public class Add: Node, Operation {
         return self.description
     }
 
+    override public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = self.arguments.reduce(Set<Variable>(), {(currentSet, nextArg) in
+                return currentSet + nextArg.variables
+            })
+            return self._variables!
+        }
+    }
+
+    override public var parameters: Set<Parameter> {
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = self.arguments.reduce(Set<Parameter>(), {(currentSet, nextArg) in
+                return currentSet + nextArg.parameters
+            })
+            return self._parameters!
+        }
+    }
+
     override public var derivatives: Set<Derivative> {
         var derivatives: Set<Derivative> = []
         
@@ -69,13 +91,6 @@ public class Add: Node, Operation {
     
     required public init(_ params: [Node]) {
         self.arguments = params
-        super.init()
-        self.variables = self.arguments.reduce(Set<Variable>(), {(currentSet, nextArg) in
-            return currentSet + nextArg.variables
-        })
-        self.parameters = self.arguments.reduce(Set<Parameter>(), {(currentSet, nextArg) in
-            return currentSet + nextArg.parameters
-        })
     }
 
     // override required public init() {
@@ -242,7 +257,7 @@ public class Add: Node, Operation {
         simplifiedAdd = removeZero(simplifiedAdd)
 
         let new = terminal(simplifiedAdd)
-        try! new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(from: self)
         new.isSimplified = true
         return new
     }

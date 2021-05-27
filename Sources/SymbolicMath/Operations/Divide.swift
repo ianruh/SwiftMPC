@@ -37,6 +37,24 @@ public class Divide: Node, Operation {
         return "\\frac{\(self.left.latex)}{\(self.right.latex)}"
     }
 
+    override public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = self.left.variables + self.right.variables
+            return self._variables!
+        }
+    }
+
+    override public var parameters: Set<Parameter> {
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = self.left.parameters + self.right.parameters
+            return self._parameters!
+        }
+    }
+
     override public var derivatives: Set<Derivative> {
         return self.left.derivatives + self.right.derivatives
     }
@@ -54,9 +72,6 @@ public class Divide: Node, Operation {
     public init(_ left: Node, _ right: Node) {
         self.left = left
         self.right = right
-        super.init()
-        self.variables = self.left.variables + self.right.variables
-        self.parameters = self.left.parameters + self.right.parameters
     }
     
     @inlinable
@@ -154,11 +169,11 @@ public class Divide: Node, Operation {
             let rightValue = (rightSimplified as! Number).value
             guard rightValue != 0.0 else {
                 let new = Divide(leftSimplified, rightSimplified)
-                try! new.setVariableOrder(self.orderedVariables)
+                try! new.setVariableOrder(from: self)
                 return new
             }
             let new = Number((leftSimplified as! Number).value / rightValue)
-            try! new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(from: self)
             return new
         }
 
@@ -171,7 +186,7 @@ public class Divide: Node, Operation {
             let rightDiv = rightSimplified as! Divide
             // let new = Divide(leftDiv.left * rightDiv.right, leftDiv.right * rightDiv.left).simplify()
             let new = cancelTerms(Divide(leftDiv.left * rightDiv.right, leftDiv.right * rightDiv.left))
-            try! new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(from: self)
             new.isSimplified = true
             return new
         } else if(leftIsDiv && !rightIsDiv) {
@@ -179,7 +194,7 @@ public class Divide: Node, Operation {
             let leftDiv = leftSimplified as! Divide
             // let new = Divide(leftDiv.left, leftDiv.right * rightSimplified).simplify()
             let new = Divide(leftDiv.left, leftDiv.right * rightSimplified)
-            try! new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(from: self)
             new.isSimplified = true
             return new
         } else if(!leftIsDiv && rightIsDiv) {
@@ -188,24 +203,24 @@ public class Divide: Node, Operation {
             // let new = Divide(leftSimplified*rightDiv.right, rightDiv.left).simplify()
             let new = Divide(leftSimplified*rightDiv.right, rightDiv.left)
             new.isSimplified = true
-            try! new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(from: self)
             return new
         } else {
             // Default case
             if(rightSimplified == Number(1)) {
                 let new = leftSimplified
-                try! new.setVariableOrder(self.orderedVariables)
+                try! new.setVariableOrder(from: self)
                 new.isSimplified = true
                 return new
             } else if(leftSimplified == Number(0.0)) {
                 let new = Number(0.0)
                 new.isSimplified = true
-                try! new.setVariableOrder(self.orderedVariables)
+                try! new.setVariableOrder(from: self)
                 return new
             } else {
                 let simplifiedDiv: Divide = Divide(leftSimplified, rightSimplified)
                 let new = cancelTerms(simplifiedDiv)
-                try! new.setVariableOrder(self.orderedVariables)
+                try! new.setVariableOrder(from: self)
                 new.isSimplified = true
                 return new
             }

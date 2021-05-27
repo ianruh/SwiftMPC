@@ -22,6 +22,24 @@ public class Negative: Node, Operation {
         return "-\(self.argument.latex)"
     }
 
+    override public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = self.argument.variables
+            return self._variables!
+        }
+    }
+
+    override public var parameters: Set<Parameter> {
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = self.argument.parameters
+            return self._parameters!
+        }
+    }
+
     override public var derivatives: Set<Derivative> {
         return self.argument.derivatives
     }
@@ -34,9 +52,6 @@ public class Negative: Node, Operation {
     
     required public init(_ params: [Node]) {
         self.argument = params[0]
-        super.init()
-        self.variables = self.argument.variables
-        self.parameters = self.argument.parameters
     }
     
     public func factory(_ params: [Node]) -> Node {
@@ -77,7 +92,7 @@ public class Negative: Node, Operation {
         if(self.isSimplified) { return self }
 
         let new = Multiply(Number(-1), self.argument.simplify())
-        try! new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(from: self)
         new.isSimplified =  true
         return new
     }

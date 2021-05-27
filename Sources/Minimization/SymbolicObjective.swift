@@ -441,8 +441,8 @@ public struct SymbolicObjective: Objective {
                 return originalConstraint <= s
             })
             constraints.append(-10.0 <= s) // To alleive the singularity of the hessian
-            var newConstraintsSymbolicVector = SymbolicVector(constraints)
-            var originalConstraintsSymbolicVector = symbolicConstraints
+            let newConstraintsSymbolicVector = SymbolicVector(constraints)
+            let originalConstraintsSymbolicVector = symbolicConstraints
             var ordering: OrderedSet<Variable> = OrderedSet<Variable>([s]).union(self.orderedVariables)
 
             // We can also end up with a singular hessian when our ambient problem involves a variable (lets say x),

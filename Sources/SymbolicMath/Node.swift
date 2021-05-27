@@ -42,10 +42,24 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
     }
 
     /// The set of variables in the node. This should be overridden.
-    public var variables: Set<Variable> = []
+    internal var _variables: Set<Variable>?
+    public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            return []
+        }
+    }
 
     /// The set of variables in the node. This should be overridden.
-    public var parameters: Set<Parameter> = []
+    internal var _parameters: Set<Parameter>?
+    public var parameters: Set<Parameter> {
+        if let parameter = self._parameters {
+            return parameter
+        } else {
+            return []
+        }
+    }
 
     /// The set of derivatives in the node. This should be overridden.
     public var derivatives: Set<Derivative> {
@@ -93,6 +107,12 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
             }
         })
         self.orderedVariables = OrderedSet<Variable>(newOrdering)
+    }
+
+    public func setVariableOrder(from node: Node) throws {
+        if let ordering = node._ordering {
+            try self.setVariableOrder(ordering)
+        }
     }
 
     /// Evaluate the node. This should be overridden.

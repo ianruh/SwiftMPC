@@ -16,6 +16,24 @@ public class Sqrt: Node, Function {
         return "\\sqrt{\(self.argument.latex)}"
     }
 
+    override public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = self.argument.variables
+            return self._variables!
+        }
+    }
+
+    override public var parameters: Set<Parameter> {
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = self.argument.parameters
+            return self._parameters!
+        }
+    }
+
     override public var derivatives: Set<Derivative> {
         return self.argument.derivatives
     }
@@ -28,9 +46,6 @@ public class Sqrt: Node, Function {
 
     required public init(_ params: [Node]) {
         self.argument = params[0]
-        super.init()
-        self.variables = self.argument.variables
-        self.parameters = self.argument.parameters
     }
 
     public convenience init(_ param: Node) {
@@ -72,7 +87,7 @@ public class Sqrt: Node, Function {
         if(self.isSimplified) { return self }
 
         let new = Sqrt(self.argument.simplify())
-        try! new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(from: self)
         new.isSimplified = true
         return new
     }

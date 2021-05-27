@@ -21,6 +21,24 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
     override public var latex: String {
         return "\(self.value)"
     }
+
+    override public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = []
+            return self._variables!
+        }
+    }
+
+    override public var parameters: Set<Parameter> {
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = []
+            return self._parameters!
+        }
+    }
     
     public convenience init(_ num: Int) {
         self.init(Double(num))
@@ -28,9 +46,6 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
 
     public init(_ num: Double) {
         self.value = num
-        super.init()
-        self.variables = []
-        self.parameters = []
     }
 
     required public convenience init(integerLiteral value: Int) {

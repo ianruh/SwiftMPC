@@ -27,15 +27,30 @@ public class Variable: Node, ExpressibleByStringLiteral {
         return self.string
     }
 
+    override public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = [self]
+            return self._variables!
+        }
+    }
+
+    override public var parameters: Set<Parameter> {
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = []
+            return self._parameters!
+        }
+    }
+
     public static func ==(_ lhs: Variable, _ rhs: Variable) -> Bool {
         return lhs.string == rhs.string
     }
     
     public required init(stringLiteral str: String) {
         self.string = str
-        super.init()
-        self.variables = [self]
-        self.parameters = []
     }
 
     /// Initialize a variable using a string. The initial value is only used if the variable is the dependent variable in an ODE.
