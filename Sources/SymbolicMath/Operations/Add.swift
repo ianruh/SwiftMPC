@@ -1,9 +1,11 @@
 import Numerics
+import Collections
 
 /// Add one node to the other.
 public class Add: Node, Operation {
     
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Assign().precedence)
+    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Assign.staticPrecedence)
+    public let precedence: OperationPrecedence = Add.staticPrecedence
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .left
     public let identifier: String = "+"
@@ -48,25 +50,27 @@ public class Add: Node, Operation {
     override public var latex: String {
         return self.description
     }
-    
-    override public var variables: Set<Variable> {
-        var variables: Set<Variable> = []
-        
-        for arg in self.arguments {
-            variables = variables + arg.variables
-        }
 
-        return variables
+    override public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = self.arguments.reduce(Set<Variable>(), {(currentSet, nextArg) in
+                return currentSet + nextArg.variables
+            })
+            return self._variables!
+        }
     }
 
     override public var parameters: Set<Parameter> {
-        var parameters: Set<Parameter> = []
-        
-        for arg in self.arguments {
-            parameters = parameters.union(arg.parameters)
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = self.arguments.reduce(Set<Parameter>(), {(currentSet, nextArg) in
+                return currentSet + nextArg.parameters
+            })
+            return self._parameters!
         }
-
-        return parameters
     }
 
     override public var derivatives: Set<Derivative> {
@@ -89,10 +93,10 @@ public class Add: Node, Operation {
         self.arguments = params
     }
 
-    override required public init() {
-        self.arguments = []
-        super.init()
-    }
+    // override required public init() {
+    //     self.arguments = []
+    //     super.init()
+    // }
 
     public convenience init(_ params: Node...) {
         self.init(params)
@@ -185,34 +189,39 @@ public class Add: Node, Operation {
         }
 
         func combineLike(_ node: Add) -> Add {
-            var args = node.arguments
+            let args = node.arguments
             var reducedTerms: [Node] = []
-            var i = 0
-            while(i < args.count) {
-                var current = args[i]
-                var multiple: Node = Number(1)
-                if let mul = current as? Multiply {
-                    current = mul.arguments[0]
-                    multiple = Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count])).simplify()
-                }
-                var j = i + 1
-                while(j < args.count) {
-                    if(args[j] == current) {
-                        multiple = Add(multiple, Number(1))
-                        args.remove(at: args.startIndex + j)
-                        j -= 1
-                    } else if let mul = args[j] as? Multiply {
-                        if(current == mul.arguments[0]) {
-                            multiple = Add(multiple, Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count])).simplify())
-                            args.remove(at: args.startIndex + j)
-                            j -= 1
+
+            var termsDict: Dictionary<Node, Node> = [:]
+            args.forEach({arg in
+                if let mul = arg as? Multiply {
+                    if(mul.arguments.count > 1) {
+                        if let term = termsDict[mul.arguments[0]] {
+                            termsDict[mul.arguments[0]] = term + Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count]))
+                        } else {
+                            termsDict[mul.arguments[0]] = Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count]))
+                        }
+                    } else {
+                        if let term = termsDict[mul.arguments[0]] {
+                            termsDict[mul.arguments[0]] = term + Number(1)
+                        } else {
+                            termsDict[mul.arguments[0]] = Number(1)
                         }
                     }
-                    j += 1
+                } else {
+                    if let term = termsDict[arg] {
+                        termsDict[arg] = term + Number(1)
+                    } else {
+                        termsDict[arg] = Number(1)
+                    }
                 }
-
-                reducedTerms.append(Multiply(current, multiple).simplify())
-                i += 1
+            })
+            for (base, multiple) in termsDict {
+                if(multiple == Number(1)) {
+                    reducedTerms.append(base)
+                } else {
+                    reducedTerms.append(base * multiple.simplify())
+                }
             }
 
             return Add(reducedTerms)
@@ -248,7 +257,7 @@ public class Add: Node, Operation {
         simplifiedAdd = removeZero(simplifiedAdd)
 
         let new = terminal(simplifiedAdd)
-        new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(from: self)
         new.isSimplified = true
         return new
     }

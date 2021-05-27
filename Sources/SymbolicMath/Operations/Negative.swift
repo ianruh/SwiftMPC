@@ -1,9 +1,12 @@
 import Foundation
 import Numerics
+import Collections
 
 /// A negative number
 public class Negative: Node, Operation {
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Multiply().precedence)
+
+    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Multiply.staticPrecedence)
+    public let precedence: OperationPrecedence = Negative.staticPrecedence
     public let type: OperationType = .prefix
     public let associativity: OperationAssociativity = .none
     public let identifier: String = "-"
@@ -18,13 +21,23 @@ public class Negative: Node, Operation {
     override public var latex: String {
         return "-\(self.argument.latex)"
     }
-    
+
     override public var variables: Set<Variable> {
-        return self.argument.variables
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = self.argument.variables
+            return self._variables!
+        }
     }
 
     override public var parameters: Set<Parameter> {
-        return self.argument.parameters
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = self.argument.parameters
+            return self._parameters!
+        }
     }
 
     override public var derivatives: Set<Derivative> {
@@ -39,11 +52,6 @@ public class Negative: Node, Operation {
     
     required public init(_ params: [Node]) {
         self.argument = params[0]
-    }
-
-    override required public init() {
-        self.argument = Node()
-        super.init()
     }
     
     public func factory(_ params: [Node]) -> Node {
@@ -84,7 +92,7 @@ public class Negative: Node, Operation {
         if(self.isSimplified) { return self }
 
         let new = Multiply(Number(-1), self.argument.simplify())
-        new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(from: self)
         new.isSimplified =  true
         return new
     }

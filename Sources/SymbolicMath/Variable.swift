@@ -18,14 +18,6 @@ public class Variable: Node, ExpressibleByStringLiteral {
     override public var latex: String {
         return "\(self.string)"
     }
-    
-    override public var variables: Set<Variable> {
-        return [self]
-    }
-
-    override public var parameters: Set<Parameter> {
-        return []
-    }
 
     override public var derivatives: Set<Derivative> {
         return []
@@ -33,6 +25,24 @@ public class Variable: Node, ExpressibleByStringLiteral {
 
     override public var typeIdentifier: String {
         return self.string
+    }
+
+    override public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = [self]
+            return self._variables!
+        }
+    }
+
+    override public var parameters: Set<Parameter> {
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = []
+            return self._parameters!
+        }
     }
 
     public static func ==(_ lhs: Variable, _ rhs: Variable) -> Bool {

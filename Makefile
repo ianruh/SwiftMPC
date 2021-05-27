@@ -19,7 +19,7 @@ run-debug:
 	swift run $(DEBUG)
 
 test:
-	swift test -c release -Xswiftc $(WHOLE_MODULE) $(UNCHECKED) $(FAST_MATH) $(COMPILER_OPT)
+	swift test -c release $(WHOLE_MODULE) $(UNCHECKED) $(FAST_MATH) $(COMPILER_OPT)
 
 test-debug:
 	swift test $(DEBUG)

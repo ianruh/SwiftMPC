@@ -9,7 +9,7 @@ public extension SymbolicMatrix {
         }))
     }
 
-    init(_ vecs: [[Variable]]) {
+    convenience init(_ vecs: [[Variable]]) {
         self.init(vecs.map({ SymbolicVector($0) }))
     }
 

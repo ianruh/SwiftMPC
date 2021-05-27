@@ -1,10 +1,12 @@
 import Foundation
 import Numerics
+import Collections
 
 /// Subtract one node from the other.
 public class Subtract: Node, Operation {
     
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Assign().precedence)
+    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Assign.staticPrecedence)
+    public let precedence: OperationPrecedence = Subtract.staticPrecedence
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .left
     public let identifier: String = "-"
@@ -35,13 +37,23 @@ public class Subtract: Node, Operation {
     override public var latex: String {
         return self.description
     }
-    
+
     override public var variables: Set<Variable> {
-        return self.left.variables + self.right.variables
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = self.left.variables + self.right.variables
+            return self._variables!
+        }
     }
 
     override public var parameters: Set<Parameter> {
-        return self.left.parameters + self.right.parameters
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = self.left.parameters + self.right.parameters
+            return self._parameters!
+        }
     }
 
     override public var derivatives: Set<Derivative> {
@@ -57,12 +69,6 @@ public class Subtract: Node, Operation {
     required public init(_ params: [Node]) {
         self.left = params[0]
         self.right = params[1]
-    }
-
-    override required public init() {
-        self.left = Node()
-        self.right = Node()
-        super.init()
     }
     
     public func factory(_ params: [Node]) -> Node {
@@ -113,13 +119,13 @@ public class Subtract: Node, Operation {
 
         if(leftIsNum && rightIsNum) {
             let new = Number((leftSimplified as! Number).value - (rightSimplified as! Number).value)
-            new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(from: self)
             new.isSimplified = true
             return new
         }
         
         let new = Add(leftSimplified, Multiply(Number(-1), rightSimplified).simplify()).simplify()
-        new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(from: self)
         new.isSimplified = true
         return new
     }

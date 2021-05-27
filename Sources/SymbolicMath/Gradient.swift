@@ -13,11 +13,11 @@ public extension Node {
             gradElements.append(expression)
         }
 
-        var  gradVector: SymbolicVector = SymbolicVector(gradElements)
+        let gradVector: SymbolicVector = SymbolicVector(gradElements)
 
         // Set the ordering on the gradient vector. It inherits the ordering from
         // the original node
-        gradVector.setVariableOrder(self.orderedVariables)
+        try! gradVector.setVariableOrder(self.orderedVariables)
 
         return gradVector
     }

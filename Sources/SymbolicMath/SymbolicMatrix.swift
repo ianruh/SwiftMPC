@@ -5,7 +5,7 @@
 import LASwift
 import Collections
 
-public struct SymbolicMatrix: Collection, ExpressibleByArrayLiteral, VariableOrdered {
+public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
     public typealias Element = SymbolicVector
     public typealias Index = Int
 
@@ -25,21 +25,29 @@ public struct SymbolicMatrix: Collection, ExpressibleByArrayLiteral, VariableOrd
         }
     }
 
-    internal var vectors: [SymbolicVector] = []
-    public var _ordering: OrderedSet<Variable>? = nil
-    public var variables: Set<Variable> {
-        return self.reduce(Set<Variable>(),{(currentSet, nextVector) in
-            return currentSet.union(nextVector.variables)
-            // return nextVector.reduce(currentSet, {(currentSet2, nextElement) in
-            //     return currentSet2.union(nextElement.variables)
-            // })
-        })
+    internal var vectors: [SymbolicVector]
+
+    private var _ordering: OrderedSet<Variable>? = nil
+    public var orderedVariables: OrderedSet<Variable> {
+        if let ordering = self._ordering {
+            return ordering
+        } else {
+            self._ordering = OrderedSet<Variable>(self.variables.sorted())
+            return self._ordering!
+        }
     }
-    public var parameters: Set<Parameter> {
-        return self.reduce(Set<Parameter>(),{(currentSet, nextVector) in
+
+    public lazy var variables: Set<Variable> = {
+        return self.vectors.reduce(Set<Variable>(),{(currentSet, nextVector) in
+            return currentSet.union(nextVector.variables)
+        })
+    }()
+
+    public lazy var parameters: Set<Parameter> = {
+        return self.vectors.reduce(Set<Parameter>(),{(currentSet, nextVector) in
             return currentSet.union(nextVector.parameters)
         })
-    }
+    }()
 
     public var sparsityString: String {
         var str: String = ""
@@ -63,15 +71,12 @@ public struct SymbolicMatrix: Collection, ExpressibleByArrayLiteral, VariableOrd
         return str
     }
 
-    public init() {}
-
     public init(_ array: [SymbolicVector]) {
         self.vectors = array
     }
 
-    public init(arrayLiteral: Element...) {
-        self.init()
-        self.vectors = arrayLiteral
+    public required convenience init(arrayLiteral: Element...) {
+        self.init(arrayLiteral)
     }
 
     public func evaluate(withValues values: [Node: Double]) throws -> Matrix {
@@ -135,12 +140,14 @@ public struct SymbolicMatrix: Collection, ExpressibleByArrayLiteral, VariableOrd
     }
 
     // every element needs to also be set
-    public mutating func setVariableOrder<C>(_ newOrdering: C) where C: Collection, C.Element == Variable {
-
+    public func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection, C.Element == Variable {
         self._ordering = OrderedSet<Variable>(newOrdering)
 
+        // The elements set ordering will throw if there is a missing variable, so no need to
+        // check here as well
+
         for i in 0..<self.count {
-            self.vectors[i].setVariableOrder(self._ordering!)
+            try self.vectors[i].setVariableOrder(self.orderedVariables)
         }
     }
 
@@ -148,8 +155,8 @@ public struct SymbolicMatrix: Collection, ExpressibleByArrayLiteral, VariableOrd
 
         if(self.isSimplified) { return self }
 
-        var new = SymbolicMatrix(self.vectors.map({ $0.simplify() }))
-        new.setVariableOrder(self.orderedVariables)
+        let new = SymbolicMatrix(self.vectors.map({ $0.simplify() }))
+        try! new.setVariableOrder(self.orderedVariables)
         new.isSimplified = true
         return new
     }

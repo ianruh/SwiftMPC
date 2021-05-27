@@ -1,10 +1,12 @@
 import Foundation
 import Numerics
+import Collections
 
 /// Factorial of a node.
 public class Factorial: Node, Operation {
     
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Power().precedence)
+    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Power.staticPrecedence)
+    public let precedence: OperationPrecedence = Factorial.staticPrecedence
     public let type: OperationType = .postfix
     public let associativity: OperationAssociativity = .none
     public let identifier: String = "!"
@@ -33,13 +35,23 @@ public class Factorial: Node, Operation {
         
         return "\(self.argument.latex)!"
     }
-    
+
     override public var variables: Set<Variable> {
-        return self.argument.variables
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = self.argument.variables
+            return self._variables!
+        }
     }
 
     override public var parameters: Set<Parameter> {
-        return self.argument.parameters
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = self.argument.parameters
+            return self._parameters!
+        }
     }
 
     override public var derivatives: Set<Derivative> {
@@ -52,17 +64,12 @@ public class Factorial: Node, Operation {
         return "factorial\(hasher.finalize())"
     }
     
-    required public init(_ params: [Node]) {
-        self.argument = params[0]
+    required public convenience init(_ params: [Node]) {
+        self.init(params[0])
     }
 
     public init(_ param: Node) {
         self.argument = param
-    }
-
-    override required public init() {
-        self.argument = Node()
-        super.init()
     }
     
     @inlinable
@@ -100,7 +107,7 @@ public class Factorial: Node, Operation {
         if(self.isSimplified) { return self }
 
         let new = Factorial(self.argument.simplify())
-        new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(from: self)
         new.isSimplified = true
         return new
     }

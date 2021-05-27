@@ -1,10 +1,12 @@
 import Foundation
 import Numerics
+import Collections
 
 /// Multiply one node by the other.
 public class Multiply: Node, Operation {
     
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: Add().precedence)
+    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Add.staticPrecedence)
+    public let precedence: OperationPrecedence = Multiply.staticPrecedence
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .left
     public let identifier: String = "*"
@@ -44,25 +46,27 @@ public class Multiply: Node, Operation {
     override public var latex: String {
         return self.description
     }
-    
-    override public var variables: Set<Variable> {
-        var variables: Set<Variable> = []
-        
-        for arg in self.arguments {
-            variables = variables + arg.variables
-        }
 
-        return variables
+    override public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = self.arguments.reduce(Set<Variable>(), {(currentSet, nextArg) in
+                return currentSet + nextArg.variables
+            })
+            return self._variables!
+        }
     }
 
     override public var parameters: Set<Parameter> {
-        var parameters: Set<Parameter> = []
-        
-        for arg in self.arguments {
-            parameters = parameters + arg.parameters
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = self.arguments.reduce(Set<Parameter>(), {(currentSet, nextArg) in
+                return currentSet + nextArg.parameters
+            })
+            return self._parameters!
         }
-
-        return parameters
     }
 
     override public var derivatives: Set<Derivative> {
@@ -83,11 +87,6 @@ public class Multiply: Node, Operation {
     
     required public init(_ params: [Node]) {
         self.arguments = params
-    }
-
-    override required public init() {
-        self.arguments = []
-        super.init()
     }
 
     public convenience init(_ params: Node...) {
@@ -204,7 +203,8 @@ public class Multiply: Node, Operation {
                 }
             } else if(bottoms.count == 1) {
                 if(tops.count == 1) {
-                    return Divide(tops[0], bottoms[0]).simplify()
+                    let temp = Divide(tops[0], bottoms[0]).simplify()
+                    return temp
                 } else {
                     return Divide(Multiply(tops).simplify(), bottoms[0]).simplify()
                 }
@@ -218,34 +218,39 @@ public class Multiply: Node, Operation {
         }
 
         func combineLike(_ node: Multiply) -> Multiply {
-            var args = node.arguments
+            let args = node.arguments
             var reducedTerms: [Node] = []
-            var i = 0
-            while(i < args.count) {
-                var current = args[i]
-                var exponent: Node = Number(1)
-                if let pow = current as? Power {
-                    current = pow.left
-                    exponent = pow.right
-                }
-                var j = i + 1
-                while(j < args.count) {
-                    if(args[j] == current) {
-                        exponent = Add(exponent, Number(1))
-                        args.remove(at: args.startIndex + j)
-                        j -= 1
-                    } else if let pow = args[j] as? Power {
-                        if(pow.left == current) {
-                            exponent = Add(exponent, pow.right)
-                            args.remove(at: args.startIndex + j)
-                            j -= 1
-                        }
-                    }
-                    j += 1
-                }
 
-                reducedTerms.append(Power(current, exponent).simplify())
-                i += 1
+            // Base: exponent
+            var termsDict: Dictionary<Node, Node> = [:]
+            args.forEach({arg in
+                if let pow = arg as? Power {
+                    let base = pow.left
+                    let exponent = pow.right
+                    if(termsDict.keys.contains(base)) {
+                        termsDict[base] = termsDict[base]! + exponent
+                    } else {
+                        termsDict[base] = exponent
+                    }
+                } else {
+                    if(termsDict.keys.contains(arg)) {
+                        termsDict[arg] = termsDict[arg]! + Number(1)
+                    } else {
+                        termsDict[arg] = Number(1)
+                    }
+                }
+            })
+
+            for (base, exponent) in termsDict {
+                if(exponent ==  Number(1)) {
+                    reducedTerms.append(base)
+                } else if(exponent == Number(0)) {
+                    continue
+                } else {
+                    let temp = Power(base, exponent.simplify())
+                    temp.isSimplified = true
+                    reducedTerms.append(temp)
+                }
             }
 
             return Multiply(reducedTerms)
@@ -273,23 +278,23 @@ public class Multiply: Node, Operation {
 
         if(simplifiedMul.arguments.contains(Number(0))) {
             let new = Number(0)
-            new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(from: self)
             new.isSimplified = true
             return new
         } else if(simplifiedMul.arguments.count == 1) {
             let new = simplifiedMul.arguments[0]
-            new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(from: self)
             new.isSimplified = true
             return new
         } else if(simplifiedMul.arguments.count == 0) {
             let new = Number(1)
-            new.setVariableOrder(self.orderedVariables)
+            try! new.setVariableOrder(from: self)
             new.isSimplified = true
             return new
         }
 
         let new = fractionProduct(simplifiedMul)
-        new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(from: self)
         new.isSimplified = true
         return new
     }

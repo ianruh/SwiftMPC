@@ -1,4 +1,5 @@
 import RealModule
+import Collections
 
 public class Cos: Node, Function {
     public let identifier: String = "cos"
@@ -16,11 +17,21 @@ public class Cos: Node, Function {
     }
 
     override public var variables: Set<Variable> {
-        return self.argument.variables
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = self.argument.variables
+            return self._variables!
+        }
     }
 
     override public var parameters: Set<Parameter> {
-        return self.argument.parameters
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = self.argument.parameters
+            return self._parameters!
+        }
     }
 
     override public var derivatives: Set<Derivative> {
@@ -39,10 +50,6 @@ public class Cos: Node, Function {
 
     public convenience init(_ param: Node) {
         self.init([param])
-    }
-
-    override required public convenience init() {
-        self.init([Node()])
     }
 
     @inlinable
@@ -80,7 +87,7 @@ public class Cos: Node, Function {
         if(self.isSimplified) { return self }
 
         let new = Cos(self.argument.simplify())
-        new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(from: self)
         new.isSimplified = true
         return new
     }

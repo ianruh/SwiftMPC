@@ -8,14 +8,28 @@
 import OrderedCollections
 import LASwift
 
-public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdered {
+public class Node: CustomStringConvertible, Comparable, Hashable {
 
     //------------------------ Properties ------------------------
 
     /// The node's unqie identifier
     lazy public var id: Id = Id()
 
-    public var _ordering: OrderedSet<Variable>? = nil
+    private var _ordering: OrderedSet<Variable>? = nil
+    public var orderedVariables: OrderedSet<Variable> {
+        get {
+            if let ordering = self._ordering {
+                return ordering
+            } else {
+                let simpleOrdering = OrderedSet<Variable>(self.variables.sorted())
+                self._ordering = simpleOrdering
+                return simpleOrdering
+            }
+        }
+        set {
+            self._ordering = newValue
+        }
+    }
 
     /// A string representation of the node. This should be overridden.
     public var description: String {
@@ -28,13 +42,23 @@ public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdere
     }
 
     /// The set of variables in the node. This should be overridden.
+    internal var _variables: Set<Variable>?
     public var variables: Set<Variable> {
-        preconditionFailure("variables should be overridden")
+        if let variables = self._variables {
+            return variables
+        } else {
+            return []
+        }
     }
 
     /// The set of variables in the node. This should be overridden.
+    internal var _parameters: Set<Parameter>?
     public var parameters: Set<Parameter> {
-        preconditionFailure("parameters should be overridden")
+        if let parameter = self._parameters {
+            return parameter
+        } else {
+            return []
+        }
     }
 
     /// The set of derivatives in the node. This should be overridden.
@@ -44,7 +68,7 @@ public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdere
 
     /// The type identifier of the class. This should be overridden.
     public var typeIdentifier: String {
-        preconditionFailure("variables should be overridden")
+        preconditionFailure("typeIdentifier should be overridden")
     }
 
     /// Determine if the node is basic
@@ -76,8 +100,19 @@ public class Node: CustomStringConvertible, Comparable, Hashable, VariableOrdere
 
     //------------------------ Functions ------------------------
 
-    public func setVariableOrder<C>(_ newOrdering: C) where C: Collection, C.Element == Variable {
-        self._ordering = OrderedSet<Variable>(newOrdering)
+    public func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection, C.Element == Variable {
+        try self.variables.forEach({ variable in 
+            guard newOrdering.contains(variable) else {
+                throw SymbolicMathError.misc("New ordering \(newOrdering) does not contain variable \(variable).")
+            }
+        })
+        self.orderedVariables = OrderedSet<Variable>(newOrdering)
+    }
+
+    public func setVariableOrder(from node: Node) throws {
+        if let ordering = node._ordering {
+            try self.setVariableOrder(ordering)
+        }
     }
 
     /// Evaluate the node. This should be overridden.

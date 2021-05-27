@@ -1,10 +1,12 @@
 import Foundation
 import Numerics
+import Collections
 
 /// Assign one node to the other.
 public class Assign: Node, Operation {
     // Nil means is the lowest possible precedence
-    public let precedence: OperationPrecedence = OperationPrecedence(higherThan: nil)
+    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: nil)
+    public let precedence: OperationPrecedence = Assign.staticPrecedence
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .none
     public let identifier: String = "="
@@ -21,13 +23,23 @@ public class Assign: Node, Operation {
     override public var latex: String {
         return "\(self.left.latex)=\(self.right.latex)"
     }
-    
+
     override public var variables: Set<Variable> {
-        return self.left.variables + self.right.variables
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = self.left.variables + self.right.variables
+            return self._variables!
+        }
     }
 
     override public var parameters: Set<Parameter> {
-        return self.left.parameters + self.right.parameters
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = self.left.parameters + self.right.parameters
+            return self._parameters!
+        }
     }
 
     override public var derivatives: Set<Derivative> {
@@ -43,12 +55,6 @@ public class Assign: Node, Operation {
     required public init(_ params: [Node]) {
         self.left = params[0]
         self.right = params[1]
-    }
-
-    override required public init() {
-        self.left = Node()
-        self.right = Node()
-        super.init()
     }
     
     public func factory(_ params: [Node]) -> Node {
@@ -90,7 +96,7 @@ public class Assign: Node, Operation {
         if(self.isSimplified) { return self }
 
         let new = Assign(self.left.simplify(), self.right.simplify())
-        new.setVariableOrder(self.orderedVariables)
+        try! new.setVariableOrder(from: self)
         new.isSimplified = false
         return new
     }

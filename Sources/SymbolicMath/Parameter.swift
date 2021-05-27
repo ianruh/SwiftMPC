@@ -17,14 +17,6 @@ public class Parameter: Node {
     override public var latex: String {
         return "\(self.name)"
     }
-    
-    override public var variables: Set<Variable> {
-        return []
-    }
-
-    override public var parameters: Set<Parameter> {
-        return [self]
-    }
 
     override public var derivatives: Set<Derivative> {
         return []
@@ -32,6 +24,24 @@ public class Parameter: Node {
 
     override public var typeIdentifier: String {
         return self.name
+    }
+
+    override public var variables: Set<Variable> {
+        if let variables = self._variables {
+            return variables
+        } else {
+            self._variables = []
+            return self._variables!
+        }
+    }
+
+    override public var parameters: Set<Parameter> {
+        if let parameters = self._parameters {
+            return parameters
+        } else {
+            self._parameters = [self]
+            return self._parameters!
+        }
     }
 
     public static func ==(_ lhs: Parameter, _ rhs: Parameter) -> Bool {

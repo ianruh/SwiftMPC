@@ -5,7 +5,7 @@
 import LASwift
 import Collections
 
-public struct SymbolicVector: Collection, ExpressibleByArrayLiteral, VariableOrdered {
+public class SymbolicVector: Collection, ExpressibleByArrayLiteral {
     public typealias Element = Node
     public typealias Index = Int
 
@@ -15,27 +15,35 @@ public struct SymbolicVector: Collection, ExpressibleByArrayLiteral, VariableOrd
     internal var isSimplified: Bool = false
 
     public var elements: [Node] = []
-    public var _ordering: OrderedSet<Variable>? = nil
-    public var variables: Set<Variable> {
-        return self.reduce(Set<Variable>(),{(currentSet, nextElement) in
+
+    private var _ordering: OrderedSet<Variable>? = nil
+    public var orderedVariables: OrderedSet<Variable> {
+        if let ordering = self._ordering {
+            return ordering
+        } else {
+            self._ordering = OrderedSet<Variable>(self.variables.sorted())
+            return self._ordering!
+        }
+    }
+    
+    public lazy var variables: Set<Variable> = {
+        return self.elements.reduce(Set<Variable>(),{(currentSet, nextElement) in
             return currentSet.union(nextElement.variables)
         })
-    }
-    public var parameters: Set<Parameter> {
+    }()
+
+    public lazy var parameters: Set<Parameter> = {
         return self.reduce(Set<Parameter>(),{(currentSet, nextElement) in
             return currentSet.union(nextElement.parameters)
         })
-    }
-
-    public init() {}
+    }()
 
     public init(_ array: [Node]) {
         self.elements = array
     }
 
-    public init(arrayLiteral: Element...) {
-        self.init()
-        self.elements = arrayLiteral
+    public required convenience init(arrayLiteral: Element...) {
+        self.init(arrayLiteral)
     }
 
     public func evaluate(withValues values: [Node: Double]) throws -> Vector {
@@ -74,12 +82,15 @@ public struct SymbolicVector: Collection, ExpressibleByArrayLiteral, VariableOrd
     }
 
     // every element needs to also be set
-    public mutating func setVariableOrder<C>(_ newOrdering: C) where C: Collection, C.Element == Variable {
+    public func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection, C.Element == Variable {
         self._ordering = OrderedSet<Variable>(newOrdering)
+
+        // The setting of the elements checks for every variable being present
+        // no need to do it here too.
 
         // Every child element should also have it's ordering set
         for i in 0..<self.count {
-            self.elements[i].setVariableOrder(newOrdering)
+            try self.elements[i].setVariableOrder(newOrdering)
         }
     }
 
@@ -87,8 +98,8 @@ public struct SymbolicVector: Collection, ExpressibleByArrayLiteral, VariableOrd
 
         if(self.isSimplified) { return self }
 
-        var new = SymbolicVector(self.elements.map({ $0.simplify() }))
-        new.setVariableOrder(self.orderedVariables)
+        let new = SymbolicVector(self.elements.map({ $0.simplify() }))
+        try! new.setVariableOrder(self.orderedVariables)
         new.isSimplified = true
         return new
     }

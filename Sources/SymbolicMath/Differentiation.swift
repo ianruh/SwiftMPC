@@ -46,13 +46,21 @@ public func differentiate(_ term: Node, wrt variableNode: Node, partially: Bool 
 
         for arg in add.arguments {
             if let der = differentiate(arg, wrt: variable, partially: partially) {
-                terms.append(der)
+                if(der != Number(0)) {
+                    terms.append(der)
+                }
             } else {
                 return nil
             }
         }
 
-        return Add(terms)
+        if(terms.count == 0) {
+            return Number(0)
+        } else if(terms.count == 1) {
+            return terms[0]
+        } else {
+            return Add(terms)
+        }
     case let sub as Subtract:
         let leftOp = differentiate(sub.left, wrt: variable, partially: partially)
         let rightOp = differentiate(sub.right, wrt: variable, partially: partially)
@@ -64,12 +72,19 @@ public func differentiate(_ term: Node, wrt variableNode: Node, partially: Bool 
             return nil
         }
 
-        return left - right
+        if(right == Number(0)) {
+            return leftOp
+        } else if(left == Number(0)) {
+            return Negative(right)
+        } else {
+            return left - right
+        }
     case let mul as Multiply:
         var current: BinaryMultiply = BinaryMultiply(mul.arguments[0], mul.arguments[1])
         for i in 2..<mul.arguments.count {
             current = BinaryMultiply(mul.arguments[i], current)
         }
+        // We do the zero simplification in the  binary multipy derivative function
         return current.derivative(wrt: variable, partially: partially)
     case let div as Divide:
         let leftOp = differentiate(div.left, wrt: variable, partially: partially)
@@ -97,7 +112,17 @@ public func differentiate(_ term: Node, wrt variableNode: Node, partially: Bool 
             return nil
         }
 
-        return pow*(dbase*pow.right/pow.left + dpower*Ln([pow.left]))
+        if(dbase == Number(0) && dpower == Number(0)) {
+            return Number(0)
+        } else if(dbase == Number(0)) {
+            return pow*dpower*Ln([pow.left])
+        } else  if(dpower == Number(0)) {
+            return pow*(dbase*pow.right/pow.left)
+        } else {
+            return pow*(dbase*pow.right/pow.left + dpower*Ln([pow.left]))
+        }
+
+        // return pow*(dbase*pow.right/pow.left + dpower*Ln([pow.left]))
     case is Factorial:
         return nil
     case let dir as Derivative:
@@ -183,6 +208,14 @@ private struct BinaryMultiply {
             return nil
         }
 
-        return self.right*dleft + self.left*dright
+        if(dleft == Number(0) && dright == Number(0)) {
+            return Number(0)
+        } else if(dleft == Number(0)) {
+            return self.left*dright
+        } else  if(dright == Number(0)) {
+            return self.right*dleft
+        } else {
+            return self.right*dleft + self.left*dright
+        }
     }
 }
