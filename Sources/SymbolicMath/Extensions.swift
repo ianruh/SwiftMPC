@@ -185,3 +185,21 @@ extension Array {
         return result.map { $0! }
     }
 }
+
+extension Int {
+    func factorial() -> Int {
+        guard self >= 0 else {
+            preconditionFailure("Factorial must be of a non-negative integer.")
+        }
+        // 1 case
+        guard self != 0 else {
+            return 1
+        }
+
+        var current: Int = 1
+        for i in 1...self {
+            current *= i
+        }
+        return current
+    }
+}

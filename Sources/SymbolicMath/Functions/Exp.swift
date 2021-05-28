@@ -78,7 +78,16 @@ public class Exp: Node, Function {
 
         if(self.isSimplified) { return self }
 
-        let new = Exp(self.argument.simplify())
+        let simplifiedArg = self.argument.simplify()
+
+        if(simplifiedArg == Number(0)) {
+            let new = Number(1)
+            try! new.setVariableOrder(from: self)
+            new.isSimplified = true
+            return new
+        }
+
+        let new = Exp(simplifiedArg)
         try! new.setVariableOrder(from: self)
         new.isSimplified = true
         return new
