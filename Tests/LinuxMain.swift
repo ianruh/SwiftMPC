@@ -1,10 +1,9 @@
 import XCTest
 
 import MinimizationTests
-import MinimizationRegressionTests
+import SymbolicMathTests
 
 var tests = [XCTestCaseEntry]()
 tests += MinimizationTests.allTests()
-tests += RegressionTests.allTests()
-tests += BenchmarkTests.allTests()
+tests += SymbolicMathTests.allTests()
 XCTMain(tests)
