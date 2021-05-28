@@ -155,7 +155,7 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
 
         if(self.isSimplified) { return self }
 
-        let new = SymbolicMatrix(self.vectors.map({ $0.simplify() }))
+        let new = SymbolicMatrix(self.vectors.parallelMap({ $0.simplify() }))
         try! new.setVariableOrder(self.orderedVariables)
         new.isSimplified = true
         return new

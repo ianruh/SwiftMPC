@@ -5,6 +5,7 @@
 import Numerics
 import LASwift
 import SymbolicMath
+import Foundation
 
 precedencegroup ExponentiationPrecedence {
     associativity: right

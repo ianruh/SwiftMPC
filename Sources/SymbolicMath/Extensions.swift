@@ -8,6 +8,7 @@
 
 import LASwift
 import RealModule
+import Foundation
 
 extension String {
     var isInteger: Bool {
@@ -167,4 +168,20 @@ public func *(_ lhs: String, _ rhs: Int) -> String {
 
 public func printDebug(_ msg: CustomStringConvertible = "", file: StaticString = #file, line: UInt = #line) {
     print("Got to \(file):\(line) \(msg)")
+}
+
+// https://talk.objc.io/episodes/S01E90-concurrent-map
+extension Array {
+    func parallelMap<B>(_ transform: @escaping (Element) -> B) -> [B] {
+        var result = Array<B?>(repeating: nil, count: count)
+        let q = DispatchQueue(label: "sync queue")
+        DispatchQueue.concurrentPerform(iterations: count) { idx in
+            let element = self[idx]
+            let transformed = transform(element)
+            q.sync {
+                result[idx] = transformed
+            }
+        }
+        return result.map { $0! }
+    }
 }

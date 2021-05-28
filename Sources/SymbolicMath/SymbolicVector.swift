@@ -98,7 +98,15 @@ public class SymbolicVector: Collection, ExpressibleByArrayLiteral {
 
         if(self.isSimplified) { return self }
 
-        let new = SymbolicVector(self.elements.map({ $0.simplify() }))
+        var new: SymbolicVector = [0.0].symbolic
+        if(self.elements.count > 20) {
+            new = SymbolicVector(self.elements.parallelMap({ $0.simplify() }))
+        } else {
+            new = SymbolicVector(self.elements.map({ $0.simplify() }))
+        }
+
+        // let new = SymbolicVector(self.elements.map({ $0.simplify() }))
+
         try! new.setVariableOrder(self.orderedVariables)
         new.isSimplified = true
         return new
