@@ -482,16 +482,16 @@ final class SymbolicMathTests: XCTestCase {
             let x = Variable("x")
             let expression = x**2
 
-            assertNodesEqual(expression.taylorExpand(in: x, about: 0.0, ofOrder: 1), Number(0))
-            assertNodesEqual(expression.taylorExpand(in: x, about: 1.0, ofOrder: 1), (x-1)*2.symbol + 1)
+            assertNodesEqual(expression.taylorExpand(in: x, about: 0.0.symbol, ofOrder: 1), Number(0))
+            assertNodesEqual(expression.taylorExpand(in: x, about: 1.0.symbol, ofOrder: 1), (x-1)*2.symbol + 1)
         }
 
         do {
             let x = Variable("x")
             let expression = Exp(x)
 
-            assertNodesEqual(expression.taylorExpand(in: x, about: 0.0, ofOrder: 1), 1 + x)
-            assertNodesEqual(expression.taylorExpand(in: x, about: 0.0, ofOrder: 2), 1 + x + 0.5.symbol*x**2)
+            assertNodesEqual(expression.taylorExpand(in: x, about: 0.0.symbol, ofOrder: 1), 1 + x)
+            assertNodesEqual(expression.taylorExpand(in: x, about: 0.0.symbol, ofOrder: 2), 1 + x + 0.5.symbol*x**2)
         }
     }
 

@@ -61,5 +61,14 @@ let package = Package(
                 "SymbolicMath",
                 .product(name: "Collections", package: "swift-collections")
             ]),
+        .target(
+            name: "LTVMPC",
+            dependencies: [
+                .product(name: "RealModule", package: "swift-numerics"),
+                "LASwift",
+                "SymbolicMath",
+                .product(name: "Collections", package: "swift-collections"),
+                "Minimization"
+            ]),
     ]
 )

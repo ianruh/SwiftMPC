@@ -82,8 +82,9 @@ public extension SymbolicObjective {
 
         //====== Extractors ====
 
+        str += "\n"
         str += labelString("Extractors")
-        str += "\n\n"
+        str += "\n"
 
         // Matrix extractors
         for (matrixName, variableMatrix) in matrixExtractors {

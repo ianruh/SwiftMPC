@@ -217,10 +217,6 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
         return terms
     }
 
-    public func taylorExpand(in variable: Node, about location: Double, ofOrder order: Int) -> Node? {
-        return self.taylorExpand(in: variable, about: location.symbol, ofOrder: order)
-    }
-
     //--------------Comparable Conformance-----------------
 
     public static func ==(_ lhs: Node, _ rhs: Node) -> Bool {
