@@ -183,7 +183,7 @@ public class Power: Node, Operation {
 
     override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
 
-        // You can think [this issue](https://github.com/apple/swift-numerics/pull/82) for the weirdness here.
+        // You can thank [this issue](https://github.com/apple/swift-numerics/pull/82) for the weirdness here.
         guard let rightSideNumber = self.right as? Number else {
             throw SymbolicMathError.misc("The exponent for a power must be a number, not \(self.right)(\(self.right.typeIdentifier))")
         }

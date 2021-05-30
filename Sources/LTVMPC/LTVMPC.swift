@@ -64,15 +64,6 @@ struct LTVMPC {
 
         var parameterRepresentations: Dictionary<Parameter, String> = [:]
 
-        // for i in 0..<6 {
-        //     if let initialPosition = self.initialPositionSymbolicParameters {
-        //         parameterRepresentations[initialPosition[i]] = "self.initialPosition[\(i)]"
-        //     }
-        //     if let initialVelocity = self.initialVelocitySymbolicParameters {
-        //         parameterRepresentations[initialVelocity[i]] = "self.initialVelocity[\(i)]"
-        //     }
-        // }
-
         for (parameterName, parameter) in self.parameters {
             parameterRepresentations[parameter] = "self.\(parameterName)"
         }
@@ -92,7 +83,7 @@ struct LTVMPC {
             "acceleration": self.variableVectors["acceleration"]!
         ]
 
-        try objective.printSwiftCode(objectiveName: "LTVNumericObjective", parameterRepresentations: parameterRepresentations, vectorExtractors: vectorExtractors, toFile: fileName)
+        try objective.printSwiftCode2(objectiveName: "LTVNumericObjective", parameterRepresentations: parameterRepresentations, vectorExtractors: vectorExtractors, toFile: fileName)
     }
 
     mutating func runSymbolic() throws -> (minimum: Double, point: Vector) {
@@ -101,9 +92,11 @@ struct LTVMPC {
         return (minimum: min, point: pt)
     }
 
-    // mutating func runNumeric() throws -> (minimum: Double, point: Vector) {
-    //     let objective = SpringsNumericObjective()
-    //     let (min, pt, _) = try self.solver.infeasibleInequalityMinimize(objective: objective)
-    //     return (minimum: min, point: pt)
-    // }
+    #if !NO_NUMERIC_OBJECTIVE
+    mutating func runNumeric() throws -> (minimum: Double, point: Vector) {
+        let objective = LTVNumericObjective(numSteps: self.numTimeHorizonSteps)
+        let (min, pt, _) = try self.solver.infeasibleInequalityMinimize(objective: objective)
+        return (minimum: min, point: pt)
+    }
+    #endif
 }

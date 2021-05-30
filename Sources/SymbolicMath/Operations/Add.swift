@@ -270,11 +270,26 @@ public class Add: Node, Operation {
     override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
         var str = ""
 
-        for i in 0..<self.arguments.count-1 {
-            str += "(\(try self.arguments[i].swiftCode(using: representations)))+"
+        // Handle if there is only one child
+        if(self.arguments.count == 1) {
+            return try self.arguments[0].swiftCode(using: representations)
         }
-        str += "(\(try self.arguments.last!.swiftCode(using: representations)))"
 
+        for i in 0..<self.arguments.count {
+            if let op = self.arguments[i] as? Operation {
+                if(op.precedence <= self.precedence && op.type == .infix) {
+                    str += "(\(try op.swiftCode(using: representations)))"
+                } else {
+                    str += "\(try op.swiftCode(using: representations))"
+                }
+            } else {
+                str += try self.arguments[i].swiftCode(using: representations)
+            }
+            if(i != self.arguments.count-1) {
+                str += " + "
+            }
+        }
+        
         return str
     }
 }

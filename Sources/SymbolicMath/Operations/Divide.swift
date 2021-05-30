@@ -234,6 +234,22 @@ public class Divide: Node, Operation {
     }
 
     override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
-        return "(\(try self.left.swiftCode(using: representations)))/(\(try self.right.swiftCode(using: representations)))"
+        var leftString = "\(try self.left.swiftCode(using: representations))"
+        var rightString = "\(try self.right.swiftCode(using: representations))"
+        
+        // Wrap the sides if needed
+        if let op = self.left as? Operation {
+            if(op.precedence <= self.precedence && op.type == .infix) {
+                leftString = "(\(leftString))"
+            }
+        }
+        if let op = self.right as? Operation {
+            if(op.precedence <= self.precedence && op.type == .infix) {
+                rightString = "(\(rightString))"
+            }
+        }
+        
+        return "\(leftString) / \(rightString)"
+
     }
 }

@@ -103,6 +103,10 @@ public class Negative: Node, Operation {
     }
 
     override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
-        return "-1*(\(try self.argument.swiftCode(using: representations)))"
+        if(self.argument == Number(0.0)) {
+            return try Number(0.0).swiftCode(using: representations)
+        } else {
+            return try Multiply([Number(-1.0), self.argument]).swiftCode(using: representations)
+        }
     }
 }

@@ -109,9 +109,9 @@ extension LTVMPC {
         // Position and Velcoity
         for t in 1..<self.numTimeHorizonSteps {
             // X Position constraint
-            eqConstraints.append( xPosition[t] ≈ xPosition[t-1] + self.mpc_dt*previousVelocity[t]*(Cos(vehicleAngle[t-1] + previousSteeringAngle[t]).taylorExpand(in: vehicleAngle[t-1], about: previousAngle[t] + previousSteeringAngle[t], ofOrder: 1)!) )
+            eqConstraints.append( xPosition[t] ≈ xPosition[t-1] + self.mpc_dt*previousVelocity[t]*(Cos(vehicleAngle[t-1] + previousSteeringAngle[t]).taylorExpand(in: vehicleAngle[t-1], about: previousAngle[t], ofOrder: 1)!) )
             // Y Position Constraint
-            eqConstraints.append( yPosition[t] ≈ yPosition[t-1] + self.mpc_dt*previousVelocity[t]*(Sin(vehicleAngle[t-1] + previousSteeringAngle[t]).taylorExpand(in: vehicleAngle[t-1], about: previousAngle[t] + previousSteeringAngle[t], ofOrder: 1)!) )
+            eqConstraints.append( yPosition[t] ≈ yPosition[t-1] + self.mpc_dt*previousVelocity[t]*(Sin(vehicleAngle[t-1] + previousSteeringAngle[t]).taylorExpand(in: vehicleAngle[t-1], about: previousAngle[t], ofOrder: 1)!) )
             // Angular Constraint
             eqConstraints.append( vehicleAngle[t] ≈ vehicleAngle[t-1] + self.mpc_dt*previousVelocity[t]*(1.0/self.wheelBaseLength)*(Sin(steerigAngle[t-1]).taylorExpand(in: steerigAngle[t-1], about: previousSteeringAngle[t], ofOrder: 1)!) )
             // Velocity Constraint
@@ -120,7 +120,7 @@ extension LTVMPC {
 
         //======== Objective ========
 
-        let objectiveNode: Node = -1*xPosition.last!
+        let objectiveNode: Node = -1*xPosition.last! + -1*forwardVelocity.last!
 
         guard let objective = SymbolicObjective(min: objectiveNode, subjectTo: SymbolicVector(ineqConstraints), equalityConstraints: eqConstraints, ordering: ordering, parameterValues: initialParameterValues) else {
             throw MPCError.misc("Unable to construct symbolic objective")

@@ -3,12 +3,6 @@ import Numerics
 
 public extension SymbolicMatrix {
 
-    var flat: SymbolicVector {
-        return SymbolicVector(self.vectors.reduce(Array<Node>(), {(current, nextVector) in
-            return current + nextVector.elements
-        }))
-    }
-
     convenience init(_ vecs: [[Variable]]) {
         self.init(vecs.map({ SymbolicVector($0) }))
     }

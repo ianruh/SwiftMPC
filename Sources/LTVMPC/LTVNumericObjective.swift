@@ -34,10 +34,13 @@ struct LTVNumericObjective {
     }
 
     func startPoint() throws -> (primal: Vector, dual: Vector) {
-        // var primal = ones(self.numVariables).*0.3
-        // var dual = ones(self.equalityConstraintMatrix!.rows)
-       var primal = zeros(1)
-       var dual = zeros(1)
+        #if !NO_NUMERIC_OBJECTIVE
+        var primal = zeros(self.numVariables)
+        var dual = zeros(self.equalityConstraintMatrix!.rows)
+        #else
+        var primal = zeros(1)
+        var dual = zeros(1)
+        #endif
 
         if let warmStartPrimal = self.warmStartPrimal {
             primal = warmStartPrimal

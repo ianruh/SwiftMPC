@@ -5,21 +5,22 @@ FAST_MATH = -Xcc -ffast-math
 UNCHECKED = -Xswiftc -Ounchecked
 WHOLE_MODULE = -Xswiftc -whole-module-optimization
 COMPILER_OPT = -Xcc -Ofast
+# NO_NUMERIC_OBJECTIVE = -Xswiftc -D -Xswiftc NO_NUMERIC_OBJECTIVE
 
 build:
-	swift build -c release --build-tests $(WHOLE_MODULE) $(UNCHECKED) $(FAST_MATH) $(COMPILER_OPT)
+	swift build -c release --build-tests $(WHOLE_MODULE) $(UNCHECKED) $(FAST_MATH) $(COMPILER_OPT) $(EXTRAS)
 
 build-debug:
-	swift build --build-tests $(DEBUG)
+	swift build --build-tests $(DEBUG) $(EXTRAS)
 
 run:
-	swift run -c release --build-tests $(WHOLE_MODULE) $(UNCHECKED) $(FAST_MATH) $(COMPILER_OPT)
+	swift run -c release --build-tests $(WHOLE_MODULE) $(UNCHECKED) $(FAST_MATH) $(COMPILER_OPT) $(EXTRAS)
 
 run-debug:
-	swift run $(DEBUG)
+	swift run $(DEBUG) $(EXTRAS)
 
 test:
-	swift test -c release $(WHOLE_MODULE) $(UNCHECKED) $(FAST_MATH) $(COMPILER_OPT)
+	swift test -c release $(WHOLE_MODULE) $(UNCHECKED) $(FAST_MATH) $(COMPILER_OPT) $(EXTRAS)
 
 test-debug:
-	swift test $(DEBUG)
+	swift test $(DEBUG) $(EXTRAS)
