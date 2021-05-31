@@ -5,10 +5,14 @@ import PackageDescription
 
 let package = Package(
     name: "Minimization",
+    platforms: [
+       .macOS(.v10_15)
+    ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-numerics.git", from: "0.0.8"),
         .package(url: "https://github.com/ianruh/LASwift.git", .branch("linux")),
         .package(url: "https://github.com/apple/swift-collections.git", from: "0.0.1"),
+        .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -22,12 +26,19 @@ let package = Package(
                 .product(name: "Collections", package: "swift-collections")
             ]),
         .target(
-                name: "SymbolicMath",
-                dependencies: [
-                    .product(name: "RealModule", package: "swift-numerics"),
-                    "LASwift",
-                    .product(name: "Collections", package: "swift-collections")
-                ]),
+            name: "SymbolicMath",
+            dependencies: [
+                .product(name: "RealModule", package: "swift-numerics"),
+                "LASwift",
+                .product(name: "Collections", package: "swift-collections")
+            ]),
+        .target(
+            name: "SimpleSimulator",
+            dependencies: [
+                .product(name: "RealModule", package: "swift-numerics"),
+                "LASwift",
+                .product(name: "Vapor", package: "vapor")
+            ]),
         .target(
             name: "StraightLineMPC",
             dependencies: [
@@ -47,12 +58,12 @@ let package = Package(
                 "Minimization"
             ]),
         .testTarget(
-                name: "SymbolicMathTests",
-                dependencies: [
-                    "SymbolicMath", 
-                    "LASwift",
-                    .product(name: "Collections", package: "swift-collections")
-                ]),
+            name: "SymbolicMathTests",
+            dependencies: [
+                "SymbolicMath", 
+                "LASwift",
+                .product(name: "Collections", package: "swift-collections")
+            ]),
         .testTarget(
             name: "MinimizationTests",
             dependencies: [
@@ -68,7 +79,8 @@ let package = Package(
                 "LASwift",
                 "SymbolicMath",
                 .product(name: "Collections", package: "swift-collections"),
-                "Minimization"
+                "Minimization",
+                "SimpleSimulator"
             ]),
     ]
 )
