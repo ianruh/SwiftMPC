@@ -1,7 +1,12 @@
+import Numerics
 
 public struct Vec2 {
     public var x: Double
     public var y: Double
+
+    public var norm: Double {
+        return Double.sqrt(x*x + y*y)
+    }
 
     public init(_ x: Double, _ y: Double) {
         self.x = x

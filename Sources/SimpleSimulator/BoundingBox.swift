@@ -30,4 +30,40 @@ public struct BoundingBox {
         self.minY = center.y - height/2
         self.maxY = center.y + height/2
     }
+    
+    public func isInBox(_ pt: Vec2) -> Bool {
+        return pt.x > self.minX && pt.x < self.maxX && pt.y > self.minY && pt.y < self.maxY
+    }
+
+    public func relativePosition(of pt: Vec2, along axis: Axis) -> BoundingBox.RelativePosition {
+        if(axis == .X) {
+            if(pt.x > self.maxX) {
+                return RelativePosition.above
+            } else if(pt.x < self.minX) {
+                return RelativePosition.below
+            } else {
+                return RelativePosition.inside
+            }
+        } else {
+            if(pt.y > self.maxY) {
+                return RelativePosition.above
+            } else if(pt.y < self.minY) {
+                return RelativePosition.below
+            } else {
+                return RelativePosition.inside
+            }
+        }
+    }
+
+    public func intersectsLine(x: Double) -> Bool {
+        return x > self.minX && x < self.maxX
+    }
+
+    public func intersectsLine(y: Double) -> Bool {
+        return y > self.minY && y < self.maxY
+    }
+
+    public enum RelativePosition {
+        case above, inside, below
+    }
 }

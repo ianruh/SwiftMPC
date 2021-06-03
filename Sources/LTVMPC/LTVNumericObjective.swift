@@ -1,5 +1,6 @@
 import LASwift
 import Minimization
+import Numerics
 
 struct LTVNumericObjective {
     // Objective properties

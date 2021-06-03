@@ -2,13 +2,14 @@ import LASwift
 import Minimization
 import Collections
 import SymbolicMath
+import Numerics
 
-struct LTVMPC {
+public struct LTVMPC {
     var numTimeHorizonSteps: Int
     var mpc_dt: Double
-    let maxSteeringAngle: Double = 2.0*Double.pi/6.0
-    let maxAcceleration: Double = 1.0
-    let minAcceleration: Double = -3.0
+    public let maxSteeringAngle: Double = 2.0*Double.pi/6.0
+    public let maxAcceleration: Double = 1.0
+    public let minAcceleration: Double = -3.0
 
     // Parameter and variable storage. A bit ugly, but whatever
     var parameters: [String: Parameter] = [:]
@@ -24,42 +25,49 @@ struct LTVMPC {
     var solver: InequalitySolver
     var numericObjective: LTVNumericObjective
 
-    init(numSteps: Int, dt: Double = 0.1) {
+    public init(numSteps: Int, dt: Double = 0.1) {
         self.numTimeHorizonSteps = numSteps
         self.mpc_dt = dt
         self.solver = InequalitySolver()
         self.numericObjective = LTVNumericObjective(numSteps: numSteps)
     }
+    
+    public mutating func getNextControls() throws -> (acceleration: Double, steeringAngle: Double) {
 
-    // mutating func runSimulation(length: Double = 10) throws -> (positions: [Vector], velocities: [Vector], times: [Double]) {
-    //     let N = Int(length / self.sim_dt)
+        // Solve the optimization problem
+        let (min, primal, dual) = try solver.infeasibleInequalityMinimize(objective: self.numericObjective)
 
-    //     // Main simulation loop
-    //     for i in 0..<N {
-    //         print("Simulation step \(i)            Time: \(Double(i)*self.sim_dt)")
+        // Extract the control and relavent state variables
+        let accelerationVector = LTVNumericObjective.extractVector_acceleration(primal)
+        let steeringAngleVector = LTVNumericObjective.extractVector_steeringAngle(primal)
+        let velocityVector = LTVNumericObjective.extractVector_forwardVelocity(primal)
+        let vehicleAngleVector = LTVNumericObjective.extractVector_vehicleAngle(primal)
 
-    //         let (min, primal, dual) = try solver.infeasibleInequalityMinimize(objective: self.numericObjective)
+        // Save the vectors that the objective needs as parameters
+        self.numericObjective.previousVelocity = velocityVector
+        self.numericObjective.previousAngle = vehicleAngleVector
+        self.numericObjective.previousSteeringAngle = steeringAngleVector
 
-    //         let controlInputs: Matrix = numericObjective.extractMatrix_control(primal)
-    //         let firstControlInputs: Vector = controlInputs[col: 0]
+        // Set the warm starts
+        // TODO: Ignoring warmstarts for now. Revist later
+        //self.numericObjective.warmStartPrimal = primal
+        //self.numericObjective.warmStartDual = dual
 
-    //         self.simulator.evolve(controls: firstControlInputs)
-    //         self.costs.append(self.numericObjective.value(primal))
+        return (acceleration: accelerationVector[0], steeringAngle: steeringAngleVector[0])
+    }
 
-    //         // Set the warm starts
-    //         self.numericObjective.warmStartPrimal = primal
-    //         self.numericObjective.warmStartDual = dual
-    //     }
-
-    //     return (positions: self.simulator.positionHistory, velocities: self.simulator.velocityHistory, times: self.simulator.timeHistory)
-
-    // }
+    public mutating func setInitialState(x: Double, y: Double, vehicleAngle: Double, velocity: Double) {
+        self.numericObjective.initialXPosition = x
+        self.numericObjective.initialYPosition = y
+        self.numericObjective.initialVehicleAngle = vehicleAngle
+        self.numericObjective.initialForwardVelocity = velocity
+    }
 
     /// Generate the numeric objective code
     ///
     /// - Parameter fileName: The file to write the generated code to
     /// - Throws: If the code could not be generated or the file could not be written.
-    mutating func codeGen(toFile fileName: String) throws {
+    public mutating func codeGen(toFile fileName: String) throws {
         let objective = try self.constructSymbolicObjective()
 
         var parameterRepresentations: Dictionary<Parameter, String> = [:]
@@ -86,14 +94,14 @@ struct LTVMPC {
         try objective.printSwiftCode2(objectiveName: "LTVNumericObjective", parameterRepresentations: parameterRepresentations, vectorExtractors: vectorExtractors, toFile: fileName)
     }
 
-    mutating func runSymbolic() throws -> (minimum: Double, point: Vector) {
+    public mutating func runSymbolic() throws -> (minimum: Double, point: Vector) {
         let objective = try self.constructSymbolicObjective()
         let (min, pt, _) = try self.solver.infeasibleInequalityMinimize(objective: objective)
         return (minimum: min, point: pt)
     }
 
     #if !NO_NUMERIC_OBJECTIVE
-    mutating func runNumeric() throws -> (minimum: Double, point: Vector) {
+    public mutating func runNumeric() throws -> (minimum: Double, point: Vector) {
         let objective = LTVNumericObjective(numSteps: self.numTimeHorizonSteps)
         let (min, pt, _) = try self.solver.infeasibleInequalityMinimize(objective: objective)
         return (minimum: min, point: pt)
