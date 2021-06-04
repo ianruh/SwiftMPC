@@ -4,7 +4,7 @@ import PlaygroundSupport
 import SpriteKit
 import SimpleSimulator
 import LTVMPC
-import Numerics
+import RealModule
 
 let viewWidth: Double = 500
 let viewHeight: Double = 500

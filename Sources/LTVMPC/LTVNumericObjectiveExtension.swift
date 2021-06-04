@@ -1,6 +1,6 @@
 #if !NO_NUMERIC_OBJECTIVE
 import LASwift
-@_exported import Numerics
+@_exported import RealModule
 import Minimization
 
 

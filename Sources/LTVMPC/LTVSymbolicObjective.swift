@@ -2,7 +2,7 @@ import LASwift
 import Collections
 import Minimization
 import SymbolicMath
-import Numerics
+import RealModule
 
 /// Implementation of on of the examples from https://web.stanford.edu/~boyd/papers/fast_mpc.html
 extension LTVMPC {

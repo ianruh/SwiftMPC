@@ -2,7 +2,7 @@ import LASwift
 import Minimization
 import Collections
 import SymbolicMath
-import Numerics
+import RealModule
 
 public struct LTVMPC {
     var numTimeHorizonSteps: Int

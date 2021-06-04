@@ -1,6 +1,6 @@
 import LASwift
 import Minimization
-import Numerics
+import RealModule
 
 struct LTVNumericObjective {
     // Objective properties

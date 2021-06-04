@@ -1,5 +1,5 @@
 import LASwift
-import Numerics
+import RealModule
 
 public func sum(_ vec: SymbolicVector) -> Node {
     return vec.elements.reduce(Number(0), {(currentSum, nextNode) in 

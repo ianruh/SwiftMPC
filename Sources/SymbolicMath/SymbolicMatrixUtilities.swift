@@ -1,5 +1,5 @@
 import LASwift
-import Numerics
+import RealModule
 
 public extension SymbolicMatrix {
 

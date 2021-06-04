@@ -166,7 +166,7 @@ public func *(_ lhs: String, _ rhs: Int) -> String {
     return str
 }
 
-public func printDebug(_ msg: CustomStringConvertible = "", file: StaticString = #file, line: UInt = #line) {
+public func printDebug(_ msg: Any, file: StaticString = #file, line: UInt = #line) {
     print("Got to \(file):\(line) \(msg)")
 }
 

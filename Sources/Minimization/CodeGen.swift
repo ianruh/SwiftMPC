@@ -66,7 +66,7 @@ public extension SymbolicObjective {
 
         //====== Imports ====
         str += "import LASwift\n"
-        str += "import Numerics\n"
+        str += "import RealModule\n"
         str += "import Minimization\n"
 
         str += "\n\n"
@@ -301,7 +301,7 @@ public extension SymbolicObjective {
 
         //====== Imports ====
         str += "import LASwift\n"
-        str += "import Numerics\n"
+        str += "import RealModule\n"
         str += "import Minimization\n"
 
         str += "\n\n"

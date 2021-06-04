@@ -24,3 +24,6 @@ test:
 
 test-debug:
 	swift test $(DEBUG) $(EXTRAS)
+
+clean:
+	rm -rf .build/

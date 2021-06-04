@@ -2,7 +2,7 @@
 // Created by Ian Ruh on 5/5/21.
 //
 import LASwift
-import Numerics
+import RealModule
 
 func newtonStepDirection(startingPoint: Vector, gradient: Vector, hessian: Matrix) throws -> Vector {
     // Solve for the newton step Δx: ∇²f Δx = -1 * ∇f
