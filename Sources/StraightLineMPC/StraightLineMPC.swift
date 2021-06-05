@@ -1,7 +1,7 @@
 import Foundation
 import Collections
 import LASwift
-import Minimization
+import SwiftMPC
 import SymbolicMath
 
 struct StraightLineMPC {

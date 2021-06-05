@@ -1,7 +1,7 @@
 #if !NO_NUMERIC_OBJECTIVE
 import LASwift
 @_exported import RealModule
-import Minimization
+import SwiftMPC
 
 
 extension LTVNumericObjective: Objective {

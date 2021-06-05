@@ -4,7 +4,7 @@
 //
 // var mpc = LTVMPC(numSteps: 30)
 //
-//// try mpc.codeGen(toFile: "/Users/ianruh/Dev/Minimization/Sources/LTVMPC/LTVNumericObjectiveExtension.swift")
+//// try mpc.codeGen(toFile: "/Users/ianruh/Dev/SwiftMPC/Sources/LTVMPC/LTVNumericObjectiveExtension.swift")
 //
 // let (min, pt) = try mpc.runNumeric()
 //

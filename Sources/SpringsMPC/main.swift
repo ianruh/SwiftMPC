@@ -3,7 +3,7 @@ import LASwift
 var mpc = SpringsMPC()
 mpc.numTimeHorizonSteps = 30
 
-try mpc.codeGen(toFile: "/Users/ianruh/Dev/Minimization/Sources/SpringsMPC/SpringsNumericObjectiveExtension.swift")
+try mpc.codeGen(toFile: "/Users/ianruh/Dev/SwiftMPC/Sources/SpringsMPC/SpringsNumericObjectiveExtension.swift")
 
 // let (min, pt) = try mpc.runNumeric()
 // let (min, pt) = try mpc.runSymbolic()

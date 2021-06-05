@@ -1,6 +1,6 @@
 import LASwift
 import Collections
-import Minimization
+import SwiftMPC
 import SymbolicMath
 import RealModule
 

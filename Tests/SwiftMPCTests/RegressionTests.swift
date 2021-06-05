@@ -2,7 +2,7 @@ import XCTest
 import Collections
 import LASwift
 import SymbolicMath
-import Minimization
+import SwiftMPC
 
 final class RegressionTests: XCTestCase {
 

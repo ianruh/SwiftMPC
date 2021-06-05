@@ -23,7 +23,7 @@ public extension SymbolicObjective {
         // Check that every parameter has a representation in the parameterRepresentations dict
         for param in self.parameters {
             guard parameterRepresentations.keys.contains(param) else {
-                throw MinimizationError.misc("No representation for the parameter \(param)")
+                throw SwiftMPCError.misc("No representation for the parameter \(param)")
             }
         }
 
@@ -32,7 +32,7 @@ public extension SymbolicObjective {
             for variableVector in variableMatrix {
                 for variable in variableVector {
                     guard self.orderedVariables.contains(variable) else {
-                        throw MinimizationError.misc("The variable \(variable) cannot be extracted because it is not in the model")
+                        throw SwiftMPCError.misc("The variable \(variable) cannot be extracted because it is not in the model")
                     }
                 }
             }
@@ -40,13 +40,13 @@ public extension SymbolicObjective {
         for variableVector in vectorExtractors.values {
             for variable in variableVector {
                 guard self.orderedVariables.contains(variable) else {
-                    throw MinimizationError.misc("The variable \(variable) cannot be extracted because it is not in the model")
+                    throw SwiftMPCError.misc("The variable \(variable) cannot be extracted because it is not in the model")
                 }
             }
         }
         for variable in variableExtractors.values {
             guard self.orderedVariables.contains(variable) else {
-                throw MinimizationError.misc("The variable \(variable) cannot be extracted because it is not in the model")
+                throw SwiftMPCError.misc("The variable \(variable) cannot be extracted because it is not in the model")
             }
         }
 
@@ -67,7 +67,7 @@ public extension SymbolicObjective {
         //====== Imports ====
         str += "import LASwift\n"
         str += "import RealModule\n"
-        str += "import Minimization\n"
+        str += "import SwiftMPC\n"
 
         str += "\n\n"
 
@@ -258,7 +258,7 @@ public extension SymbolicObjective {
         // Check that every parameter has a representation in the parameterRepresentations dict
         for param in self.parameters {
             guard parameterRepresentations.keys.contains(param) else {
-                throw MinimizationError.misc("No representation for the parameter \(param)")
+                throw SwiftMPCError.misc("No representation for the parameter \(param)")
             }
         }
 
@@ -267,7 +267,7 @@ public extension SymbolicObjective {
             for variableVector in variableMatrix {
                 for variable in variableVector {
                     guard self.orderedVariables.contains(variable) else {
-                        throw MinimizationError.misc("The variable \(variable) cannot be extracted because it is not in the model")
+                        throw SwiftMPCError.misc("The variable \(variable) cannot be extracted because it is not in the model")
                     }
                 }
             }
@@ -275,13 +275,13 @@ public extension SymbolicObjective {
         for variableVector in vectorExtractors.values {
             for variable in variableVector {
                 guard self.orderedVariables.contains(variable) else {
-                    throw MinimizationError.misc("The variable \(variable) cannot be extracted because it is not in the model")
+                    throw SwiftMPCError.misc("The variable \(variable) cannot be extracted because it is not in the model")
                 }
             }
         }
         for variable in variableExtractors.values {
             guard self.orderedVariables.contains(variable) else {
-                throw MinimizationError.misc("The variable \(variable) cannot be extracted because it is not in the model")
+                throw SwiftMPCError.misc("The variable \(variable) cannot be extracted because it is not in the model")
             }
         }
 
@@ -302,7 +302,7 @@ public extension SymbolicObjective {
         //====== Imports ====
         str += "import LASwift\n"
         str += "import RealModule\n"
-        str += "import Minimization\n"
+        str += "import SwiftMPC\n"
 
         str += "\n\n"
 

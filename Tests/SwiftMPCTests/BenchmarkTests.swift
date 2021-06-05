@@ -2,7 +2,7 @@ import XCTest
 import Collections
 import LASwift
 import SymbolicMath
-import Minimization
+import SwiftMPC
 
 /// Tests to do:
 final class BenchmarkTests: XCTestCase {

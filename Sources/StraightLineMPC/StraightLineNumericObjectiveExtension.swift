@@ -1,6 +1,6 @@
 import LASwift
 import RealModule
-import Minimization
+import SwiftMPC
 
 
 extension StraightLineNumericObjective: Objective {

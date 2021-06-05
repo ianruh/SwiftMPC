@@ -1,9 +1,9 @@
 import XCTest
 
-import MinimizationTests
+import SwiftMPCTests
 import SymbolicMathTests
 
 var tests = [XCTestCaseEntry]()
-tests += MinimizationTests.allTests()
+tests += SwiftMPCTests.allTests()
 tests += SymbolicMathTests.allTests()
 XCTMain(tests)

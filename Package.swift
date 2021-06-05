@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Minimization",
+    name: "SwiftMPC",
     platforms: [
        .macOS(.v10_15)
     ],
@@ -17,7 +17,7 @@ let package = Package(
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "Minimization",
+            name: "SwiftMPC",
             dependencies: [
                 .product(name: "RealModule", package: "swift-numerics"),
                 "LASwift",
@@ -44,7 +44,7 @@ let package = Package(
                 "LASwift",
                 "SymbolicMath",
                 .product(name: "Collections", package: "swift-collections"),
-                "Minimization"
+                "SwiftMPC"
             ]),
         .target(
             name: "SpringsMPC",
@@ -53,7 +53,7 @@ let package = Package(
                 "LASwift",
                 "SymbolicMath",
                 .product(name: "Collections", package: "swift-collections"),
-                "Minimization"
+                "SwiftMPC"
             ]),
         .testTarget(
             name: "SymbolicMathTests",
@@ -63,9 +63,9 @@ let package = Package(
                 .product(name: "Collections", package: "swift-collections")
             ]),
         .testTarget(
-            name: "MinimizationTests",
+            name: "SwiftMPCTests",
             dependencies: [
-                "Minimization",
+                "SwiftMPC",
                 "LASwift",
                 "SymbolicMath",
                 .product(name: "Collections", package: "swift-collections")
@@ -77,7 +77,7 @@ let package = Package(
                 "LASwift",
                 "SymbolicMath",
                 .product(name: "Collections", package: "swift-collections"),
-                "Minimization",
+                "SwiftMPC",
             ]),
     ]
 )

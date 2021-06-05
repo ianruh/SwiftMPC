@@ -1,5 +1,5 @@
 import LASwift
-import Minimization
+import SwiftMPC
 
 struct StraightLineNumericObjective {
     func startPoint() throws -> (primal: Vector, dual: Vector) {

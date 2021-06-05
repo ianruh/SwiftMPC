@@ -384,7 +384,7 @@ public struct SymbolicObjective: Objective {
     public mutating func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection, C.Element == Variable {
         try self.variables.forEach({ variable in
             guard newOrdering.contains(variable) else {
-                throw MinimizationError.misc("New ordering \(newOrdering) does not contain variable \(variable)")
+                throw SwiftMPCError.misc("New ordering \(newOrdering) does not contain variable \(variable)")
             }
         })
         self.orderedVariables = OrderedSet<Variable>(newOrdering)
@@ -507,7 +507,7 @@ public struct SymbolicObjective: Objective {
             // The equality vector doesn't need to change at all
 
             guard let newObjective = SymbolicObjective(min: s, subjectTo: newConstraintsSymbolicVector, equalityConstraintMatrix: expandedEqualityMatrix?.symbolic, equalityConstraintVector: self.equalityConstraintVector?.symbolic, startPrimal: startVector, ordering: ordering, parameterValues: self.parameterValues) else {
-                throw MinimizationError.misc("Unable to find feasible point")
+                throw SwiftMPCError.misc("Unable to find feasible point")
             }
 
             #if DEBUG
@@ -520,7 +520,7 @@ public struct SymbolicObjective: Objective {
 
             // Min should be negative if we have a feasible point
             guard min < 0.0 else {
-                throw MinimizationError.misc("Problem may be infeasible. Found minimum feasible point of \(pt)")
+                throw SwiftMPCError.misc("Problem may be infeasible. Found minimum feasible point of \(pt)")
             }
 
             var startPrimal: [Double] = Array(pt[1..<pt.count])
