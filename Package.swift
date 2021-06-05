@@ -5,8 +5,8 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftMPC",
-    platforms: [
-       .macOS(.v10_15)
+    products: [
+        .library(name: "SwiftMPC", targets: ["SwiftMPC", "SymbolicMath"])
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-numerics.git", from: "0.0.8"),
