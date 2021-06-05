@@ -91,6 +91,11 @@ public class Negative: Node, Operation {
     public override func simplify() -> Node {
         if(self.isSimplified) { return self }
 
+        // Little check to remove negatives of negatives
+        if let negativeArg = self.argument as? Negative {
+            return negativeArg.argument.simplify()
+        }
+
         let new = Multiply(Number(-1), self.argument.simplify())
         try! new.setVariableOrder(from: self)
         new.isSimplified =  true

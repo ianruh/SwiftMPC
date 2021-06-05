@@ -206,7 +206,6 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
         var derivatives: [Node] = [self]
         for i in 0...order {
             terms = terms + derivatives.last!.replace(variable, with: location)/Number(i.factorial())*(variable - location)**Number(i)
-
             // Find the ith derivative
             guard let nextDerivative = differentiate(derivatives.last!, wrt: variable) else {
                 return nil

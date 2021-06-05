@@ -312,14 +312,14 @@ final class RegressionTests: XCTestCase {
     }
 
     static var allTests = [
-        ("Regression 1", testRegression1),
-        ("Regression 2", testRegression2),
-        ("Regression 3", testRegression3),
-        ("Regression 4", testRegression4),
-        ("Regression 5", testRegression5),
-        ("Regression 6", testRegression6),
-        ("Regression 7", testRegression7),
-        ("Regression 8", testRegression8),
-        ("Regression 9", testRegression9),
+        ("SwiftMPC Regression 1", testRegression1),
+        ("SwiftMPC Regression 2", testRegression2),
+        ("SwiftMPC Regression 3", testRegression3),
+        ("SwiftMPC Regression 4", testRegression4),
+        ("SwiftMPC Regression 5", testRegression5),
+        ("SwiftMPC Regression 6", testRegression6),
+        ("SwiftMPC Regression 7", testRegression7),
+        ("SwiftMPC Regression 8", testRegression8),
+        ("SwiftMPC Regression 9", testRegression9),
     ]
 }

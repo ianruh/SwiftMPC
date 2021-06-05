@@ -40,7 +40,11 @@ public func differentiate(_ term: Node, wrt variableNode: Node, partially: Bool 
     case is Assign:
         return nil
     case let negative as Negative:
-        return differentiate(negative, wrt: variable, partially: partially)
+        if let argDir = differentiate(negative.argument, wrt: variable, partially: partially) {
+            return Negative(argDir)
+        } else {
+            return nil
+        }
     case let add as Add:
         var terms: [Node] = []
 
