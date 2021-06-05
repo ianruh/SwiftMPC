@@ -38,7 +38,7 @@ public func .*(_ lhs: SymbolicVector, _ rhs: Node) -> SymbolicVector {
 public func .*(_ lhs: Node, _ rhs: SymbolicVector) -> SymbolicVector {
     return SymbolicVector(rhs.elements.map({ $0 * lhs }))
 }
-public func .**(_ lhs: SymbolicVector, _ rhs: Double) -> SymbolicVector {
+public func .**(_ lhs: SymbolicVector, _ rhs: Int) -> SymbolicVector {
     return SymbolicVector(lhs.elements.map({ $0 ** Number(rhs) }))
 }
 
@@ -48,6 +48,6 @@ public func .*(_ lhs: [Variable], _ rhs: Double) -> SymbolicVector {
 public func .*(_ lhs: Double, _ rhs: [Variable]) -> SymbolicVector {
     return lhs .* SymbolicVector(rhs)
 }
-public func .**(_ lhs: [Variable], _ rhs: Double) -> SymbolicVector {
+public func .**(_ lhs: [Variable], _ rhs: Int) -> SymbolicVector {
     return SymbolicVector(lhs) .** rhs
 }

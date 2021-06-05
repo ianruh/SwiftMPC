@@ -35,7 +35,7 @@ public func .*(_ lhs: SymbolicMatrix, _ rhs: Node) -> SymbolicMatrix {
 public func .*(_ lhs: Node, _ rhs: SymbolicMatrix) -> SymbolicMatrix {
     return SymbolicMatrix(rhs.vectors.map({ $0 .* lhs }))
 }
-public func .**(_ lhs: SymbolicMatrix, _ rhs: Double) -> SymbolicMatrix {
+public func .**(_ lhs: SymbolicMatrix, _ rhs: Int) -> SymbolicMatrix {
     return SymbolicMatrix(lhs.vectors.map({ $0 .** rhs }))
 }
 
@@ -45,7 +45,7 @@ public func .*(_ lhs: [[Variable]], _ rhs: Double) -> SymbolicMatrix {
 public func .*(_ lhs: Double, _ rhs: [[Variable]]) -> SymbolicMatrix {
     return lhs .* SymbolicMatrix(rhs)
 }
-public func .**(_ lhs: [[Variable]], _ rhs: Double) -> SymbolicMatrix {
+public func .**(_ lhs: [[Variable]], _ rhs: Int) -> SymbolicMatrix {
     return SymbolicMatrix(lhs) .** rhs
 }
 
