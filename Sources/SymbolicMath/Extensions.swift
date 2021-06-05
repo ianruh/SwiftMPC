@@ -173,6 +173,7 @@ public func printDebug(_ msg: Any, file: StaticString = #file, line: UInt = #lin
 // https://talk.objc.io/episodes/S01E90-concurrent-map
 extension Array {
     func parallelMap<B>(_ transform: @escaping (Element) -> B) -> [B] {
+        #if !NO_PARALLEL
         var result = Array<B?>(repeating: nil, count: count)
         let q = DispatchQueue(label: "sync queue")
         DispatchQueue.concurrentPerform(iterations: count) { idx in
@@ -183,6 +184,9 @@ extension Array {
             }
         }
         return result.map { $0! }
+        #else
+        return self.map(transform)
+        #endif
     }
 }
 
