@@ -24,7 +24,9 @@ public func norm(_ a: Vector) -> Double {
 
 @usableFromInline
 internal func printDebug(_ msg: Any, file: StaticString = #file, line: UInt = #line) {
+    #if !NO_PRINT
     print("\(file):\(line) --- \(msg)")
+    #endif
 }
 
 // Pointwise comparisons
