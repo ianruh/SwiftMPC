@@ -427,7 +427,7 @@ public extension SymbolicObjective {
             str += labelString("Primal Constructor")
             str += "\n"
             str += "@inlinable\n"
-            str += "func constructPrimal(\(parametersString)) -> Vector {\n"
+            str += "static func constructPrimal(\(parametersString)) -> Vector {\n"
             // Write the numeric flat vector placeholder
             str += "var flat: Vector = zeros(\(self.orderedVariables.count))\n"
 
