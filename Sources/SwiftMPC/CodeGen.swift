@@ -245,6 +245,7 @@ public extension SymbolicObjective {
             matrixExtractors: Dictionary<String, [[Variable]]> = [:],
             vectorExtractors: Dictionary<String, [Variable]> = [:],
             variableExtractors: Dictionary<String, Variable> = [:],
+            primalConstructor: Bool = false,
             toFile file: String? = nil) throws {
 
         /// Utility function to generate a section label
@@ -283,6 +284,52 @@ public extension SymbolicObjective {
             guard self.orderedVariables.contains(variable) else {
                 throw SwiftMPCError.misc("The variable \(variable) cannot be extracted because it is not in the model")
             }
+        }
+
+        // If we are making the primal constructor, then we need to makes sure every variables is
+        // in one of the extractors
+        if(primalConstructor) {
+            for variable in self.orderedVariables {
+                let matrixContains: Bool = matrixExtractors.values.reduce(false, { (runningValue, matrix) in 
+                    return runningValue || matrix.reduce(false, {$0 || $1.contains(variable) })
+                })
+                let vectorContains: Bool = vectorExtractors.values.reduce(false, { $0 || $1.contains(variable)})
+                let variableContains: Bool = variableExtractors.values.contains(variable)
+                guard matrixContains || vectorContains || variableContains else {
+                    throw SwiftMPCError.misc("In order to construct the primalConstructor, every variable must be in an extractor. \(variable) was not found.")
+                }
+            }
+        }
+        // Utility function for constructing the primal constructor
+        // If it gets called, then we have already checked that every variable is represented,
+        // so it is sae to assume it will always return a reference
+        func primalConstructorGetVariableString(_ variable: Variable) -> String? {
+            // Search in matrices
+            for (matrixName, matrix) in matrixExtractors {
+                for row in 0..<matrix.count {
+                    for col in 0..<matrix[row].count {
+                        if(matrix[row][col] == variable) {
+                            return "\(matrixName)[\(row), \(col)]"
+                        }
+                    }
+                }
+            }
+            // Search in vectors
+            for (vectorName, vector) in vectorExtractors {
+                for index in 0..<vector.count {
+                    if(vector[index] == variable) {
+                        return "\(vectorName)[\(index)]"
+                    }
+                }
+            }
+            // Search Variables
+            for (variableName, variableEx) in variableExtractors {
+                if(variableEx == variable) {
+                    return "\(variableName)"
+                }
+            }
+            // Fallback should never run
+            return nil
         }
 
         // Merge the parameter representation dict with the generated variable representations dict
@@ -354,6 +401,49 @@ public extension SymbolicObjective {
             str += "static func extractVariable_\(variableName)(_ \(stateVectorName): Vector) -> Double {\n"
             str += "return "
             str += try variable.swiftCode(using: representation)
+            str += "\n"
+            str += "}"
+            str += "\n"
+        }
+
+                //====== Primal vector constructor ======
+        if(primalConstructor) {
+            var parametersString = ""
+            for (matrixName, _) in matrixExtractors {
+                parametersString += "\(matrixName): Matrix, "
+            }
+            for (vectorName, _) in vectorExtractors {
+                parametersString += "\(vectorName): Vector, "
+            }
+            // Variable extractors
+            for (variableName, _) in variableExtractors {
+                parametersString += "\(variableName): Double, "
+            }
+
+            // Remove the last space and comma
+            parametersString = String(parametersString.dropLast())
+            parametersString = String(parametersString.dropLast())
+
+            str += labelString("Primal Constructor")
+            str += "\n"
+            str += "@inlinable\n"
+            str += "func constructPrimal(\(parametersString)) -> Vector {\n"
+            // Write the numeric flat vector placeholder
+            str += "var flat: Vector = zeros(\(self.orderedVariables.count))\n"
+
+            // Get the pointer
+            str += "flat.withUnsafeMutableBufferPointer({ buffer in\n"
+
+            // Write every accessor
+            for i in 0..<self.orderedVariables.count {
+                str += "buffer[\(i)] = \(primalConstructorGetVariableString(self.orderedVariables[i])!)\n"
+            }
+
+            // Close the pointer closure
+            str += "})\n"
+
+            // Return the vector
+            str += "return flat"
             str += "\n"
             str += "}"
             str += "\n"
