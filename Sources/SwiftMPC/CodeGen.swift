@@ -409,14 +409,14 @@ public extension SymbolicObjective {
                 //====== Primal vector constructor ======
         if(primalConstructor) {
             var parametersString = ""
-            for (matrixName, _) in matrixExtractors {
+            for matrixName in matrixExtractors.keys.sorted() {
                 parametersString += "\(matrixName): Matrix, "
             }
-            for (vectorName, _) in vectorExtractors {
+            for vectorName in vectorExtractors.keys.sorted() {
                 parametersString += "\(vectorName): Vector, "
             }
             // Variable extractors
-            for (variableName, _) in variableExtractors {
+            for variableName in variableExtractors.keys.sorted() {
                 parametersString += "\(variableName): Double, "
             }
 
