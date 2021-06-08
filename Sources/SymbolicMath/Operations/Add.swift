@@ -194,6 +194,11 @@ public class Add: Node, Operation {
 
             var termsDict: Dictionary<Node, Node> = [:]
             args.forEach({arg in
+
+                // NOTE: This section is commented out because we want simplify to expand, rather than factor, terms.
+                // I'm not sure if I'll want it later, so commenting for now, rather than deleting. If you are reading this
+                // later, you can likely delete it safely.
+
                 // if let mul = arg as? Multiply {
                 //     if(mul.arguments.count > 1) {
                 //         if let term = termsDict[mul.arguments[0]] {
