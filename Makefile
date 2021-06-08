@@ -17,10 +17,10 @@ build-debug:
 	swift build --build-tests $(DEBUG) $(EXTRAS)
 
 test:
-	swift test $(RELEASE) $(WHOLE_MODULE) $(UNCHECKED) $(FAST_MATH) $(COMPILER_OPT) $(EXTRAS)
+	swift test $(RELEASE) $(WHOLE_MODULE) $(UNCHECKED) $(FAST_MATH) $(COMPILER_OPT) $(EXTRAS) $(NO_PARALLEL)
 
 test-debug:
-	swift test $(DEBUG) $(EXTRAS)
+	swift test $(DEBUG) $(EXTRAS) $(NO_PARALLEL)
 
 clean:
 	rm -rf .build/

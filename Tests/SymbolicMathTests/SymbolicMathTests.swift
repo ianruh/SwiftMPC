@@ -121,6 +121,16 @@ final class SymbolicMathTests: XCTestCase {
         assertNodesEqual(x+x+x, 3*x)
     }
 
+    func testExpandAddition() {
+        let x = Variable("x")
+        let y = Variable("y")
+
+        assertNodesEqual(x*(x + 1), Power(x, Number(2)) + x)
+        assertNodesEqual(x*(x + y), x*y + x**2)
+        assertNodesEqual(x*(x+1) + y*(y+1), x**2 + x + y**2 + y)
+        assertNodesEqual(x*(x+1)*(y+2), x**2*y + 2*x**2 + x*y + 2*x)
+    }
+
     func testIdentities() {
         let x = Variable("x")
 
@@ -501,6 +511,7 @@ final class SymbolicMathTests: XCTestCase {
         ("Number Combining", testNumberCombining),
         ("Equality", testEquality),
         ("Combine Like", testCombineLike),
+        ("Test Expand Addition", testExpandAddition),
         ("Identities", testIdentities),
         ("Cosine", testCos),
         ("Sine", testSin),

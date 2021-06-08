@@ -194,27 +194,27 @@ public class Add: Node, Operation {
 
             var termsDict: Dictionary<Node, Node> = [:]
             args.forEach({arg in
-                if let mul = arg as? Multiply {
-                    if(mul.arguments.count > 1) {
-                        if let term = termsDict[mul.arguments[0]] {
-                            termsDict[mul.arguments[0]] = term + Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count]))
-                        } else {
-                            termsDict[mul.arguments[0]] = Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count]))
-                        }
-                    } else {
-                        if let term = termsDict[mul.arguments[0]] {
-                            termsDict[mul.arguments[0]] = term + Number(1)
-                        } else {
-                            termsDict[mul.arguments[0]] = Number(1)
-                        }
-                    }
-                } else {
+                // if let mul = arg as? Multiply {
+                //     if(mul.arguments.count > 1) {
+                //         if let term = termsDict[mul.arguments[0]] {
+                //             termsDict[mul.arguments[0]] = term + Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count]))
+                //         } else {
+                //             termsDict[mul.arguments[0]] = Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count]))
+                //         }
+                //     } else {
+                //         if let term = termsDict[mul.arguments[0]] {
+                //             termsDict[mul.arguments[0]] = term + Number(1)
+                //         } else {
+                //             termsDict[mul.arguments[0]] = Number(1)
+                //         }
+                //     }
+                // } else {
                     if let term = termsDict[arg] {
                         termsDict[arg] = term + Number(1)
                     } else {
                         termsDict[arg] = Number(1)
                     }
-                }
+                // }
             })
             for (base, multiple) in termsDict {
                 if(multiple == Number(1)) {
