@@ -1,3 +1,3 @@
-# Unconstrained-Minimization
+# Unconstrained-SwiftMPC
 
 A description of this package.

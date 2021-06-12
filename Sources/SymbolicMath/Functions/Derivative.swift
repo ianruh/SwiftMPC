@@ -133,7 +133,7 @@ public class Derivative: Node, Function {
                 return new
             }
         } else {
-            print("Unexpectedly found nil while simplifying a derivative: `\(self)`")
+            printDebug("Unexpectedly found nil while simplifying a derivative: `\(self)`")
             return Number(0)
         }
     }

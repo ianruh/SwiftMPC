@@ -2,7 +2,7 @@
 // Created by Ian Ruh on 5/5/21.
 //
 
-import Numerics
+import RealModule
 import LASwift
 import SymbolicMath
 import Foundation
@@ -23,8 +23,10 @@ public func norm(_ a: Vector) -> Double {
 }
 
 @usableFromInline
-internal func printDebug(_ msg: CustomStringConvertible = "", file: StaticString = #file, line: UInt = #line) {
+internal func printDebug(_ msg: Any, file: StaticString = #file, line: UInt = #line) {
+    #if !NO_PRINT
     print("\(file):\(line) --- \(msg)")
+    #endif
 }
 
 // Pointwise comparisons

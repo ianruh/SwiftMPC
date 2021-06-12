@@ -166,13 +166,14 @@ public func *(_ lhs: String, _ rhs: Int) -> String {
     return str
 }
 
-public func printDebug(_ msg: CustomStringConvertible = "", file: StaticString = #file, line: UInt = #line) {
+public func printDebug(_ msg: Any, file: StaticString = #file, line: UInt = #line) {
     print("Got to \(file):\(line) \(msg)")
 }
 
 // https://talk.objc.io/episodes/S01E90-concurrent-map
 extension Array {
     func parallelMap<B>(_ transform: @escaping (Element) -> B) -> [B] {
+        #if !NO_PARALLEL
         var result = Array<B?>(repeating: nil, count: count)
         let q = DispatchQueue(label: "sync queue")
         DispatchQueue.concurrentPerform(iterations: count) { idx in
@@ -183,5 +184,26 @@ extension Array {
             }
         }
         return result.map { $0! }
+        #else
+        return self.map(transform)
+        #endif
+    }
+}
+
+extension Int {
+    func factorial() -> Int {
+        guard self >= 0 else {
+            preconditionFailure("Factorial must be of a non-negative integer.")
+        }
+        // 1 case
+        guard self != 0 else {
+            return 1
+        }
+
+        var current: Int = 1
+        for i in 1...self {
+            current *= i
+        }
+        return current
     }
 }

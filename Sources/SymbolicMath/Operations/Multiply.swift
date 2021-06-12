@@ -1,5 +1,5 @@
 import Foundation
-import Numerics
+import RealModule
 import Collections
 
 /// Multiply one node by the other.
@@ -262,10 +262,48 @@ public class Multiply: Node, Operation {
             return Multiply(args)
         }
 
+        func expandAddition(_ node: Multiply) -> Node {
+            var additionTerms: [Add] = []
+            var otherTerms: [Node] = []
+            node.arguments.forEach({ term in
+                if let add = term as? Add {
+                    additionTerms.append(add)
+                } else {
+                    otherTerms.append(term)
+                }
+            })
+            
+            if(additionTerms.count == 0) {
+                return node
+            }
+
+            // We no convert x*(y+1)*(z+1) --> x*y*(z+1) + x*1*(z+1), which then needs to get simplified again
+            let firstAdd = additionTerms[0]
+            let allOthers = otherTerms + (additionTerms.count >= 2 ? Array<Add>(additionTerms[1..<additionTerms.count]) : Array<Add>())
+
+            var newNodeArguments: [Node] = []
+            for el in firstAdd.arguments {
+                newNodeArguments.append(Multiply(allOthers + [el]))
+            }
+
+            return Add(newNodeArguments).simplify()
+        }
+
         let args = self.arguments.map({$0.simplify()})
 
         var simplifiedMul = Multiply(args)
         simplifiedMul = level(simplifiedMul)
+
+        // The expansion doesn't necessarily return a multiply
+        let expandResult: Node = expandAddition(simplifiedMul)
+        if let mul = expandResult as? Multiply {
+            simplifiedMul = mul
+        } else {
+            try! expandResult.setVariableOrder(from: self)
+            expandResult.isSimplified = true
+            return expandResult
+        }
+
         simplifiedMul = combineNumbers(simplifiedMul)
         simplifiedMul = combineLike(simplifiedMul)
         simplifiedMul = removeOne(simplifiedMul)
@@ -307,11 +345,21 @@ public class Multiply: Node, Operation {
     override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
         var str = ""
 
-        for i in 0..<self.arguments.count-1 {
-            str += "(\(try self.arguments[i].swiftCode(using: representations)))*"
+        for i in 0..<self.arguments.count {
+            if let op = self.arguments[i] as? Operation {
+                if(op.precedence <= self.precedence && op.type == .infix) {
+                    str += "(\(try op.swiftCode(using: representations)))"
+                } else {
+                    str += "\(try op.swiftCode(using: representations))"
+                }
+            } else {
+                str += try self.arguments[i].swiftCode(using: representations)
+            }
+            if(i != self.arguments.count-1) {
+                str += " * "
+            }
         }
-        str += "(\(try self.arguments.last!.swiftCode(using: representations)))"
-
+        
         return str
     }
 }

@@ -1,6 +1,6 @@
 import LASwift
 import Collections
-import Minimization
+import SwiftMPC
 import SymbolicMath
 
 /// Implementation of on of the examples from https://web.stanford.edu/~boyd/papers/fast_mpc.html

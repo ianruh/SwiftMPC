@@ -121,6 +121,16 @@ final class SymbolicMathTests: XCTestCase {
         assertNodesEqual(x+x+x, 3*x)
     }
 
+    func testExpandAddition() {
+        let x = Variable("x")
+        let y = Variable("y")
+
+        assertNodesEqual(x*(x + 1), Power(x, Number(2)) + x)
+        assertNodesEqual(x*(x + y), x*y + x**2)
+        assertNodesEqual(x*(x+1) + y*(y+1), x**2 + x + y**2 + y)
+        assertNodesEqual(x*(x+1)*(y+2), x**2*y + 2*x**2 + x*y + 2*x)
+    }
+
     func testIdentities() {
         let x = Variable("x")
 
@@ -477,6 +487,23 @@ final class SymbolicMathTests: XCTestCase {
         }
     }
 
+    func testTaylor() {
+        do {
+            let x = Variable("x")
+            let expression = x**2
+
+            assertNodesEqual(expression.taylorExpand(in: x, about: 0.0.symbol, ofOrder: 1), Number(0))
+            assertNodesEqual(expression.taylorExpand(in: x, about: 1.0.symbol, ofOrder: 1), (x-1)*2.symbol + 1)
+        }
+
+        do {
+            let x = Variable("x")
+            let expression = Exp(x)
+
+            assertNodesEqual(expression.taylorExpand(in: x, about: 0.0.symbol, ofOrder: 1), 1 + x)
+            assertNodesEqual(expression.taylorExpand(in: x, about: 0.0.symbol, ofOrder: 2), 1 + x + 0.5.symbol*x**2)
+        }
+    }
 
     static var allTests = [
         ("Leveling Test", testLeveling),
@@ -484,6 +511,7 @@ final class SymbolicMathTests: XCTestCase {
         ("Number Combining", testNumberCombining),
         ("Equality", testEquality),
         ("Combine Like", testCombineLike),
+        ("Test Expand Addition", testExpandAddition),
         ("Identities", testIdentities),
         ("Cosine", testCos),
         ("Sine", testSin),
@@ -495,6 +523,7 @@ final class SymbolicMathTests: XCTestCase {
         ("Gradient", testGradient),
         ("Hessian", testHessian),
         ("Variable Ordering", testOrdering),
-        ("Parameter Derivative", testParameter)
+        ("Parameter Derivative", testParameter),
+        ("Taylor Expansion", testTaylor)
     ]
 }

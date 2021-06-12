@@ -1,5 +1,5 @@
 import LASwift
-import Numerics
+import RealModule
 
 public struct InequalitySolver {
 
@@ -75,7 +75,7 @@ public struct InequalitySolver {
             shiftedValue = self.barrierValue(objective: objective, at: startPrimal + s.*primalDirection, t: t)
             numIterations += 1
             if(numIterations > self.hyperParameters.lineSearchMaximumIterations) {
-                throw MinimizationError.misc("Reached maximum number of line search iterations")
+                throw SwiftMPCError.misc("Reached maximum number of line search iterations")
             }
         }
         return s
@@ -104,11 +104,11 @@ public struct InequalitySolver {
 
                 // Check that the equality constraints and objective have the same number of variables
                 guard objective.numVariables == equalityConstraintMatrix.cols else {
-                    throw MinimizationError.wrongNumberOfVariables("Number of variables in objective and equality constraint disagree")
+                    throw SwiftMPCError.wrongNumberOfVariables("Number of variables in objective and equality constraint disagree")
                 }
                 // Check that the matrix and vector have the same height
                 guard equalityConstraintMatrix.rows == equalityConstraintVector.count else {
-                    throw MinimizationError.wrongNumberOfVariables("Equality constraint matrix has different number of rows than the equality constraint vector.")
+                    throw SwiftMPCError.wrongNumberOfVariables("Equality constraint matrix has different number of rows than the equality constraint vector.")
                 }
             }
         }
@@ -117,11 +117,11 @@ public struct InequalitySolver {
         var (currentPoint, currentDual): (Vector, Vector) = try objective.startPoint()
         // Check that they are the right dimensions
         guard currentPoint.count == objective.numVariables else {
-            throw MinimizationError.wrongNumberOfVariables("Primal start \(currentPoint) does not have the same number of variables as the objective (\(objective.numVariables))")
+            throw SwiftMPCError.wrongNumberOfVariables("Primal start \(currentPoint) does not have the same number of variables as the objective (\(objective.numVariables))")
         }
         if(self.hasEqaulityConstraints) {
             guard currentDual.count == objective.equalityConstraintMatrix!.rows else {
-                throw MinimizationError.wrongNumberOfVariables("Dual start \(currentDual) does not have the same number of variables as equality constraints in the objective (\(objective.equalityConstraintMatrix!.rows))")
+                throw SwiftMPCError.wrongNumberOfVariables("Dual start \(currentDual) does not have the same number of variables as equality constraints in the objective (\(objective.equalityConstraintMatrix!.rows))")
             }
         } else {
             // Just set the dual to empty even if they provide one

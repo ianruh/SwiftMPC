@@ -4,7 +4,10 @@
 import PackageDescription
 
 let package = Package(
-    name: "Minimization",
+    name: "SwiftMPC",
+    products: [
+        .library(name: "SwiftMPC", targets: ["SwiftMPC", "SymbolicMath"])
+    ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-numerics.git", from: "0.0.8"),
         .package(url: "https://github.com/ianruh/LASwift.git", .branch("linux")),
@@ -14,7 +17,7 @@ let package = Package(
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "Minimization",
+            name: "SwiftMPC",
             dependencies: [
                 .product(name: "RealModule", package: "swift-numerics"),
                 "LASwift",
@@ -22,12 +25,18 @@ let package = Package(
                 .product(name: "Collections", package: "swift-collections")
             ]),
         .target(
-                name: "SymbolicMath",
-                dependencies: [
-                    .product(name: "RealModule", package: "swift-numerics"),
-                    "LASwift",
-                    .product(name: "Collections", package: "swift-collections")
-                ]),
+            name: "SymbolicMath",
+            dependencies: [
+                .product(name: "RealModule", package: "swift-numerics"),
+                "LASwift",
+                .product(name: "Collections", package: "swift-collections")
+            ]),
+        .target(
+            name: "SimpleSimulator",
+            dependencies: [
+                .product(name: "RealModule", package: "swift-numerics"),
+                "LASwift"
+            ]),
         .target(
             name: "StraightLineMPC",
             dependencies: [
@@ -35,7 +44,7 @@ let package = Package(
                 "LASwift",
                 "SymbolicMath",
                 .product(name: "Collections", package: "swift-collections"),
-                "Minimization"
+                "SwiftMPC"
             ]),
         .target(
             name: "SpringsMPC",
@@ -44,22 +53,31 @@ let package = Package(
                 "LASwift",
                 "SymbolicMath",
                 .product(name: "Collections", package: "swift-collections"),
-                "Minimization"
+                "SwiftMPC"
             ]),
         .testTarget(
-                name: "SymbolicMathTests",
-                dependencies: [
-                    "SymbolicMath", 
-                    "LASwift",
-                    .product(name: "Collections", package: "swift-collections")
-                ]),
-        .testTarget(
-            name: "MinimizationTests",
+            name: "SymbolicMathTests",
             dependencies: [
-                "Minimization",
+                "SymbolicMath", 
+                "LASwift",
+                .product(name: "Collections", package: "swift-collections")
+            ]),
+        .testTarget(
+            name: "SwiftMPCTests",
+            dependencies: [
+                "SwiftMPC",
                 "LASwift",
                 "SymbolicMath",
                 .product(name: "Collections", package: "swift-collections")
+            ]),
+        .target(
+            name: "LTVMPC",
+            dependencies: [
+                .product(name: "RealModule", package: "swift-numerics"),
+                "LASwift",
+                "SymbolicMath",
+                .product(name: "Collections", package: "swift-collections"),
+                "SwiftMPC",
             ]),
     ]
 )

@@ -2,7 +2,7 @@
 // Created by Ian Ruh on 5/5/21.
 //
 import LASwift
-import Numerics
+import RealModule
 
 func newtonStepDirection(startingPoint: Vector, gradient: Vector, hessian: Matrix) throws -> Vector {
     // Solve for the newton step Δx: ∇²f Δx = -1 * ∇f
@@ -106,7 +106,7 @@ func equalityConstrainedMinimize(
 
     // Check that the equality constraints and objective have the same number of variables
     guard objective.numVariables == equalityConstraintMatrix.cols else {
-        throw MinimizationError.wrongNumberOfVariables("Number of variables in objective and equality constraint disagree")
+        throw SwiftMPCError.wrongNumberOfVariables("Number of variables in objective and equality constraint disagree")
     }
 
     // Set start point
@@ -250,10 +250,10 @@ func infeasibleEqualityMinimize(
 
     // Check that the equality constraints and objective have the same number of variables
     guard objective.numVariables == equalityConstraintMatrix.cols else {
-        throw MinimizationError.wrongNumberOfVariables("Number of variables in objective and equality constraint disagree")
+        throw SwiftMPCError.wrongNumberOfVariables("Number of variables in objective and equality constraint disagree")
     }
     guard equalityConstraintMatrix.rows == equalityConstraintVector.count else {
-        throw MinimizationError.wrongNumberOfVariables("Equality constraint matrix has different number of rows than the equality constraint vector.")
+        throw SwiftMPCError.wrongNumberOfVariables("Equality constraint matrix has different number of rows than the equality constraint vector.")
     }
 
     // Set start point

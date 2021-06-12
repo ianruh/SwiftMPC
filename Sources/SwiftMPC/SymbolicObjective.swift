@@ -1,5 +1,5 @@
 import LASwift
-import Numerics
+import RealModule
 import SymbolicMath
 import Collections
 import Foundation
@@ -123,20 +123,20 @@ public struct SymbolicObjective: Objective {
                 try  self.setVariableOrder(self.orderedVariables)
             }
         } catch {
-            print(error)
+            printDebug(error)
             return nil
         }
 
         // The symbolic equality constraint matrix and vector are not allowed to have any variables
         if let matrix = optionalEqualityConstraintMatrix {
             guard matrix.variables.count == 0 else {
-                print("The equality constraint matrix cannot contain variables.")
+                printDebug("The equality constraint matrix cannot contain variables.")
                 return nil
             }
         }
         if let vector = optionalEqualityConstraintVector {
             guard vector.variables.count == 0 else {
-                print("The equality constraint vector cannot contain variables.")
+                printDebug("The equality constraint vector cannot contain variables.")
                 return nil
             }
         }
@@ -144,17 +144,17 @@ public struct SymbolicObjective: Objective {
         // Save the equality constraint matrices
         if let equalityConstraintMatrix = optionalEqualityConstraintMatrix {
             guard let equalityConstraintVector = optionalEqualityConstraintVector else {
-                print("literal equality constraint matrix provided, but not literal equality constraint vector")
+                printDebug("literal equality constraint matrix provided, but not literal equality constraint vector")
                 return nil
             }
             // Make sure they are the same height
             guard equalityConstraintMatrix.rows == equalityConstraintVector.count else {
-                print("Literal equality contraint matrix and literal equality constraint vector dimensions do not agree. \(equalityConstraintMatrix.rows) vs \(equalityConstraintVector.count)")
+                printDebug("Literal equality contraint matrix and literal equality constraint vector dimensions do not agree. \(equalityConstraintMatrix.rows) vs \(equalityConstraintVector.count)")
                 return nil
             }
             // Make sure the matrix has  the right number of columns
             guard equalityConstraintMatrix.cols == self.orderedVariables.count else {
-                print("Literal equality constraint matrix does not have the same number of columns as objective has variables. \(equalityConstraintMatrix.cols) vs \(self.orderedVariables.count)")
+                printDebug("Literal equality constraint matrix does not have the same number of columns as objective has variables. \(equalityConstraintMatrix.cols) vs \(self.orderedVariables.count)")
                 return nil
             }
 
@@ -208,7 +208,7 @@ public struct SymbolicObjective: Objective {
                     for el in leftElements {
                         // Check the number of variables
                         if(el.variables.count > 1) {
-                            print("The constraint \(constraint) contains a non-linear term")
+                            printDebug("The constraint \(constraint) contains a non-linear term")
                             return nil
                         } else if(el.variables.count == 1) {
                             let variable = el.variables.first!
@@ -253,7 +253,7 @@ public struct SymbolicObjective: Objective {
         // Check that every parameter has a value
         for param in self.parameters {
             guard self.parameterValues[param] != nil else {
-                print("Parameter \(param) does not have a specified value")
+                printDebug("Parameter \(param) does not have a specified value")
                 return nil
             }
         }
@@ -291,7 +291,7 @@ public struct SymbolicObjective: Objective {
                     try self.symbolicConstraintsVector!.setVariableOrder(self.orderedVariables)
                 }
             } catch {
-                print(error)
+                printDebug(error)
                 return nil
             }
         }
@@ -313,7 +313,7 @@ public struct SymbolicObjective: Objective {
             // Construct gradients
             for symbol in constraints {
                 guard let grad = symbol.gradient() else {
-                    print("Unable to construct gradient of \(symbol)")
+                    printDebug("Unable to construct gradient of \(symbol)")
                     return nil
                 }
                 #if NO_SIMPLIFY
@@ -326,7 +326,7 @@ public struct SymbolicObjective: Objective {
             // Construct hessian
             for symbol in constraints {
                 guard let hess = symbol.hessian() else {
-                    print("Unable to construct hessian of \(symbol)")
+                    printDebug("Unable to construct hessian of \(symbol)")
                     return nil
                 }
                 #if NO_SIMPLIFY
@@ -376,7 +376,7 @@ public struct SymbolicObjective: Objective {
                 try self.setVariableOrder(self.orderedVariables)
             }
         } catch {
-            print(error)
+            printDebug(error)
             return nil
         }
     }
@@ -384,7 +384,7 @@ public struct SymbolicObjective: Objective {
     public mutating func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection, C.Element == Variable {
         try self.variables.forEach({ variable in
             guard newOrdering.contains(variable) else {
-                throw MinimizationError.misc("New ordering \(newOrdering) does not contain variable \(variable)")
+                throw SwiftMPCError.misc("New ordering \(newOrdering) does not contain variable \(variable)")
             }
         })
         self.orderedVariables = OrderedSet<Variable>(newOrdering)
@@ -507,7 +507,7 @@ public struct SymbolicObjective: Objective {
             // The equality vector doesn't need to change at all
 
             guard let newObjective = SymbolicObjective(min: s, subjectTo: newConstraintsSymbolicVector, equalityConstraintMatrix: expandedEqualityMatrix?.symbolic, equalityConstraintVector: self.equalityConstraintVector?.symbolic, startPrimal: startVector, ordering: ordering, parameterValues: self.parameterValues) else {
-                throw MinimizationError.misc("Unable to find feasible point")
+                throw SwiftMPCError.misc("Unable to find feasible point")
             }
 
             #if DEBUG
@@ -520,7 +520,7 @@ public struct SymbolicObjective: Objective {
 
             // Min should be negative if we have a feasible point
             guard min < 0.0 else {
-                throw MinimizationError.misc("Problem may be infeasible. Found minimum feasible point of \(pt)")
+                throw SwiftMPCError.misc("Problem may be infeasible. Found minimum feasible point of \(pt)")
             }
 
             var startPrimal: [Double] = Array(pt[1..<pt.count])
@@ -574,8 +574,8 @@ public struct SymbolicObjective: Objective {
         do {
             return try self.objectiveNode.evaluate(x, withParameters: self.parameterValues)
         } catch {
-            print(error)
-            print("Returned NaN instead")
+            printDebug(error)
+            printDebug("Returned NaN instead")
             return Double.nan
         }
     }
@@ -589,8 +589,8 @@ public struct SymbolicObjective: Objective {
         do {
             return try self.symbolicGradient.evaluate(x, withParameters: self.parameterValues)
         } catch {
-            print(error)
-            print("Returned NaN instead")
+            printDebug(error)
+            printDebug("Returned NaN instead")
             return Vector(repeating: Double.nan, count: self.numVariables)
         }
     }
@@ -604,8 +604,8 @@ public struct SymbolicObjective: Objective {
         do {
             return try self.symbolicHessian.evaluate(x, withParameters: self.parameterValues)
         } catch {
-            print(error)
-            print("Returned NaN instead")
+            printDebug(error)
+            printDebug("Returned NaN instead")
             return Matrix(self.numVariables, self.numVariables, Double.nan)
         }
     }
@@ -620,8 +620,7 @@ public struct SymbolicObjective: Objective {
         do {
             return try constraint.evaluate(x, withParameters: self.parameterValues)
         } catch {
-            // Don't print call stack here. We expect to get nan sometimes in the line search
-            print(error)
+            printDebug(error)
             Thread.callStackSymbols.forEach{print($0)}
             return Double.nan
         }
@@ -637,7 +636,7 @@ public struct SymbolicObjective: Objective {
         do {
             return try constraintsGradient.evaluate(x, withParameters: self.parameterValues)
         } catch {
-            print(error)
+            printDebug(error)
             Thread.callStackSymbols.forEach{print($0)}
             return Array(repeating: Double.nan, count: self.numConstraints)
         }
@@ -653,7 +652,7 @@ public struct SymbolicObjective: Objective {
         do {
             return try constraintsHessian.evaluate(x, withParameters: self.parameterValues)
         } catch {
-            print("Unable to evaluate \(constraintsHessian) at \(x)")
+            printDebug("Unable to evaluate \(constraintsHessian) at \(x)")
             return Matrix(self.numVariables, self.numVariables, Double.nan)
         }
     }

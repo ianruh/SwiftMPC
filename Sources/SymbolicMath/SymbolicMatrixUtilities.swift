@@ -1,13 +1,7 @@
 import LASwift
-import Numerics
+import RealModule
 
 public extension SymbolicMatrix {
-
-    var flat: SymbolicVector {
-        return SymbolicVector(self.vectors.reduce(Array<Node>(), {(current, nextVector) in
-            return current + nextVector.elements
-        }))
-    }
 
     convenience init(_ vecs: [[Variable]]) {
         self.init(vecs.map({ SymbolicVector($0) }))
@@ -41,7 +35,7 @@ public func .*(_ lhs: SymbolicMatrix, _ rhs: Node) -> SymbolicMatrix {
 public func .*(_ lhs: Node, _ rhs: SymbolicMatrix) -> SymbolicMatrix {
     return SymbolicMatrix(rhs.vectors.map({ $0 .* lhs }))
 }
-public func .**(_ lhs: SymbolicMatrix, _ rhs: Double) -> SymbolicMatrix {
+public func .**(_ lhs: SymbolicMatrix, _ rhs: Int) -> SymbolicMatrix {
     return SymbolicMatrix(lhs.vectors.map({ $0 .** rhs }))
 }
 
@@ -51,7 +45,7 @@ public func .*(_ lhs: [[Variable]], _ rhs: Double) -> SymbolicMatrix {
 public func .*(_ lhs: Double, _ rhs: [[Variable]]) -> SymbolicMatrix {
     return lhs .* SymbolicMatrix(rhs)
 }
-public func .**(_ lhs: [[Variable]], _ rhs: Double) -> SymbolicMatrix {
+public func .**(_ lhs: [[Variable]], _ rhs: Int) -> SymbolicMatrix {
     return SymbolicMatrix(lhs) .** rhs
 }
 

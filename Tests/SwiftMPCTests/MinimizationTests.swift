@@ -2,7 +2,7 @@ import XCTest
 import Collections
 import LASwift
 import SymbolicMath
-import Minimization
+import SwiftMPC
 
 /// Tests to do:
 /// -[ ] One variable, no constraints
@@ -22,7 +22,7 @@ import Minimization
 /// -[ ] Incomplete ordering
 /// -[ ] Random ordering
 
-final class MinimizationTests: XCTestCase {
+final class SwiftMPCTests: XCTestCase {
 
     func testConstrainedMinimization1() {
         

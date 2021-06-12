@@ -1,5 +1,5 @@
 import LASwift
-import Minimization
+import SwiftMPC
 import Collections
 import SymbolicMath
 

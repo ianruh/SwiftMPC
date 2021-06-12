@@ -25,6 +25,14 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
         }
     }
 
+    public var flat: [Node] {
+        var nodes: [Node] = []
+        for vector in self.vectors {
+            nodes.append(contentsOf: vector.elements)
+        }
+        return nodes
+    }
+
     internal var vectors: [SymbolicVector]
 
     private var _ordering: OrderedSet<Variable>? = nil

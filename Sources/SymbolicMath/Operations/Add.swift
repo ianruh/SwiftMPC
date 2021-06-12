@@ -1,4 +1,4 @@
-import Numerics
+import RealModule
 import Collections
 
 /// Add one node to the other.
@@ -194,27 +194,32 @@ public class Add: Node, Operation {
 
             var termsDict: Dictionary<Node, Node> = [:]
             args.forEach({arg in
-                if let mul = arg as? Multiply {
-                    if(mul.arguments.count > 1) {
-                        if let term = termsDict[mul.arguments[0]] {
-                            termsDict[mul.arguments[0]] = term + Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count]))
-                        } else {
-                            termsDict[mul.arguments[0]] = Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count]))
-                        }
-                    } else {
-                        if let term = termsDict[mul.arguments[0]] {
-                            termsDict[mul.arguments[0]] = term + Number(1)
-                        } else {
-                            termsDict[mul.arguments[0]] = Number(1)
-                        }
-                    }
-                } else {
+
+                // NOTE: This section is commented out because we want simplify to expand, rather than factor, terms.
+                // I'm not sure if I'll want it later, so commenting for now, rather than deleting. If you are reading this
+                // later, you can likely delete it safely.
+
+                // if let mul = arg as? Multiply {
+                //     if(mul.arguments.count > 1) {
+                //         if let term = termsDict[mul.arguments[0]] {
+                //             termsDict[mul.arguments[0]] = term + Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count]))
+                //         } else {
+                //             termsDict[mul.arguments[0]] = Multiply(Array<Node>(mul.arguments[1..<mul.arguments.count]))
+                //         }
+                //     } else {
+                //         if let term = termsDict[mul.arguments[0]] {
+                //             termsDict[mul.arguments[0]] = term + Number(1)
+                //         } else {
+                //             termsDict[mul.arguments[0]] = Number(1)
+                //         }
+                //     }
+                // } else {
                     if let term = termsDict[arg] {
                         termsDict[arg] = term + Number(1)
                     } else {
                         termsDict[arg] = Number(1)
                     }
-                }
+                // }
             })
             for (base, multiple) in termsDict {
                 if(multiple == Number(1)) {
@@ -270,11 +275,26 @@ public class Add: Node, Operation {
     override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
         var str = ""
 
-        for i in 0..<self.arguments.count-1 {
-            str += "(\(try self.arguments[i].swiftCode(using: representations)))+"
+        // Handle if there is only one child
+        if(self.arguments.count == 1) {
+            return try self.arguments[0].swiftCode(using: representations)
         }
-        str += "(\(try self.arguments.last!.swiftCode(using: representations)))"
 
+        for i in 0..<self.arguments.count {
+            if let op = self.arguments[i] as? Operation {
+                if(op.precedence <= self.precedence && op.type == .infix) {
+                    str += "(\(try op.swiftCode(using: representations)))"
+                } else {
+                    str += "\(try op.swiftCode(using: representations))"
+                }
+            } else {
+                str += try self.arguments[i].swiftCode(using: representations)
+            }
+            if(i != self.arguments.count-1) {
+                str += " + "
+            }
+        }
+        
         return str
     }
 }

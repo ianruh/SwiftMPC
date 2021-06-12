@@ -196,6 +196,26 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
         preconditionFailure("This method must be overriden")
     }
 
+    public func taylorExpand(in variable: Node, about location: Node, ofOrder order: Int) -> Node? {
+        // Check that the order is positive
+        guard order >= 0 else {
+            return nil
+        }
+
+        var terms: Node = Number(0)
+        var derivatives: [Node] = [self]
+        for i in 0...order {
+            terms = terms + derivatives.last!.replace(variable, with: location)/Number(i.factorial())*(variable - location)**Number(i)
+            // Find the ith derivative
+            guard let nextDerivative = differentiate(derivatives.last!, wrt: variable) else {
+                return nil
+            }
+            derivatives.append(nextDerivative)
+        }
+
+        return terms
+    }
+
     //--------------Comparable Conformance-----------------
 
     public static func ==(_ lhs: Node, _ rhs: Node) -> Bool {
