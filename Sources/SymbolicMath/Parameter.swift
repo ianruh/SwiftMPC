@@ -1,6 +1,6 @@
+// Created 2020 github @ianruh
 
 public class Parameter: Node {
-
     private static var currentNameIndex: Int = 0
 
     internal static var nextName: String {
@@ -9,11 +9,11 @@ public class Parameter: Node {
     }
 
     public var name: String
-    
+
     override public var description: String {
         return self.name
     }
-    
+
     override public var latex: String {
         return "\(self.name)"
     }
@@ -44,7 +44,7 @@ public class Parameter: Node {
         }
     }
 
-    public static func ==(_ lhs: Parameter, _ rhs: Parameter) -> Bool {
+    public static func == (_ lhs: Parameter, _ rhs: Parameter) -> Bool {
         return lhs.name == rhs.name
     }
 
@@ -60,10 +60,10 @@ public class Parameter: Node {
     override public convenience init() {
         self.init(Self.nextName)
     }
-    
+
     @inlinable
-    override public func evaluate(withValues values: [Node : Double]) throws -> Double {
-        if let value  = values[self] {
+    override public func evaluate(withValues values: [Node: Double]) throws -> Double {
+        if let value = values[self] {
             return value
         } else {
             throw SymbolicMathError.misc("No value provided for parameter \(self.name)")
@@ -79,7 +79,7 @@ public class Parameter: Node {
     }
 
     override public func contains<T: Node>(nodeType: T.Type) -> [Id] {
-        if(nodeType == Parameter.self) {
+        if nodeType == Parameter.self {
             return [self.id]
         } else {
             return []
@@ -87,7 +87,7 @@ public class Parameter: Node {
     }
 
     @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
-        if(targetNode == self) {
+        if targetNode == self {
             return replacement
         } else {
             return self
@@ -104,7 +104,7 @@ public class Parameter: Node {
         hasher.combine(self.name)
     }
 
-    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
+    override public func swiftCode(using representations: [Node: String]) throws -> String {
         if let rep = representations[self] {
             return rep
         } else {
@@ -113,12 +113,10 @@ public class Parameter: Node {
     }
 }
 
-
 public extension Parameter {
-
     static func vector(_ name: String, count: Int) -> [Parameter] {
         var arr: [Parameter] = []
-        for i in 0..<count {
+        for i in 0 ..< count {
             arr.append(Parameter("\(name)[\(i)]"))
         }
         return arr
@@ -126,19 +124,18 @@ public extension Parameter {
 
     static func matrix(_ name: String, rows: Int, cols: Int) -> [[Parameter]] {
         var arrs: [[Parameter]] = []
-        for i in 0..<rows {
+        for i in 0 ..< rows {
             var arr: [Parameter] = []
-            for j in 0..<cols {
+            for j in 0 ..< cols {
                 arr.append(Parameter("\(name)[\(i),\(j)]"))
             }
             arrs.append(arr)
         }
         return arrs
     }
-
 }
 
-public extension Array where Array.Element == Array<Parameter> {
+public extension Array where Array.Element == [Parameter] {
     subscript(_ row: Int, _ col: Int) -> Parameter {
         return self[row][col]
     }

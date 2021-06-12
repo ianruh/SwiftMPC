@@ -1,9 +1,7 @@
-//
-// Created by Ian Ruh on 5/10/21.
-//
+// Created 2020 github @ianruh
 
-import LASwift
 import Collections
+import LASwift
 
 public class SymbolicVector: Collection, ExpressibleByArrayLiteral {
     public typealias Element = Node
@@ -16,7 +14,7 @@ public class SymbolicVector: Collection, ExpressibleByArrayLiteral {
 
     public var elements: [Node] = []
 
-    private var _ordering: OrderedSet<Variable>? = nil
+    private var _ordering: OrderedSet<Variable>?
     public var orderedVariables: OrderedSet<Variable> {
         if let ordering = self._ordering {
             return ordering
@@ -25,17 +23,17 @@ public class SymbolicVector: Collection, ExpressibleByArrayLiteral {
             return self._ordering!
         }
     }
-    
+
     public lazy var variables: Set<Variable> = {
-        return self.elements.reduce(Set<Variable>(),{(currentSet, nextElement) in
-            return currentSet.union(nextElement.variables)
-        })
+        self.elements.reduce(Set<Variable>()) { currentSet, nextElement in
+            currentSet.union(nextElement.variables)
+        }
     }()
 
     public lazy var parameters: Set<Parameter> = {
-        return self.reduce(Set<Parameter>(),{(currentSet, nextElement) in
-            return currentSet.union(nextElement.parameters)
-        })
+        self.reduce(Set<Parameter>()) { currentSet, nextElement in
+            currentSet.union(nextElement.parameters)
+        }
     }()
 
     public init(_ array: [Node]) {
@@ -47,28 +45,29 @@ public class SymbolicVector: Collection, ExpressibleByArrayLiteral {
     }
 
     public func evaluate(withValues values: [Node: Double]) throws -> Vector {
-        return try self.map({ try $0.evaluate(withValues: values) })
+        return try self.map { try $0.evaluate(withValues: values) }
     }
 
-    public func evaluate(_ x: Vector, withParameters parameterValues: Dictionary<Parameter, Double> = [:]) throws -> Vector {
+    public func evaluate(_ x: Vector, withParameters parameterValues: [Parameter: Double] = [:]) throws -> Vector {
         // Ensure the vector is the right length
         guard x.count == self.orderedVariables.count else {
-            throw SymbolicMathError.misc("Vector \(x) is the wrong length (\(x.count) != \(self.orderedVariables.count)")
+            throw SymbolicMathError
+                .misc("Vector \(x) is the wrong length (\(x.count) != \(self.orderedVariables.count)")
         }
 
         // We don't check that all parameters are represented. It will throw a clear error if one is missing when
         // it tries to evaluate it.
 
-        var values = Dictionary<Node, Double>()
+        var values = [Node: Double]()
         let orderedVariables = self.orderedVariables
-        for i in 0..<x.count {
+        for i in 0 ..< x.count {
             values[orderedVariables[i]] = x[i]
         }
 
         // merge in the parameters. The closure is meaningless, as there will never be conflicting
-        // keys in this case (only variables present in values, and only parameters present in 
+        // keys in this case (only variables present in values, and only parameters present in
         // parameterValues).
-        values.merge(parameterValues, uniquingKeysWith: {(current, _) in current})
+        values.merge(parameterValues, uniquingKeysWith: { current, _ in current })
 
         return try self.evaluate(withValues: values)
     }
@@ -89,20 +88,19 @@ public class SymbolicVector: Collection, ExpressibleByArrayLiteral {
         // no need to do it here too.
 
         // Every child element should also have it's ordering set
-        for i in 0..<self.count {
+        for i in 0 ..< self.count {
             try self.elements[i].setVariableOrder(newOrdering)
         }
     }
 
     public func simplify() -> SymbolicVector {
-
-        if(self.isSimplified) { return self }
+        if self.isSimplified { return self }
 
         var new: SymbolicVector = [0.0].symbolic
-        if(self.elements.count > 20) {
-            new = SymbolicVector(self.elements.parallelMap({ $0.simplify() }))
+        if self.elements.count > 20 {
+            new = SymbolicVector(self.elements.parallelMap { $0.simplify() })
         } else {
-            new = SymbolicVector(self.elements.map({ $0.simplify() }))
+            new = SymbolicVector(self.elements.map { $0.simplify() })
         }
 
         // let new = SymbolicVector(self.elements.map({ $0.simplify() }))
@@ -115,6 +113,6 @@ public class SymbolicVector: Collection, ExpressibleByArrayLiteral {
 
 public extension Vector {
     var symbolic: SymbolicVector {
-        return SymbolicVector(self.map({ Number($0) }))
+        return SymbolicVector(self.map { Number($0) })
     }
 }

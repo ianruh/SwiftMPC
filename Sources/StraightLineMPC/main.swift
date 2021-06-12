@@ -1,3 +1,5 @@
+// Created 2020 github @ianruh
+
 import Foundation
 import LASwift
 
@@ -12,7 +14,7 @@ func writeNumericObjective(_ mpc: StraightLineMPC) throws {
 
     try objective.printSwiftCode(
         objectiveName: "StraightLineNumericObjective",
-        toFile: "/Users/ianruh/Dev/SwiftMPC/Sources/StraightLineMPC/StraightLineNumericObjectiveExtension.swift"    
+        toFile: "/Users/ianruh/Dev/SwiftMPC/Sources/StraightLineMPC/StraightLineNumericObjectiveExtension.swift"
     )
 }
 

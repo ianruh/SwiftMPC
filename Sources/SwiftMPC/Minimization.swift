@@ -1,27 +1,29 @@
+// Created 2020 github @ianruh
+
 //
 // Created by Ian Ruh on 5/5/21.
 //
 import LASwift
 import RealModule
 
-func newtonStepDirection(startingPoint: Vector, gradient: Vector, hessian: Matrix) throws -> Vector {
+func newtonStepDirection(startingPoint _: Vector, gradient: Vector, hessian: Matrix) throws -> Vector {
     // Solve for the newton step Δx: ∇²f Δx = -1 * ∇f
-    let step = try LASwift.linsolve(hessian, -1.*Matrix(gradient))
+    let step = try LASwift.linsolve(hessian, -1 .* Matrix(gradient))
     return step.flat // linsolve always returns a matrix at the moment, so we just flatten it
 }
 
 func approxBackTrackingLineSearch(
-        objective: Objective,
-        startPoint: Vector,
-        startValue: Double,
-        startGradient: Vector,
-        stepDirection: Vector,
-        alpha: Double = 0.25,
-        beta: Double = 0.5) -> Double {
-
+    objective: Objective,
+    startPoint: Vector,
+    startValue: Double,
+    startGradient: Vector,
+    stepDirection: Vector,
+    alpha: Double = 0.25,
+    beta: Double = 0.5
+) -> Double {
     var t = 1.0
 
-    while(objective.value(startPoint + t.*stepDirection) > startValue + alpha*t.*startGradient*stepDirection) {
+    while objective.value(startPoint + t .* stepDirection) > startValue + alpha * t .* startGradient * stepDirection {
         t = beta * t
     }
 
@@ -29,19 +31,19 @@ func approxBackTrackingLineSearch(
 }
 
 func unconstrainedMinimize(
-        _ objective: Objective,
-        startPoint: Vector = [1.0], // Placeholder, even if not set
-        gradEpsilon: Double = 1.0e-6,
-        maxIterations: Int = 100,
-        debugInfo: Bool = false) throws -> Vector {
-
+    _ objective: Objective,
+    startPoint: Vector = [1.0], // Placeholder, even if not set
+    gradEpsilon: Double = 1.0e-6,
+    maxIterations: Int = 100,
+    debugInfo: Bool = false
+) throws -> Vector {
     // Set start point
     var currentPoint = startPoint
-    if(startPoint.count == 1 && startPoint[0] == 1.0) {
+    if startPoint.count == 1, startPoint[0] == 1.0 {
         currentPoint = ones(objective.numVariables)
     }
 
-    if(debugInfo) {
+    if debugInfo {
         print("Starting point: \(startPoint)")
     }
 
@@ -50,17 +52,18 @@ func unconstrainedMinimize(
     var H = objective.hessian(currentPoint)
 
     var iterations: Int = 0
-    while(norm(grad) > gradEpsilon && iterations < maxIterations) {
+    while norm(grad) > gradEpsilon, iterations < maxIterations {
         let stepDirection = try newtonStepDirection(startingPoint: currentPoint, gradient: grad, hessian: H)
 
         // Not really the step length as the newton step direction isn't normalized
         let stepLength = approxBackTrackingLineSearch(
-                objective: objective,
-                startPoint: currentPoint,
-                startValue: value,
-                startGradient: grad,
-                stepDirection: stepDirection)
-        currentPoint = currentPoint + stepLength.*stepDirection
+            objective: objective,
+            startPoint: currentPoint,
+            startValue: value,
+            startGradient: grad,
+            stepDirection: stepDirection
+        )
+        currentPoint = currentPoint + stepLength .* stepDirection
 
         value = objective.value(currentPoint)
         grad = objective.gradient(currentPoint)
@@ -68,7 +71,7 @@ func unconstrainedMinimize(
         iterations += 1
     }
 
-    if(debugInfo) {
+    if debugInfo {
         print("Numer of Iterations: \(iterations)")
         print("Gradient Norm: \(norm(grad))")
         print("Minimum Location: \(currentPoint)")
@@ -97,13 +100,13 @@ func unconstrainedMinimize(
 /// - Returns:
 /// - Throws:
 func equalityConstrainedMinimize(
-        objective: Objective,
-        equalityConstraintMatrix: Matrix,
-        startPoint: Vector = [1.0, 1.0],
-        gradEpsilon: Double = 1.0e-6,
-        maxIterations: Int = 100,
-        debugInfo: Bool = false) throws -> Vector {
-
+    objective: Objective,
+    equalityConstraintMatrix: Matrix,
+    startPoint: Vector = [1.0, 1.0],
+    gradEpsilon: Double = 1.0e-6,
+    maxIterations: Int = 100,
+    debugInfo: Bool = false
+) throws -> Vector {
     // Check that the equality constraints and objective have the same number of variables
     guard objective.numVariables == equalityConstraintMatrix.cols else {
         throw SwiftMPCError.wrongNumberOfVariables("Number of variables in objective and equality constraint disagree")
@@ -111,11 +114,11 @@ func equalityConstrainedMinimize(
 
     // Set start point
     var currentPoint = startPoint
-    if(startPoint.count == 1 && startPoint[0] == 1.0) {
+    if startPoint.count == 1, startPoint[0] == 1.0 {
         currentPoint = ones(objective.numVariables)
     }
 
-    if(debugInfo) {
+    if debugInfo {
         print("Starting point: \(startPoint)")
     }
 
@@ -125,8 +128,7 @@ func equalityConstrainedMinimize(
 
     var iterations: Int = 0
     var lambda = norm(grad) // Newton deciment (this furst one is meaningless)
-    while(lambda > gradEpsilon && iterations < maxIterations) {
-
+    while lambda > gradEpsilon, iterations < maxIterations {
         // Construct the matrix:
         // ┌         ┐
         // │ ∇f²  Aᵀ │
@@ -134,7 +136,10 @@ func equalityConstrainedMinimize(
         // └         ┘
         // Where A is the matrix for our equality constraints
         let firstRow = LASwift.append(H, cols: transpose(equalityConstraintMatrix))
-        let secondRow = LASwift.append(equalityConstraintMatrix, cols: zeros(equalityConstraintMatrix.rows, equalityConstraintMatrix.rows))
+        let secondRow = LASwift.append(
+            equalityConstraintMatrix,
+            cols: zeros(equalityConstraintMatrix.rows, equalityConstraintMatrix.rows)
+        )
         let newtonStepMatrix = LASwift.append(firstRow, rows: secondRow)
 
         // Construct the rightside vector
@@ -142,7 +147,7 @@ func equalityConstrainedMinimize(
         // │ -∇f │
         // │  0  │
         // └     ┘
-        let newtonStepRightSide = LASwift.append(-1.*Matrix(grad), rows: zeros(equalityConstraintMatrix.rows, 1))
+        let newtonStepRightSide = LASwift.append(-1 .* Matrix(grad), rows: zeros(equalityConstraintMatrix.rows, 1))
 
         let stepDirectionWithDual = try LASwift.linsolve(newtonStepMatrix, newtonStepRightSide).flat
 
@@ -153,27 +158,28 @@ func equalityConstrainedMinimize(
         // └         ┘ └     ┘   └     ┘
         // Where v is our primal step direction, and w would be the dual
 
-        let stepDirection = Array(stepDirectionWithDual[0..<objective.numVariables])
+        let stepDirection = Array(stepDirectionWithDual[0 ..< objective.numVariables])
 
         // Not really the step length as the newton step direction isn't normalized
         let stepLength = approxBackTrackingLineSearch(
-                objective: objective,
-                startPoint: currentPoint,
-                startValue: value,
-                startGradient: grad,
-                stepDirection: stepDirection)
-        currentPoint = currentPoint + stepLength.*stepDirection
+            objective: objective,
+            startPoint: currentPoint,
+            startValue: value,
+            startGradient: grad,
+            stepDirection: stepDirection
+        )
+        currentPoint = currentPoint + stepLength .* stepDirection
 
         value = objective.value(currentPoint)
         grad = objective.gradient(currentPoint)
         H = objective.hessian(currentPoint)
 
-        lambda = abs(grad*stepDirection / 2)
+        lambda = abs(grad * stepDirection / 2)
 
         iterations += 1
     }
 
-    if(debugInfo) {
+    if debugInfo {
         print("Numer of Iterations: \(iterations)")
         print("Newton Decrement: \(lambda)")
         print("Minimum Location: \(currentPoint)")
@@ -197,13 +203,14 @@ func equalityConstrainedMinimize(
 ///   - dual:
 /// - Returns:
 func residualNorm(
-        objective: Objective,
-        equalityConstraintMatrix: Matrix,
-        equalityConstraintVector: Vector,
-        primal: Vector,
-        dual: Vector) -> Double {
-    let firstRow = Matrix(objective.gradient(primal)) + transpose(equalityConstraintMatrix)*Matrix(dual)
-    let secondRow = equalityConstraintMatrix*Matrix(primal) - equalityConstraintVector
+    objective: Objective,
+    equalityConstraintMatrix: Matrix,
+    equalityConstraintVector: Vector,
+    primal: Vector,
+    dual: Vector
+) -> Double {
+    let firstRow = Matrix(objective.gradient(primal)) + transpose(equalityConstraintMatrix) * Matrix(dual)
+    let secondRow = equalityConstraintMatrix * Matrix(primal) - equalityConstraintVector
     return norm(append(firstRow, rows: secondRow).flat)
 }
 
@@ -215,55 +222,58 @@ func infeasibleLinesearch(objective: Objective,
                           startPrimal: Vector,
                           startDual: Vector,
                           alpha: Double = 0.25,
-                          beta: Double = 0.5) -> Double {
-
+                          beta: Double = 0.5) -> Double
+{
     var t = 1.0
     var shiftedNorm = residualNorm(objective: objective,
-            equalityConstraintMatrix: equalityConstraintMatrix,
-            equalityConstraintVector: equalityConstraintVector,
-            primal: startPrimal + t.*primalDirection,
-            dual: startDual + t.*dualDirection)
+                                   equalityConstraintMatrix: equalityConstraintMatrix,
+                                   equalityConstraintVector: equalityConstraintVector,
+                                   primal: startPrimal + t .* primalDirection,
+                                   dual: startDual + t .* dualDirection)
     let currentNorm = residualNorm(objective: objective,
-            equalityConstraintMatrix: equalityConstraintMatrix,
-            equalityConstraintVector: equalityConstraintVector,
-            primal: startPrimal,
-            dual: startDual)
-    while(shiftedNorm > (1-alpha*t)*currentNorm) {
-        t = beta*t
+                                   equalityConstraintMatrix: equalityConstraintMatrix,
+                                   equalityConstraintVector: equalityConstraintVector,
+                                   primal: startPrimal,
+                                   dual: startDual)
+    while shiftedNorm > (1 - alpha * t) * currentNorm {
+        t = beta * t
         shiftedNorm = residualNorm(objective: objective,
-                equalityConstraintMatrix: equalityConstraintMatrix,
-                equalityConstraintVector: equalityConstraintVector,
-                primal: startPrimal + t.*primalDirection,
-                dual: startDual + t.*dualDirection)
+                                   equalityConstraintMatrix: equalityConstraintMatrix,
+                                   equalityConstraintVector: equalityConstraintVector,
+                                   primal: startPrimal + t .* primalDirection,
+                                   dual: startDual + t .* dualDirection)
     }
     return t
 }
 
 func infeasibleEqualityMinimize(
-        objective: Objective,
-        equalityConstraintMatrix: Matrix,
-        equalityConstraintVector: Vector,
-        startPoint: Vector = [1.0],
-        gradEpsilon: Double = 1.0e-6,
-        maxIterations: Int = 100,
-        debugInfo: Bool = false) throws -> Vector {
-
+    objective: Objective,
+    equalityConstraintMatrix: Matrix,
+    equalityConstraintVector: Vector,
+    startPoint: Vector = [1.0],
+    gradEpsilon: Double = 1.0e-6,
+    maxIterations: Int = 100,
+    debugInfo: Bool = false
+) throws -> Vector {
     // Check that the equality constraints and objective have the same number of variables
     guard objective.numVariables == equalityConstraintMatrix.cols else {
         throw SwiftMPCError.wrongNumberOfVariables("Number of variables in objective and equality constraint disagree")
     }
     guard equalityConstraintMatrix.rows == equalityConstraintVector.count else {
-        throw SwiftMPCError.wrongNumberOfVariables("Equality constraint matrix has different number of rows than the equality constraint vector.")
+        throw SwiftMPCError
+            .wrongNumberOfVariables(
+                "Equality constraint matrix has different number of rows than the equality constraint vector."
+            )
     }
 
     // Set start point
     var currentPoint = startPoint
-    if(startPoint.count == 1 && startPoint[0] == 1.0) {
+    if startPoint.count == 1, startPoint[0] == 1.0 {
         currentPoint = ones(objective.numVariables)
     }
     var currentDual = zeros(equalityConstraintVector.count)
 
-    if(debugInfo) {
+    if debugInfo {
         print("Starting point: \(currentPoint)")
     }
 
@@ -273,8 +283,7 @@ func infeasibleEqualityMinimize(
 
     var iterations: Int = 0
     var lambda = norm(grad) // Newton decrement (this first one is meaningless)
-    while(lambda > gradEpsilon && iterations < maxIterations) {
-
+    while lambda > gradEpsilon, iterations < maxIterations {
         // Construct the matrix:
         // ┌         ┐
         // │ ∇f²  Aᵀ │
@@ -282,7 +291,10 @@ func infeasibleEqualityMinimize(
         // └         ┘
         // Where A is the matrix for our equality constraints
         let firstRow = LASwift.append(H, cols: transpose(equalityConstraintMatrix))
-        let secondRow = LASwift.append(equalityConstraintMatrix, cols: zeros(equalityConstraintMatrix.rows, equalityConstraintMatrix.rows))
+        let secondRow = LASwift.append(
+            equalityConstraintMatrix,
+            cols: zeros(equalityConstraintMatrix.rows, equalityConstraintMatrix.rows)
+        )
         let newtonStepMatrix = LASwift.append(firstRow, rows: secondRow)
 
         // Construct the rightside vector
@@ -290,7 +302,10 @@ func infeasibleEqualityMinimize(
         //  │  ∇f  │
         // -│ Ax-b │
         //  └      ┘
-        let newtonStepRightSide = -1.*LASwift.append(Matrix(grad), rows: equalityConstraintMatrix*Matrix(currentPoint) - equalityConstraintVector)
+        let newtonStepRightSide = -1 .* LASwift.append(
+            Matrix(grad),
+            rows: equalityConstraintMatrix * Matrix(currentPoint) - equalityConstraintVector
+        )
 
         let stepDirectionWithDual = try LASwift.linsolve(newtonStepMatrix, newtonStepRightSide).flat
 
@@ -301,34 +316,42 @@ func infeasibleEqualityMinimize(
         // └         ┘ └     ┘    └      ┘
         // Where v is our primal step direction, and w would be the next dual (not the dual step)
 
-        let stepDirectionPrimal = Array(stepDirectionWithDual[0..<objective.numVariables])
-        let stepDirectionDual = Array(stepDirectionWithDual[objective.numVariables..<stepDirectionWithDual.count]) - currentDual
+        let stepDirectionPrimal = Array(stepDirectionWithDual[0 ..< objective.numVariables])
+        let stepDirectionDual = Array(stepDirectionWithDual[objective.numVariables ..< stepDirectionWithDual.count]) -
+            currentDual
         // We subtract off the current dual here because w = ν + Δν, while v = Δx
 
         // Not really the step length as the newton step direction isn't normalized
         let stepLength = infeasibleLinesearch(
-                objective: objective,
-                equalityConstraintMatrix: equalityConstraintMatrix,
-                equalityConstraintVector: equalityConstraintVector,
-                primalDirection: stepDirectionPrimal,
-                dualDirection: stepDirectionDual,
-                startPrimal: currentPoint,
-                startDual: currentDual)
-        currentPoint = currentPoint + stepLength.*stepDirectionPrimal
-        currentDual = currentDual + stepLength.*stepDirectionDual
+            objective: objective,
+            equalityConstraintMatrix: equalityConstraintMatrix,
+            equalityConstraintVector: equalityConstraintVector,
+            primalDirection: stepDirectionPrimal,
+            dualDirection: stepDirectionDual,
+            startPrimal: currentPoint,
+            startDual: currentDual
+        )
+        currentPoint = currentPoint + stepLength .* stepDirectionPrimal
+        currentDual = currentDual + stepLength .* stepDirectionDual
 
         value = objective.value(currentPoint)
         grad = objective.gradient(currentPoint)
         H = objective.hessian(currentPoint)
 
-        lambda = residualNorm(objective: objective, equalityConstraintMatrix: equalityConstraintMatrix, equalityConstraintVector: equalityConstraintVector, primal: currentPoint, dual: currentDual)
+        lambda = residualNorm(
+            objective: objective,
+            equalityConstraintMatrix: equalityConstraintMatrix,
+            equalityConstraintVector: equalityConstraintVector,
+            primal: currentPoint,
+            dual: currentDual
+        )
 
         iterations += 1
 
 //        print("Lambda: \(lambda),        Primal: \(currentPoint),         Dual: \(currentDual)")
     }
 
-    if(debugInfo) {
+    if debugInfo {
         print("Numer of Iterations: \(iterations)")
         print("Residual Norm: \(lambda)")
         print("Minimum Location: \(currentPoint)")

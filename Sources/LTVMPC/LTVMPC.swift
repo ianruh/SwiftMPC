@@ -1,13 +1,15 @@
-import LASwift
-import SwiftMPC
+// Created 2020 github @ianruh
+
 import Collections
-import SymbolicMath
+import LASwift
 import RealModule
+import SwiftMPC
+import SymbolicMath
 
 public struct LTVMPC {
     var numTimeHorizonSteps: Int
     var mpc_dt: Double
-    public let maxSteeringAngle: Double = 2.0*Double.pi/6.0
+    public let maxSteeringAngle: Double = 2.0 * Double.pi / 6.0
     public let maxAcceleration: Double = 1.0
     public let minAcceleration: Double = -3.0
 
@@ -31,9 +33,8 @@ public struct LTVMPC {
         self.solver = InequalitySolver()
         self.numericObjective = LTVNumericObjective(numSteps: numSteps)
     }
-    
-    public mutating func getNextControls() throws -> (acceleration: Double, steeringAngle: Double) {
 
+    public mutating func getNextControls() throws -> (acceleration: Double, steeringAngle: Double) {
         // Solve the optimization problem
         let (min, primal, dual) = try solver.infeasibleInequalityMinimize(objective: self.numericObjective)
 
@@ -50,8 +51,8 @@ public struct LTVMPC {
 
         // Set the warm starts
         // TODO: Ignoring warmstarts for now. Revist later
-        //self.numericObjective.warmStartPrimal = primal
-        //self.numericObjective.warmStartDual = dual
+        // self.numericObjective.warmStartPrimal = primal
+        // self.numericObjective.warmStartDual = dual
 
         return (acceleration: accelerationVector[0], steeringAngle: steeringAngleVector[0])
     }
@@ -70,28 +71,33 @@ public struct LTVMPC {
     public mutating func codeGen(toFile fileName: String) throws {
         let objective = try self.constructSymbolicObjective()
 
-        var parameterRepresentations: Dictionary<Parameter, String> = [:]
+        var parameterRepresentations: [Parameter: String] = [:]
 
         for (parameterName, parameter) in self.parameters {
             parameterRepresentations[parameter] = "self.\(parameterName)"
         }
         for (parameterVectorName, parameterVector) in self.parameterVectors {
-            for i in 0..<parameterVector.count {
+            for i in 0 ..< parameterVector.count {
                 parameterRepresentations[parameterVector[i]] = "self.\(parameterVectorName)[\(i)]"
             }
         }
 
         // Construct the extractors
-        let vectorExtractors: Dictionary<String, [Variable]> = [
+        let vectorExtractors: [String: [Variable]] = [
             "xPosition": self.variableVectors["xPosition"]!,
             "yPosition": self.variableVectors["yPosition"]!,
             "vehicleAngle": self.variableVectors["vehicleAngle"]!,
             "forwardVelocity": self.variableVectors["forwardVelocity"]!,
             "steeringAngle": self.variableVectors["steeringAngle"]!,
-            "acceleration": self.variableVectors["acceleration"]!
+            "acceleration": self.variableVectors["acceleration"]!,
         ]
 
-        try objective.printSwiftCode2(objectiveName: "LTVNumericObjective", parameterRepresentations: parameterRepresentations, vectorExtractors: vectorExtractors, toFile: fileName)
+        try objective.printSwiftCode2(
+            objectiveName: "LTVNumericObjective",
+            parameterRepresentations: parameterRepresentations,
+            vectorExtractors: vectorExtractors,
+            toFile: fileName
+        )
     }
 
     public mutating func runSymbolic() throws -> (minimum: Double, point: Vector) {

@@ -1,3 +1,5 @@
+// Created 2020 github @ianruh
+
 //
 // Created by Ian Ruh on 5/5/21.
 //
@@ -49,22 +51,20 @@ public protocol Objective {
     /// Strictly feasible start point
     /// dual should be zeros is you don't have one or care
     func startPoint() throws -> (primal: Vector, dual: Vector)
-
 }
 
 public extension Objective {
-
     //================= Place holders that should be overriden if there are constraints ================
 
-    func inequalityConstraintsValue(_ x: Vector) -> Double {
+    func inequalityConstraintsValue(_: Vector) -> Double {
         return 0.0
     }
 
-    func inequalityConstraintsGradient(_ x: Vector) -> Vector {
+    func inequalityConstraintsGradient(_: Vector) -> Vector {
         return zeros(self.numVariables)
     }
 
-    func inequalityConstraintsHessian(_ x: Vector) -> Matrix {
+    func inequalityConstraintsHessian(_: Vector) -> Matrix {
         return zeros(self.numVariables, self.numVariables)
     }
 
@@ -77,8 +77,10 @@ public extension Objective {
     // stop when s became negative, but it will explode before  then. In stead, we add a  onstraint to that
     // problem that s >= -10. This *shouldn't* restrict any feasible objectives, and will gaurentee that our
     // barrier augmented objective is non-singular.
-    func stepSolver(gradient: Vector, hessian: Matrix, primal: Vector, dual: Vector) throws -> (primalStepDirection: Vector, dualStepDirection: Vector) {
-        if(self.equalityConstraintMatrix != nil  && self.equalityConstraintVector != nil) {
+    func stepSolver(gradient: Vector, hessian: Matrix, primal: Vector,
+                    dual: Vector) throws -> (primalStepDirection: Vector, dualStepDirection: Vector)
+    {
+        if self.equalityConstraintMatrix != nil, self.equalityConstraintVector != nil {
             // These will always be non-nill as hasEqualityConstraints is true
             let equalityConstraintMatrix = self.equalityConstraintMatrix!
             let equalityConstraintVector = self.equalityConstraintVector!
@@ -90,7 +92,10 @@ public extension Objective {
             // └         ┘
             // Where A is the matrix for our equality constraints
             let firstRow = LASwift.append(hessian, cols: transpose(equalityConstraintMatrix))
-            let secondRow = LASwift.append(equalityConstraintMatrix, cols: zeros(equalityConstraintMatrix.rows, equalityConstraintMatrix.rows))
+            let secondRow = LASwift.append(
+                equalityConstraintMatrix,
+                cols: zeros(equalityConstraintMatrix.rows, equalityConstraintMatrix.rows)
+            )
             let newtonStepMatrix = LASwift.append(firstRow, rows: secondRow)
 
             // Construct the rightside vector
@@ -98,7 +103,10 @@ public extension Objective {
             //  │  ∇f  │
             // -│ Ax-b │
             //  └      ┘
-            let newtonStepRightSide = -1.*LASwift.append(Matrix(gradient), rows: equalityConstraintMatrix*Matrix(primal) - Matrix(equalityConstraintVector))
+            let newtonStepRightSide = -1 .* LASwift.append(
+                Matrix(gradient),
+                rows: equalityConstraintMatrix * Matrix(primal) - Matrix(equalityConstraintVector)
+            )
 
             let stepDirectionWithDual = try LASwift.linsolve(newtonStepMatrix, newtonStepRightSide).flat
 
@@ -109,8 +117,9 @@ public extension Objective {
             // └         ┘ └     ┘    └      ┘
             // Where v is our primal step direction, and w would be the next dual (not the dual step)
 
-            let primalStepDirection = Array(stepDirectionWithDual[0..<self.numVariables])
-            let dualStepDirection = Array(stepDirectionWithDual[self.numVariables..<stepDirectionWithDual.count]) - dual
+            let primalStepDirection = Array(stepDirectionWithDual[0 ..< self.numVariables])
+            let dualStepDirection = Array(stepDirectionWithDual[self.numVariables ..< stepDirectionWithDual.count]) -
+                dual
             // We subtract off the current dual here because w = ν + Δν, while v = Δx
 
             return (primalStepDirection: primalStepDirection, dualStepDirection: dualStepDirection)
@@ -119,14 +128,14 @@ public extension Objective {
             // ┌     ┐
             // │ ∇²f │
             // └     ┘
-            // 
+            //
             let newtonStepMatrix = hessian
 
             // Construct the rightside vector
             //  ┌    ┐
             // -│ ∇f │
             //  └    ┘
-            let newtonStepRightSide = -1.*Matrix(gradient)
+            let newtonStepRightSide = -1 .* Matrix(gradient)
 
             // ┌     ┐ ┌     ┐    ┌      ┐
             // │ ∇²f │ │  v  │ = -│  ∇f  │

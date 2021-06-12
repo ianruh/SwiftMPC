@@ -1,8 +1,9 @@
+// Created 2020 github @ianruh
+
 import LASwift
 import SwiftMPC
 
 struct SpringsNumericObjective {
-
     var initialPosition: Vector = [1.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     var initialVelocity: Vector = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
@@ -12,8 +13,8 @@ struct SpringsNumericObjective {
     func startPoint() throws -> (primal: Vector, dual: Vector) {
         // var primal = ones(self.numVariables).*0.3
         // var dual = ones(self.equalityConstraintMatrix!.rows)
-       var primal = ones(1)
-       var dual = ones(1)
+        var primal = ones(1)
+        var dual = ones(1)
 
         if let warmStartPrimal = self.warmStartPrimal {
             primal = warmStartPrimal
@@ -25,6 +26,6 @@ struct SpringsNumericObjective {
         return (
             primal: primal,
             dual: dual
-            )
+        )
     }
 }

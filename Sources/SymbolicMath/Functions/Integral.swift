@@ -1,6 +1,8 @@
-//import RealModule
+// Created 2020 github @ianruh
+
+// import RealModule
 //
-//public class Integral: Node, Function {
+// public class Integral: Node, Function {
 //    public let identifier: String = "int"
 //    public let numArguments: Int = 4
 //
@@ -107,4 +109,4 @@
 //        hasher.combine(self.upperBound)
 //        hasher.combine(self.lowerBound)
 //    }
-//}
+// }

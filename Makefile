@@ -8,7 +8,7 @@ UNCHECKED = -Xswiftc -Ounchecked
 WHOLE_MODULE = -Xswiftc -whole-module-optimization
 COMPILER_OPT = -Xcc -Ofast
 NO_NUMERIC_OBJECTIVE = -Xswiftc -D -Xswiftc NO_NUMERIC_OBJECTIVE
-RELEASE = #-c release # Release build is broken on linux (compiler bug), so disabled for now
+RELEASE = -c release # Release build is broken on linux (compiler bug), so disabled for now
 
 build:
 	swift build $(RELEASE) --build-tests $(WHOLE_MODULE) $(UNCHECKED) $(FAST_MATH) $(COMPILER_OPT) $(EXTRAS)
@@ -21,6 +21,9 @@ test:
 
 test-debug:
 	swift test $(DEBUG) $(EXTRAS) $(NO_PARALLEL)
+
+format:
+	swiftformat --config .swiftformat Sources/
 
 clean:
 	rm -rf .build/

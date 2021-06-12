@@ -1,23 +1,24 @@
+// Created 2020 github @ianruh
+
+import Collections
 import Foundation
 import RealModule
-import Collections
 
 /// A negative number
 public class Negative: Node, Operation {
-
-    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Multiply.staticPrecedence)
+    public static let staticPrecedence = OperationPrecedence(higherThan: Multiply.staticPrecedence)
     public let precedence: OperationPrecedence = Negative.staticPrecedence
     public let type: OperationType = .prefix
     public let associativity: OperationAssociativity = .none
     public let identifier: String = "-"
-    
+
     // Store the parameters for the node
     public var argument: Node
-    
+
     override public var description: String {
         return "-\(self.argument)"
     }
-    
+
     override public var latex: String {
         return "-\(self.argument.latex)"
     }
@@ -49,18 +50,18 @@ public class Negative: Node, Operation {
         self.hash(into: &hasher)
         return "negative\(hasher.finalize())"
     }
-    
-    required public init(_ params: [Node]) {
+
+    public required init(_ params: [Node]) {
         self.argument = params[0]
     }
-    
+
     public func factory(_ params: [Node]) -> Node {
         return Self(params)
     }
-    
+
     @inlinable
-    override public func evaluate(withValues values: [Node : Double]) throws -> Double {
-        return try -1*self.argument.evaluate(withValues: values)
+    override public func evaluate(withValues values: [Node: Double]) throws -> Double {
+        return try -1 * self.argument.evaluate(withValues: values)
     }
 
     override internal func equals(_ otherNode: Node) -> Bool {
@@ -73,7 +74,7 @@ public class Negative: Node, Operation {
 
     override public func contains<T: Node>(nodeType: T.Type) -> [Id] {
         var ids: [Id] = []
-        if(nodeType == Negative.self) {
+        if nodeType == Negative.self {
             ids.append(self.id)
         }
         ids.append(contentsOf: self.argument.contains(nodeType: nodeType))
@@ -81,15 +82,15 @@ public class Negative: Node, Operation {
     }
 
     @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
-        if(targetNode == self) {
+        if targetNode == self {
             return replacement
         } else {
             return Negative(self.argument.replace(targetNode, with: replacement))
         }
     }
 
-    public override func simplify() -> Node {
-        if(self.isSimplified) { return self }
+    override public func simplify() -> Node {
+        if self.isSimplified { return self }
 
         // Little check to remove negatives of negatives
         if let negativeArg = self.argument as? Negative {
@@ -98,7 +99,7 @@ public class Negative: Node, Operation {
 
         let new = Multiply(Number(-1), self.argument.simplify())
         try! new.setVariableOrder(from: self)
-        new.isSimplified =  true
+        new.isSimplified = true
         return new
     }
 
@@ -107,8 +108,8 @@ public class Negative: Node, Operation {
         hasher.combine(self.argument)
     }
 
-    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
-        if(self.argument == Number(0.0)) {
+    override public func swiftCode(using representations: [Node: String]) throws -> String {
+        if self.argument == Number(0.0) {
             return try Number(0.0).swiftCode(using: representations)
         } else {
             return try Multiply([Number(-1.0), self.argument]).swiftCode(using: representations)

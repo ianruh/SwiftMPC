@@ -1,38 +1,39 @@
+// Created 2020 github @ianruh
+
+import Collections
 import Foundation
 import RealModule
-import Collections
 
 /// Factorial of a node.
 public class Factorial: Node, Operation {
-    
-    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Power.staticPrecedence)
+    public static let staticPrecedence = OperationPrecedence(higherThan: Power.staticPrecedence)
     public let precedence: OperationPrecedence = Factorial.staticPrecedence
     public let type: OperationType = .postfix
     public let associativity: OperationAssociativity = .none
     public let identifier: String = "!"
-    
+
     // Store the parameters for the node
     private var argument: Node
-    
+
     override public var description: String {
         // Wrap if needed
         if let op = self.argument as? Operation {
-            if(op.type != .function) {
+            if op.type != .function {
                 return "(\(self.argument))!"
             }
         }
-        
+
         return "\(self.argument)!"
     }
-    
+
     override public var latex: String {
         // Wrap if needed
         if let op = self.argument as? Operation {
-            if(op.type != .function) {
+            if op.type != .function {
                 return "(\(self.argument.latex))!"
             }
         }
-        
+
         return "\(self.argument.latex)!"
     }
 
@@ -63,17 +64,17 @@ public class Factorial: Node, Operation {
         self.hash(into: &hasher)
         return "factorial\(hasher.finalize())"
     }
-    
-    required public convenience init(_ params: [Node]) {
+
+    public required convenience init(_ params: [Node]) {
         self.init(params[0])
     }
 
     public init(_ param: Node) {
         self.argument = param
     }
-    
+
     @inlinable
-    override public func evaluate(withValues values: [Node: Double]) throws -> Double {
+    override public func evaluate(withValues _: [Node: Double]) throws -> Double {
         // TODO: Factorial evaluation
         throw SymbolicMathError.notApplicable(message: "Factorial not implemented for the moment")
     }
@@ -88,7 +89,7 @@ public class Factorial: Node, Operation {
 
     override public func contains<T: Node>(nodeType: T.Type) -> [Id] {
         var ids: [Id] = []
-        if(nodeType == Factorial.self) {
+        if nodeType == Factorial.self {
             ids.append(self.id)
         }
         ids.append(contentsOf: self.argument.contains(nodeType: nodeType))
@@ -96,15 +97,15 @@ public class Factorial: Node, Operation {
     }
 
     @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
-        if(targetNode == self) {
+        if targetNode == self {
             return replacement
         } else {
             return Factorial(self.argument.replace(targetNode, with: replacement))
         }
     }
 
-    public override func simplify() -> Node {
-        if(self.isSimplified) { return self }
+    override public func simplify() -> Node {
+        if self.isSimplified { return self }
 
         let new = Factorial(self.argument.simplify())
         try! new.setVariableOrder(from: self)
@@ -117,7 +118,7 @@ public class Factorial: Node, Operation {
         hasher.combine(self.argument)
     }
 
-    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
+    override public func swiftCode(using _: [Node: String]) throws -> String {
         throw SymbolicMathError.noCodeRepresentation("Factorial node")
     }
 }

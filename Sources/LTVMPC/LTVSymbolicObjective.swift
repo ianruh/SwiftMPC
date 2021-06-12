@@ -1,13 +1,14 @@
-import LASwift
+// Created 2020 github @ianruh
+
 import Collections
+import LASwift
+import RealModule
 import SwiftMPC
 import SymbolicMath
-import RealModule
 
 /// Implementation of on of the examples from https://web.stanford.edu/~boyd/papers/fast_mpc.html
-extension LTVMPC {
-    public mutating func constructSymbolicObjective() throws -> SymbolicObjective {
-
+public extension LTVMPC {
+    mutating func constructSymbolicObjective() throws -> SymbolicObjective {
         //======== State Variables ========
 
         // These are a N length vectors, with each element representing points in time
@@ -15,7 +16,7 @@ extension LTVMPC {
         let yPosition = Variable.vector("y", count: self.numTimeHorizonSteps)
         let vehicleAngle = Variable.vector("θ", count: self.numTimeHorizonSteps)
         let forwardVelocity = Variable.vector("vf", count: self.numTimeHorizonSteps)
-        
+
         // Save the state variable
         self.variableVectors["xPosition"] = xPosition
         self.variableVectors["yPosition"] = yPosition
@@ -38,10 +39,10 @@ extension LTVMPC {
         self.variableVectors["acceleration"] = acceleration
 
         //======== Variable Ordering ========
-        
+
         // ORDER MATTERS, A LOT!!!
         var ordering: OrderedSet<Variable> = []
-        for t in 0..<self.numTimeHorizonSteps {
+        for t in 0 ..< self.numTimeHorizonSteps {
             ordering.append(xPosition[t])
             ordering.append(yPosition[t])
             ordering.append(vehicleAngle[t])
@@ -75,14 +76,14 @@ extension LTVMPC {
         self.parameterVectors["previousSteeringAngle"] = previousSteeringAngle
 
         // Set symbolic initial values. Not used when using the code generated objective
-        var initialParameterValues: Dictionary<Parameter, Double> = [:]
+        var initialParameterValues: [Parameter: Double] = [:]
         initialParameterValues[initialXPosition] = 0.0
         initialParameterValues[initialYPosition] = 0.0
         initialParameterValues[initialVehicleAngle] = 0.0
         initialParameterValues[initialForwardVelocity] = 0.0
-        previousVelocity.forEach({ initialParameterValues[$0] = 0.0 })
-        previousAngle.forEach({ initialParameterValues[$0] = 0.0 })
-        previousSteeringAngle.forEach({ initialParameterValues[$0] = 0.0 })
+        previousVelocity.forEach { initialParameterValues[$0] = 0.0 }
+        previousAngle.forEach { initialParameterValues[$0] = 0.0 }
+        previousSteeringAngle.forEach { initialParameterValues[$0] = 0.0 }
 
         //================ Constraints ================
 
@@ -98,9 +99,9 @@ extension LTVMPC {
         eqConstraints.append(forwardVelocity[0] ≈ initialForwardVelocity)
 
         // Control variable constraints
-        for t in 0..<self.numTimeHorizonSteps {
+        for t in 0 ..< self.numTimeHorizonSteps {
             ineqConstraints.append(steerigAngle[t] <= self.maxSteeringAngle)
-            ineqConstraints.append(steerigAngle[t] >= -1*self.maxSteeringAngle)
+            ineqConstraints.append(steerigAngle[t] >= -1 * self.maxSteeringAngle)
             ineqConstraints.append(acceleration[t] <= self.maxAcceleration)
             ineqConstraints.append(acceleration[t] >= self.minAcceleration)
         }
@@ -108,22 +109,40 @@ extension LTVMPC {
         //======== Dynamics Constraints ========
 
         // Position and Velcoity
-        for t in 1..<self.numTimeHorizonSteps {
+        for t in 1 ..< self.numTimeHorizonSteps {
             // X Position constraint
-            eqConstraints.append( xPosition[t] ≈ xPosition[t-1] + self.mpc_dt*previousVelocity[t]*(Cos(vehicleAngle[t-1] + previousSteeringAngle[t]).taylorExpand(in: vehicleAngle[t-1], about: previousAngle[t], ofOrder: 1)!) )
+            eqConstraints
+                .append(xPosition[t] ≈ xPosition[t - 1] + self
+                    .mpc_dt * previousVelocity[t] *
+                    (Cos(vehicleAngle[t - 1] + previousSteeringAngle[t])
+                        .taylorExpand(in: vehicleAngle[t - 1], about: previousAngle[t], ofOrder: 1)!))
             // Y Position Constraint
-            eqConstraints.append( yPosition[t] ≈ yPosition[t-1] + self.mpc_dt*previousVelocity[t]*(Sin(vehicleAngle[t-1] + previousSteeringAngle[t]).taylorExpand(in: vehicleAngle[t-1], about: previousAngle[t], ofOrder: 1)!) )
+            eqConstraints
+                .append(yPosition[t] ≈ yPosition[t - 1] + self
+                    .mpc_dt * previousVelocity[t] *
+                    (Sin(vehicleAngle[t - 1] + previousSteeringAngle[t])
+                        .taylorExpand(in: vehicleAngle[t - 1], about: previousAngle[t], ofOrder: 1)!))
             // Angular Constraint
-            eqConstraints.append( vehicleAngle[t] ≈ vehicleAngle[t-1] + self.mpc_dt*previousVelocity[t]*(1.0/self.wheelBaseLength)*(Sin(steerigAngle[t-1]).taylorExpand(in: steerigAngle[t-1], about: previousSteeringAngle[t], ofOrder: 1)!) )
+            eqConstraints
+                .append(vehicleAngle[t] ≈ vehicleAngle[t - 1] + self
+                    .mpc_dt * previousVelocity[t] * (1.0 / self.wheelBaseLength) *
+                    (Sin(steerigAngle[t - 1])
+                        .taylorExpand(in: steerigAngle[t - 1], about: previousSteeringAngle[t], ofOrder: 1)!))
             // Velocity Constraint
-            eqConstraints.append( forwardVelocity[t] ≈ forwardVelocity[t-1] + self.mpc_dt*acceleration[t-1] )
+            eqConstraints.append(forwardVelocity[t] ≈ forwardVelocity[t - 1] + self.mpc_dt * acceleration[t - 1])
         }
 
         //======== Objective ========
 
-        let objectiveNode: Node = -1*xPosition.last! + -1*forwardVelocity.last!
+        let objectiveNode: Node = -1 * xPosition.last! + -1 * forwardVelocity.last!
 
-        guard let objective = SymbolicObjective(min: objectiveNode, subjectTo: SymbolicVector(ineqConstraints), equalityConstraints: eqConstraints, ordering: ordering, parameterValues: initialParameterValues) else {
+        guard let objective = SymbolicObjective(
+            min: objectiveNode,
+            subjectTo: SymbolicVector(ineqConstraints),
+            equalityConstraints: eqConstraints,
+            ordering: ordering,
+            parameterValues: initialParameterValues
+        ) else {
             throw MPCError.misc("Unable to construct symbolic objective")
         }
 

@@ -1,17 +1,18 @@
-import SymbolicMath
+// Created 2020 github @ianruh
+
 import LASwift
+import SymbolicMath
 
 public extension SymbolicObjective {
-
     func printSwiftCode(
-            objectiveName: String,
-            stateVectorName: String = "x",
-            parameterRepresentations: Dictionary<Parameter, String> = [:],
-            matrixExtractors: Dictionary<String, [[Variable]]> = [:],
-            vectorExtractors: Dictionary<String, [Variable]> = [:],
-            variableExtractors: Dictionary<String, Variable> = [:],
-            toFile file: String? = nil) throws {
-
+        objectiveName: String,
+        stateVectorName: String = "x",
+        parameterRepresentations: [Parameter: String] = [:],
+        matrixExtractors: [String: [[Variable]]] = [:],
+        vectorExtractors: [String: [Variable]] = [:],
+        variableExtractors: [String: Variable] = [:],
+        toFile file: String? = nil
+    ) throws {
         /// Utility function to generate a section label
         ///
         /// - Parameter str: The name of the label
@@ -32,7 +33,8 @@ public extension SymbolicObjective {
             for variableVector in variableMatrix {
                 for variable in variableVector {
                     guard self.orderedVariables.contains(variable) else {
-                        throw SwiftMPCError.misc("The variable \(variable) cannot be extracted because it is not in the model")
+                        throw SwiftMPCError
+                            .misc("The variable \(variable) cannot be extracted because it is not in the model")
                     }
                 }
             }
@@ -40,7 +42,8 @@ public extension SymbolicObjective {
         for variableVector in vectorExtractors.values {
             for variable in variableVector {
                 guard self.orderedVariables.contains(variable) else {
-                    throw SwiftMPCError.misc("The variable \(variable) cannot be extracted because it is not in the model")
+                    throw SwiftMPCError
+                        .misc("The variable \(variable) cannot be extracted because it is not in the model")
                 }
             }
         }
@@ -51,9 +54,10 @@ public extension SymbolicObjective {
         }
 
         // Merge the parameter representation dict with the generated variable representations dict
-        var representation: Dictionary<Node, String> = [:]
-        representation.merge(parameterRepresentations, uniquingKeysWith: {(current, _) in current}) // closure is useless
-        for i in 0..<self.orderedVariables.count {
+        var representation: [Node: String] = [:]
+        representation
+            .merge(parameterRepresentations, uniquingKeysWith: { current, _ in current }) // closure is useless
+        for i in 0 ..< self.orderedVariables.count {
             representation[self.orderedVariables[i]] = "\(stateVectorName)[\(i)]"
         }
 
@@ -239,15 +243,15 @@ public extension SymbolicObjective {
     }
 
     func printSwiftCode2(
-            objectiveName: String,
-            stateVectorName: String = "x",
-            parameterRepresentations: Dictionary<Parameter, String> = [:],
-            matrixExtractors: Dictionary<String, [[Variable]]> = [:],
-            vectorExtractors: Dictionary<String, [Variable]> = [:],
-            variableExtractors: Dictionary<String, Variable> = [:],
-            primalConstructor: Bool = false,
-            toFile file: String? = nil) throws {
-
+        objectiveName: String,
+        stateVectorName: String = "x",
+        parameterRepresentations: [Parameter: String] = [:],
+        matrixExtractors: [String: [[Variable]]] = [:],
+        vectorExtractors: [String: [Variable]] = [:],
+        variableExtractors: [String: Variable] = [:],
+        primalConstructor: Bool = false,
+        toFile file: String? = nil
+    ) throws {
         /// Utility function to generate a section label
         ///
         /// - Parameter str: The name of the label
@@ -268,7 +272,8 @@ public extension SymbolicObjective {
             for variableVector in variableMatrix {
                 for variable in variableVector {
                     guard self.orderedVariables.contains(variable) else {
-                        throw SwiftMPCError.misc("The variable \(variable) cannot be extracted because it is not in the model")
+                        throw SwiftMPCError
+                            .misc("The variable \(variable) cannot be extracted because it is not in the model")
                     }
                 }
             }
@@ -276,7 +281,8 @@ public extension SymbolicObjective {
         for variableVector in vectorExtractors.values {
             for variable in variableVector {
                 guard self.orderedVariables.contains(variable) else {
-                    throw SwiftMPCError.misc("The variable \(variable) cannot be extracted because it is not in the model")
+                    throw SwiftMPCError
+                        .misc("The variable \(variable) cannot be extracted because it is not in the model")
                 }
             }
         }
@@ -288,15 +294,18 @@ public extension SymbolicObjective {
 
         // If we are making the primal constructor, then we need to makes sure every variables is
         // in one of the extractors
-        if(primalConstructor) {
+        if primalConstructor {
             for variable in self.orderedVariables {
-                let matrixContains: Bool = matrixExtractors.values.reduce(false, { (runningValue, matrix) in 
-                    return runningValue || matrix.reduce(false, {$0 || $1.contains(variable) })
-                })
-                let vectorContains: Bool = vectorExtractors.values.reduce(false, { $0 || $1.contains(variable)})
+                let matrixContains: Bool = matrixExtractors.values.reduce(false) { runningValue, matrix in
+                    runningValue || matrix.reduce(false) { $0 || $1.contains(variable) }
+                }
+                let vectorContains: Bool = vectorExtractors.values.reduce(false) { $0 || $1.contains(variable) }
                 let variableContains: Bool = variableExtractors.values.contains(variable)
                 guard matrixContains || vectorContains || variableContains else {
-                    throw SwiftMPCError.misc("In order to construct the primalConstructor, every variable must be in an extractor. \(variable) was not found.")
+                    throw SwiftMPCError
+                        .misc(
+                            "In order to construct the primalConstructor, every variable must be in an extractor. \(variable) was not found."
+                        )
                 }
             }
         }
@@ -306,9 +315,9 @@ public extension SymbolicObjective {
         func primalConstructorGetVariableString(_ variable: Variable) -> String? {
             // Search in matrices
             for (matrixName, matrix) in matrixExtractors {
-                for row in 0..<matrix.count {
-                    for col in 0..<matrix[row].count {
-                        if(matrix[row][col] == variable) {
+                for row in 0 ..< matrix.count {
+                    for col in 0 ..< matrix[row].count {
+                        if matrix[row][col] == variable {
                             return "\(matrixName)[\(row), \(col)]"
                         }
                     }
@@ -316,15 +325,15 @@ public extension SymbolicObjective {
             }
             // Search in vectors
             for (vectorName, vector) in vectorExtractors {
-                for index in 0..<vector.count {
-                    if(vector[index] == variable) {
+                for index in 0 ..< vector.count {
+                    if vector[index] == variable {
                         return "\(vectorName)[\(index)]"
                     }
                 }
             }
             // Search Variables
             for (variableName, variableEx) in variableExtractors {
-                if(variableEx == variable) {
+                if variableEx == variable {
                     return "\(variableName)"
                 }
             }
@@ -333,9 +342,10 @@ public extension SymbolicObjective {
         }
 
         // Merge the parameter representation dict with the generated variable representations dict
-        var representation: Dictionary<Node, String> = [:]
-        representation.merge(parameterRepresentations, uniquingKeysWith: {(current, _) in current}) // closure is useless
-        for i in 0..<self.orderedVariables.count {
+        var representation: [Node: String] = [:]
+        representation
+            .merge(parameterRepresentations, uniquingKeysWith: { current, _ in current }) // closure is useless
+        for i in 0 ..< self.orderedVariables.count {
             representation[self.orderedVariables[i]] = "\(stateVectorName)[\(i)]"
         }
 
@@ -406,8 +416,8 @@ public extension SymbolicObjective {
             str += "\n"
         }
 
-                //====== Primal vector constructor ======
-        if(primalConstructor) {
+        //====== Primal vector constructor ======
+        if primalConstructor {
             var parametersString = ""
             for matrixName in matrixExtractors.keys.sorted() {
                 parametersString += "\(matrixName): Matrix, "
@@ -435,7 +445,7 @@ public extension SymbolicObjective {
             str += "flat.withUnsafeMutableBufferPointer({ buffer in\n"
 
             // Write every accessor
-            for i in 0..<self.orderedVariables.count {
+            for i in 0 ..< self.orderedVariables.count {
                 str += "buffer[\(i)] = \(primalConstructorGetVariableString(self.orderedVariables[i])!)\n"
             }
 
@@ -554,5 +564,4 @@ public extension SymbolicObjective {
             print(str)
         }
     }
-
 }

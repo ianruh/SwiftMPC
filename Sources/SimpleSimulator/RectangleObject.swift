@@ -1,3 +1,4 @@
+// Created 2020 github @ianruh
 
 public struct RectangleObject: SimulationObject {
     var position: Vec2 // Center
@@ -8,11 +9,11 @@ public struct RectangleObject: SimulationObject {
     let height: Double = 2.0
 
     public var boundingBox: BoundingBox {
-        return BoundingBox(center: position, width: width, height: height)
+        return BoundingBox(center: self.position, width: self.width, height: self.height)
     }
 
     public mutating func evolve(timeStep: Double) {
-        self.velocity = self.velocity + timeStep*self.acceleration
-        self.position = self.position + timeStep*self.velocity
+        self.velocity = self.velocity + timeStep * self.acceleration
+        self.position = self.position + timeStep * self.velocity
     }
 }

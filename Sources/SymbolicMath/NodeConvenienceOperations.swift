@@ -1,3 +1,5 @@
+// Created 2020 github @ianruh
+
 //
 // Created by Ian Ruh on 8/29/20.
 //
@@ -5,7 +7,7 @@ import LASwift
 
 // We have node, variable, and number versions here.
 
-//------------------------- Custom Precedence --------------------
+// ------------------------- Custom Precedence --------------------
 
 // New precidence for power
 precedencegroup ExponentiationPrecedence {
@@ -13,16 +15,14 @@ precedencegroup ExponentiationPrecedence {
     higherThan: MultiplicationPrecedence
 }
 
+// ------------------------- Custom Operators --------------------
 
+infix operator **: ExponentiationPrecedence
+infix operator .**: ExponentiationPrecedence
+infix operator ~: AssignmentPrecedence
+infix operator ≈: AssignmentPrecedence
 
-//------------------------- Custom Operators --------------------
-
-infix operator ** : ExponentiationPrecedence
-infix operator .** : ExponentiationPrecedence
-infix operator ~ : AssignmentPrecedence
-infix operator ≈ : AssignmentPrecedence
-
-//------------------------- Operations --------------------
+// ------------------------- Operations --------------------
 
 /// Add operator for nodes
 ///
@@ -30,24 +30,26 @@ infix operator ≈ : AssignmentPrecedence
 ///   - lhs: Left side of infix operation
 ///   - rhs: Right side of infix operation
 /// - Returns: New node adding the two
-public func +(_ lhs: Node, _ rhs: Node) -> Node {
-    if(lhs is Add && rhs is Add) {
+public func + (_ lhs: Node, _ rhs: Node) -> Node {
+    if lhs is Add, rhs is Add {
         return Add((lhs as! Add).arguments + (rhs as! Add).arguments)
-    } else if(lhs is Add) {
+    } else if lhs is Add {
         return Add((lhs as! Add).arguments + [rhs])
-    } else if(rhs is Add) {
+    } else if rhs is Add {
         return Add((rhs as! Add).arguments + [lhs])
     }
     return Add([lhs, rhs])
 }
-public func +(_ lhs: Node, _ rhs: Number) -> Node {
-    if(lhs is Add) {
+
+public func + (_ lhs: Node, _ rhs: Number) -> Node {
+    if lhs is Add {
         return Add((lhs as! Add).arguments + [rhs])
     }
     return Add([lhs, rhs])
 }
-public func +(_ lhs: Number, _ rhs: Node) -> Node {
-    if(rhs is Add) {
+
+public func + (_ lhs: Number, _ rhs: Node) -> Node {
+    if rhs is Add {
         return Add((rhs as! Add).arguments + [lhs])
     }
     return Add([lhs, rhs])
@@ -59,13 +61,15 @@ public func +(_ lhs: Number, _ rhs: Node) -> Node {
 ///   - lhs:
 ///   - rhs:
 /// - Returns:
-public func -(_ lhs: Node, _ rhs: Node) -> Node {
+public func - (_ lhs: Node, _ rhs: Node) -> Node {
     return Subtract([lhs, rhs])
 }
-public func -(_ lhs: Node, _ rhs: Number) -> Node {
+
+public func - (_ lhs: Node, _ rhs: Number) -> Node {
     return Subtract([lhs, rhs])
 }
-public func -(_ lhs: Number, _ rhs: Node) -> Node {
+
+public func - (_ lhs: Number, _ rhs: Node) -> Node {
     return Subtract([lhs, rhs])
 }
 
@@ -75,13 +79,15 @@ public func -(_ lhs: Number, _ rhs: Node) -> Node {
 ///   - lhs:
 ///   - rhs:
 /// - Returns:
-public func /(_ lhs: Node, _ rhs: Node) -> Node {
+public func / (_ lhs: Node, _ rhs: Node) -> Node {
     return Divide([lhs, rhs])
 }
-public func /(_ lhs: Node, _ rhs: Number) -> Node {
+
+public func / (_ lhs: Node, _ rhs: Number) -> Node {
     return Divide([lhs, rhs])
 }
-public func /(_ lhs: Number, _ rhs: Node) -> Node {
+
+public func / (_ lhs: Number, _ rhs: Node) -> Node {
     return Divide([lhs, rhs])
 }
 
@@ -91,24 +97,26 @@ public func /(_ lhs: Number, _ rhs: Node) -> Node {
 ///   - lhs:
 ///   - rhs:
 /// - Returns:
-public func *(_ lhs: Node, _ rhs: Node) -> Node {
-    if(lhs is Multiply && rhs is Multiply) {
+public func * (_ lhs: Node, _ rhs: Node) -> Node {
+    if lhs is Multiply, rhs is Multiply {
         return Multiply((lhs as! Multiply).arguments + (rhs as! Multiply).arguments)
-    } else if(lhs is Multiply) {
+    } else if lhs is Multiply {
         return Multiply((lhs as! Multiply).arguments + [rhs])
-    } else if(rhs is Multiply) {
+    } else if rhs is Multiply {
         return Multiply((rhs as! Multiply).arguments + [lhs])
     }
     return Multiply([lhs, rhs])
 }
-public func *(_ lhs: Node, _ rhs: Double) -> Node {
-    if(lhs is Multiply) {
+
+public func * (_ lhs: Node, _ rhs: Double) -> Node {
+    if lhs is Multiply {
         return Multiply((lhs as! Multiply).arguments + [Number(rhs)])
     }
     return Multiply(lhs, Number(rhs))
 }
-public func *(_ lhs: Double, _ rhs: Node) -> Node {
-    if(rhs is Multiply) {
+
+public func * (_ lhs: Double, _ rhs: Node) -> Node {
+    if rhs is Multiply {
         return Multiply((rhs as! Multiply).arguments + [Number(lhs)])
     }
     return Multiply(Number(lhs), rhs)
@@ -120,13 +128,15 @@ public func *(_ lhs: Double, _ rhs: Node) -> Node {
 ///   - lhs:
 ///   - rhs:
 /// - Returns:
-public func **(_ lhs: Node, _ rhs: Node) -> Node {
+public func ** (_ lhs: Node, _ rhs: Node) -> Node {
     return Power([lhs, rhs])
 }
-public func **(_ lhs: Node, _ rhs: Number) -> Node {
+
+public func ** (_ lhs: Node, _ rhs: Number) -> Node {
     return Power([lhs, rhs])
 }
-public func **(_ lhs: Number, _ rhs: Node) -> Node {
+
+public func ** (_ lhs: Number, _ rhs: Node) -> Node {
     return Power([lhs, rhs])
 }
 
@@ -136,56 +146,67 @@ public func **(_ lhs: Number, _ rhs: Node) -> Node {
 ///   - lhs:
 ///   - rhs:
 /// - Returns:
-public func ~(_ lhs: Node, _ rhs: Node) -> Assign {
-    return Assign([lhs, rhs])
-}
-public func ~(_ lhs: Number, _ rhs: Node) -> Assign {
-    return Assign([lhs, rhs])
-}
-public func ~(_ lhs: Node, _ rhs: Number) -> Assign {
+public func ~ (_ lhs: Node, _ rhs: Node) -> Assign {
     return Assign([lhs, rhs])
 }
 
-public func ≈(_ lhs: Node, _ rhs: Node) -> Assign {
+public func ~ (_ lhs: Number, _ rhs: Node) -> Assign {
     return Assign([lhs, rhs])
 }
-public func ≈(_ lhs: Number, _ rhs: Node) -> Assign {
+
+public func ~ (_ lhs: Node, _ rhs: Number) -> Assign {
     return Assign([lhs, rhs])
 }
-public func ≈(_ lhs: Node, _ rhs: Number) -> Assign {
+
+public func ≈ (_ lhs: Node, _ rhs: Node) -> Assign {
+    return Assign([lhs, rhs])
+}
+
+public func ≈ (_ lhs: Number, _ rhs: Node) -> Assign {
+    return Assign([lhs, rhs])
+}
+
+public func ≈ (_ lhs: Node, _ rhs: Number) -> Assign {
     return Assign([lhs, rhs])
 }
 
 // Comparisons
-public func <=(_ lhs: Node, _ rhs: Node) -> Node {
+public func <= (_ lhs: Node, _ rhs: Node) -> Node {
     return Subtract(lhs, rhs)
 }
-public func <=(_ lhs: Number, _ rhs: Node) -> Node {
+
+public func <= (_ lhs: Number, _ rhs: Node) -> Node {
     return Subtract(lhs, rhs)
 }
-public func <=(_ lhs: Node, _ rhs: Number) -> Node {
+
+public func <= (_ lhs: Node, _ rhs: Number) -> Node {
     return Subtract(lhs, rhs)
 }
-public func >=(_ lhs: Node, _ rhs: Node) -> Node {
-    return Subtract(rhs, lhs)
-}
-public func >=(_ lhs: Number, _ rhs: Node) -> Node {
-    return Subtract(rhs, lhs)
-}
-public func >=(_ lhs: Node, _ rhs: Number) -> Node {
+
+public func >= (_ lhs: Node, _ rhs: Node) -> Node {
     return Subtract(rhs, lhs)
 }
 
+public func >= (_ lhs: Number, _ rhs: Node) -> Node {
+    return Subtract(rhs, lhs)
+}
 
-public func <=(_ lhs: Double, _ rhs: Node) -> Node {
+public func >= (_ lhs: Node, _ rhs: Number) -> Node {
+    return Subtract(rhs, lhs)
+}
+
+public func <= (_ lhs: Double, _ rhs: Node) -> Node {
     return Subtract(lhs.symbol, rhs)
 }
-public func <=(_ lhs: Node, _ rhs: Double) -> Node {
+
+public func <= (_ lhs: Node, _ rhs: Double) -> Node {
     return Subtract(lhs, rhs.symbol)
 }
-public func >=(_ lhs: Double, _ rhs: Node) -> Node {
+
+public func >= (_ lhs: Double, _ rhs: Node) -> Node {
     return Subtract(rhs, lhs.symbol)
 }
-public func >=(_ lhs: Node, _ rhs: Double) -> Node {
+
+public func >= (_ lhs: Node, _ rhs: Double) -> Node {
     return Subtract(rhs.symbol, lhs)
 }

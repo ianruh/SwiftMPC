@@ -1,43 +1,44 @@
+// Created 2020 github @ianruh
+
+import Collections
 import Foundation
 import RealModule
-import Collections
 
 /// Power of one node to the other.
 public class Power: Node, Operation {
-    
-    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Negative.staticPrecedence)
+    public static let staticPrecedence = OperationPrecedence(higherThan: Negative.staticPrecedence)
     public let precedence: OperationPrecedence = Power.staticPrecedence
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .right
     public let identifier: String = "^"
-    
+
     // Store the parameters for the node
     public var left: Node
     public var right: Node
-    
+
     override public var description: String {
         var leftString = "\(self.left)"
         var rightString = "\(self.right)"
-        
+
         // Wrap the sides if needed
         if let op = self.left as? Operation {
-            if(op.precedence < self.precedence && op.type == .infix) {
+            if op.precedence < self.precedence, op.type == .infix {
                 leftString = "(\(leftString))"
             }
         }
         if let op = self.right as? Operation {
-            if(op.precedence < self.precedence && op.type == .infix) {
+            if op.precedence < self.precedence, op.type == .infix {
                 rightString = "(\(rightString))"
             }
         }
-        
+
         return "\(leftString)^\(rightString)"
     }
-    
+
     override public var latex: String {
         var leftString = self.left.latex
         if let op = self.left as? Operation {
-            if(op.precedence < self.precedence && op.type == .infix) {
+            if op.precedence < self.precedence, op.type == .infix {
                 leftString = "(\(leftString))"
             }
         }
@@ -71,8 +72,8 @@ public class Power: Node, Operation {
         self.hash(into: &hasher)
         return "power\(hasher.finalize())"
     }
-    
-    required public convenience init(_ params: [Node]) {
+
+    public required convenience init(_ params: [Node]) {
         self.init(params[0], params[1])
     }
 
@@ -80,7 +81,7 @@ public class Power: Node, Operation {
         self.left = left
         self.right = right
     }
-    
+
     @inlinable
     override public func evaluate(withValues values: [Node: Double]) throws -> Double {
         // Explanation for the weirdness here: https://github.com/apple/swift-numerics/pull/82
@@ -88,13 +89,16 @@ public class Power: Node, Operation {
         let leftValue: Double = try self.left.evaluate(withValues: values)
         let rightValue: Double = try self.right.evaluate(withValues: values)
 
-        if(leftValue >= 0) {
+        if leftValue >= 0 {
             return Double.pow(leftValue, rightValue)
         } else {
             if let rightValueInt = Int(exactly: rightValue) {
                 return Double.pow(leftValue, rightValueInt)
             } else {
-                throw SymbolicMathError.undefinedValue("Non-integer exponents of negatives are not currently supported: \(leftValue)^\(rightValue)")
+                throw SymbolicMathError
+                    .undefinedValue(
+                        "Non-integer exponents of negatives are not currently supported: \(leftValue)^\(rightValue)"
+                    )
             }
         }
     }
@@ -109,7 +113,7 @@ public class Power: Node, Operation {
 
     override public func contains<T: Node>(nodeType: T.Type) -> [Id] {
         var ids: [Id] = []
-        if(nodeType == Power.self) {
+        if nodeType == Power.self {
             ids.append(self.id)
         }
         ids.append(contentsOf: self.left.contains(nodeType: nodeType))
@@ -118,16 +122,18 @@ public class Power: Node, Operation {
     }
 
     @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
-        if(targetNode == self) {
+        if targetNode == self {
             return replacement
         } else {
-            return Power(self.left.replace(targetNode, with: replacement), self.right.replace(targetNode, with: replacement))
+            return Power(
+                self.left.replace(targetNode, with: replacement),
+                self.right.replace(targetNode, with: replacement)
+            )
         }
     }
 
-    public override func simplify() -> Node {
-
-        if(self.isSimplified) { return self }
+    override public func simplify() -> Node {
+        if self.isSimplified { return self }
 
         let leftSimplified = self.left.simplify()
         let rightSimplified = self.right.simplify()
@@ -135,23 +141,23 @@ public class Power: Node, Operation {
         let leftIsNum = leftSimplified as? Number != nil
         let rightIsNum = rightSimplified as? Number != nil
 
-        if(rightIsNum && (rightSimplified as! Number) == Number(1)) {
+        if rightIsNum, (rightSimplified as! Number) == Number(1) {
             let new = leftSimplified
             try! new.setVariableOrder(from: self)
             new.isSimplified = true
             return new
-        } else if(rightIsNum && (rightSimplified as! Number) == Number(0)) {
+        } else if rightIsNum, (rightSimplified as! Number) == Number(0) {
             let new = Number(1)
             try! new.setVariableOrder(from: self)
             new.isSimplified = true
             return new
-        } else if(leftIsNum && rightIsNum) {
+        } else if leftIsNum, rightIsNum {
             // Explanation for the weirdness here: https://github.com/apple/swift-numerics/pull/82
             let leftValue = (leftSimplified as! Number).value
             let rightValue = (rightSimplified as! Number).value
-            if(leftValue > 0) {
+            if leftValue > 0 {
                 let new = Number(Double.pow(leftValue, rightValue))
-                try!  new.setVariableOrder(from: self)
+                try! new.setVariableOrder(from: self)
                 new.isSimplified = true
                 return new
             } else {
@@ -181,13 +187,13 @@ public class Power: Node, Operation {
         hasher.combine(self.right)
     }
 
-    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
-
+    override public func swiftCode(using representations: [Node: String]) throws -> String {
         // You can thank [this issue](https://github.com/apple/swift-numerics/pull/82) for the weirdness here.
         guard let rightSideNumber = self.right as? Number else {
-            throw SymbolicMathError.misc("The exponent for a power must be a number, not \(self.right)(\(self.right.typeIdentifier))")
+            throw SymbolicMathError
+                .misc("The exponent for a power must be a number, not \(self.right)(\(self.right.typeIdentifier))")
         }
-        guard let rightSide: Int = Int(exactly: try rightSideNumber.evaluate(withValues: [:])) else {
+        guard let rightSide = Int(exactly: try rightSideNumber.evaluate(withValues: [:])) else {
             throw SymbolicMathError.misc("Power must be an integer, not \(rightSideNumber)")
         }
 

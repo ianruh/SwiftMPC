@@ -1,6 +1,6 @@
+// Created 2020 github @ianruh
 
 public extension Node {
-
     func gradient() -> SymbolicVector? {
         let variables = self.orderedVariables
 
@@ -13,7 +13,7 @@ public extension Node {
             gradElements.append(expression)
         }
 
-        let gradVector: SymbolicVector = SymbolicVector(gradElements)
+        let gradVector = SymbolicVector(gradElements)
 
         // Set the ordering on the gradient vector. It inherits the ordering from
         // the original node
@@ -21,5 +21,4 @@ public extension Node {
 
         return gradVector
     }
-
 }

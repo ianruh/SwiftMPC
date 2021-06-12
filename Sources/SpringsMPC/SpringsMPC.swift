@@ -1,6 +1,8 @@
+// Created 2020 github @ianruh
+
+import Collections
 import LASwift
 import SwiftMPC
-import Collections
 import SymbolicMath
 
 struct SpringsMPC {
@@ -52,9 +54,9 @@ struct SpringsMPC {
     mutating func codeGen(toFile fileName: String) throws {
         let objective = try self.constructSymbolicObjective()
 
-        var parameterRepresentations: Dictionary<Parameter, String> = [:]
+        var parameterRepresentations: [Parameter: String] = [:]
 
-        for i in 0..<6 {
+        for i in 0 ..< 6 {
             if let initialPosition = self.initialPositionSymbolicParameters {
                 parameterRepresentations[initialPosition[i]] = "self.initialPosition[\(i)]"
             }
@@ -64,13 +66,18 @@ struct SpringsMPC {
         }
 
         // Construct the extractors
-        let matrixExtractors: Dictionary<String, [[Variable]]> = [
+        let matrixExtractors: [String: [[Variable]]] = [
             "position": self.symbolicPositionMatrix!,
             "velocity": self.symbolicVelocityMatrix!,
-            "control": self.symbolicControlMatrix!
+            "control": self.symbolicControlMatrix!,
         ]
 
-        try objective.printSwiftCode(objectiveName: "SpringsNumericObjective", parameterRepresentations: parameterRepresentations, matrixExtractors: matrixExtractors, toFile: fileName)
+        try objective.printSwiftCode(
+            objectiveName: "SpringsNumericObjective",
+            parameterRepresentations: parameterRepresentations,
+            matrixExtractors: matrixExtractors,
+            toFile: fileName
+        )
     }
 
     mutating func runSymbolic() throws -> (minimum: Double, point: Vector) {

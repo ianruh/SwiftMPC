@@ -1,25 +1,27 @@
+// Created 2020 github @ianruh
+
+import Collections
 import Foundation
 import RealModule
-import Collections
 
 /// Assign one node to the other.
 public class Assign: Node, Operation {
     // Nil means is the lowest possible precedence
-    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: nil)
+    public static let staticPrecedence = OperationPrecedence(higherThan: nil)
     public let precedence: OperationPrecedence = Assign.staticPrecedence
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .none
     public let identifier: String = "="
-    
+
     // Store the parameters for the node
     public var left: Node
     public var right: Node
-    
+
     override public var description: String {
         // This is always true
         return "\(self.left)=\(self.right)"
     }
-    
+
     override public var latex: String {
         return "\(self.left.latex)=\(self.right.latex)"
     }
@@ -51,18 +53,18 @@ public class Assign: Node, Operation {
         self.hash(into: &hasher)
         return "assign\(hasher.finalize())"
     }
-    
-    required public init(_ params: [Node]) {
+
+    public required init(_ params: [Node]) {
         self.left = params[0]
         self.right = params[1]
     }
-    
+
     public func factory(_ params: [Node]) -> Node {
         return Self(params)
     }
-    
+
     @inlinable
-    override public func evaluate(withValues values: [Node : Double]) throws -> Double {
+    override public func evaluate(withValues _: [Node: Double]) throws -> Double {
         throw SymbolicMathError.notApplicable(message: "evaluate isn't applicable to assignment")
     }
 
@@ -76,7 +78,7 @@ public class Assign: Node, Operation {
 
     override public func contains<T: Node>(nodeType: T.Type) -> [Id] {
         var ids: [Id] = []
-        if(nodeType == Assign.self) {
+        if nodeType == Assign.self {
             ids.append(self.id)
         }
         ids.append(contentsOf: self.left.contains(nodeType: nodeType))
@@ -85,15 +87,18 @@ public class Assign: Node, Operation {
     }
 
     @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
-        if(targetNode == self) {
+        if targetNode == self {
             return replacement
         } else {
-            return Assign(self.left.replace(targetNode, with: replacement), self.right.replace(targetNode, with: replacement))
+            return Assign(
+                self.left.replace(targetNode, with: replacement),
+                self.right.replace(targetNode, with: replacement)
+            )
         }
     }
 
-    public override func simplify() -> Node {
-        if(self.isSimplified) { return self }
+    override public func simplify() -> Node {
+        if self.isSimplified { return self }
 
         let new = Assign(self.left.simplify(), self.right.simplify())
         try! new.setVariableOrder(from: self)
@@ -107,7 +112,7 @@ public class Assign: Node, Operation {
         hasher.combine(self.right)
     }
 
-    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
+    override public func swiftCode(using _: [Node: String]) throws -> String {
         throw SymbolicMathError.noCodeRepresentation("Assign node")
     }
 }

@@ -1,6 +1,8 @@
+// Created 2020 github @ianruh
+
 import LASwift
-import SwiftMPC
 import RealModule
+import SwiftMPC
 
 struct LTVNumericObjective {
     // Objective properties
@@ -17,8 +19,8 @@ struct LTVNumericObjective {
     var previousAngle: Vector
     var previousSteeringAngle: Vector
 
-    var warmStartPrimal: Vector? = nil
-    var warmStartDual: Vector? = nil
+    var warmStartPrimal: Vector?
+    var warmStartDual: Vector?
 
     init(numSteps: Int) {
         self.numTimeHorizonSteps = numSteps
@@ -53,6 +55,6 @@ struct LTVNumericObjective {
         return (
             primal: primal,
             dual: dual
-            )
+        )
     }
 }

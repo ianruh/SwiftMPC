@@ -1,3 +1,4 @@
+// Created 2020 github @ianruh
 
 public struct BoundingBox {
     public var minX: Double
@@ -14,7 +15,7 @@ public struct BoundingBox {
     }
 
     public var center: Vec2 {
-        return Vec2((self.minX + self.maxX)/2, (self.minY + self.maxY)/2)
+        return Vec2((self.minX + self.maxX) / 2, (self.minY + self.maxY) / 2)
     }
 
     public init(minX: Double, maxX: Double, minY: Double, maxY: Double) {
@@ -25,29 +26,29 @@ public struct BoundingBox {
     }
 
     public init(center: Vec2, width: Double, height: Double) {
-        self.minX = center.x - width/2
-        self.maxX = center.x + width/2
-        self.minY = center.y - height/2
-        self.maxY = center.y + height/2
+        self.minX = center.x - width / 2
+        self.maxX = center.x + width / 2
+        self.minY = center.y - height / 2
+        self.maxY = center.y + height / 2
     }
-    
+
     public func isInBox(_ pt: Vec2) -> Bool {
         return pt.x > self.minX && pt.x < self.maxX && pt.y > self.minY && pt.y < self.maxY
     }
 
     public func relativePosition(of pt: Vec2, along axis: Axis) -> BoundingBox.RelativePosition {
-        if(axis == .X) {
-            if(pt.x > self.maxX) {
+        if axis == .X {
+            if pt.x > self.maxX {
                 return RelativePosition.above
-            } else if(pt.x < self.minX) {
+            } else if pt.x < self.minX {
                 return RelativePosition.below
             } else {
                 return RelativePosition.inside
             }
         } else {
-            if(pt.y > self.maxY) {
+            if pt.y > self.maxY {
                 return RelativePosition.above
-            } else if(pt.y < self.minY) {
+            } else if pt.y < self.minY {
                 return RelativePosition.below
             } else {
                 return RelativePosition.inside

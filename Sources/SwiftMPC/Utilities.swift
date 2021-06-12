@@ -1,11 +1,9 @@
-//
-// Created by Ian Ruh on 5/5/21.
-//
+// Created 2020 github @ianruh
 
-import RealModule
-import LASwift
-import SymbolicMath
 import Foundation
+import LASwift
+import RealModule
+import SymbolicMath
 
 precedencegroup ExponentiationPrecedence {
     associativity: right
@@ -30,51 +28,55 @@ internal func printDebug(_ msg: Any, file: StaticString = #file, line: UInt = #l
 }
 
 // Pointwise comparisons
-public func .<=(_ lhs: Double, _ rhs: Vector) -> Bool {
-    return rhs.reduce(true, {(currentStatus, nextElement) in 
-        return currentStatus && lhs <= nextElement
-    })
+public func .<= (_ lhs: Double, _ rhs: Vector) -> Bool {
+    return rhs.reduce(true) { currentStatus, nextElement in
+        currentStatus && lhs <= nextElement
+    }
 }
-public func .<=(_ lhs: Vector, _ rhs: Double) -> Bool {
-    return lhs.reduce(true, {(currentStatus, nextElement) in 
-        return currentStatus && nextElement <= rhs
-    })
+
+public func .<= (_ lhs: Vector, _ rhs: Double) -> Bool {
+    return lhs.reduce(true) { currentStatus, nextElement in
+        currentStatus && nextElement <= rhs
+    }
 }
-public func .>=(_ lhs: Double, _ rhs: Vector) -> Bool {
-    return rhs.reduce(true, {(currentStatus, nextElement) in 
-        return currentStatus && lhs >= nextElement
-    })
+
+public func .>= (_ lhs: Double, _ rhs: Vector) -> Bool {
+    return rhs.reduce(true) { currentStatus, nextElement in
+        currentStatus && lhs >= nextElement
+    }
 }
-public func .>=(_ lhs: Vector, _ rhs: Double) -> Bool {
-    return lhs.reduce(true, {(currentStatus, nextElement) in 
-        return currentStatus && nextElement >= rhs
-    })
+
+public func .>= (_ lhs: Vector, _ rhs: Double) -> Bool {
+    return lhs.reduce(true) { currentStatus, nextElement in
+        currentStatus && nextElement >= rhs
+    }
 }
 
 // Nil pointwise comparisons
-public func .<=(_ lhs: Vector, _ rhs: [Double?]?) -> Bool {
+public func .<= (_ lhs: Vector, _ rhs: [Double?]?) -> Bool {
     guard let right = rhs else {
         return true
     }
     guard lhs.count == right.count else {
         return false
     }
-    return zip(lhs, right).reduce(true, {(currentStatus, nextElement) in
+    return zip(lhs, right).reduce(true) { currentStatus, nextElement in
         let (nextElementLeft, nextElementRight) = nextElement
         return currentStatus && (nextElementRight == nil || nextElementLeft <= nextElementRight!)
-    })
+    }
 }
-public func .<=(_ lhs: [Double?]?, _ rhs: Vector) -> Bool {
+
+public func .<= (_ lhs: [Double?]?, _ rhs: Vector) -> Bool {
     guard let left = lhs else {
         return true
     }
     guard rhs.count == left.count else {
         return false
     }
-    return zip(left, rhs).reduce(true, {(currentStatus, nextElement) in
-    let (nextElementLeft, nextElementRight) = nextElement
+    return zip(left, rhs).reduce(true) { currentStatus, nextElement in
+        let (nextElementLeft, nextElementRight) = nextElement
         return currentStatus && (nextElementLeft == nil || nextElementLeft! <= nextElementRight)
-    })
+    }
 }
 
 // Matrix
@@ -83,11 +85,11 @@ public extension Matrix {
         var str: String = ""
 
         // First line
-        str += "┌\(" "*self.cols)┐\n"
+        str += "┌\(" " * self.cols)┐\n"
         for row in self {
             str += "│"
             for el in row {
-                if(el == 0) {
+                if el == 0 {
                     str += " "
                 } else {
                     str += "*"
@@ -95,28 +97,28 @@ public extension Matrix {
             }
             str += "│\n"
         }
-        str += "└\(" "*self.cols)┘"
+        str += "└\(" " * self.cols)┘"
 
         return str
     }
 }
 
-public func *(_ lhs: String, _ rhs: Int) -> String {
+public func * (_ lhs: String, _ rhs: Int) -> String {
     var str = ""
-    for _ in 0..<rhs {
+    for _ in 0 ..< rhs {
         str += lhs
     }
     return str
 }
 
-public func .==(_ lhs: Vector, _ rhs: Double) -> Bool {
-    return lhs.reduce(true, {(currentStatus, nextElement) in 
-        return currentStatus && nextElement == rhs
-    })
+public func .== (_ lhs: Vector, _ rhs: Double) -> Bool {
+    return lhs.reduce(true) { currentStatus, nextElement in
+        currentStatus && nextElement == rhs
+    }
 }
 
-public func .==(_ lhs: Double, _ rhs: Vector) -> Bool {
-    return rhs.reduce(true, {(currentStatus, nextElement) in 
-        return currentStatus && nextElement == lhs
-    })
+public func .== (_ lhs: Double, _ rhs: Vector) -> Bool {
+    return rhs.reduce(true) { currentStatus, nextElement in
+        currentStatus && nextElement == lhs
+    }
 }

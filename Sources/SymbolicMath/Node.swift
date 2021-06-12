@@ -1,21 +1,15 @@
-//
-//  File.swift
-//  
-//
-//  Created by Ian Ruh on 5/14/20.
-//
+// Created 2020 github @ianruh
 
-import OrderedCollections
 import LASwift
+import OrderedCollections
 
 public class Node: CustomStringConvertible, Comparable, Hashable {
-
-    //------------------------ Properties ------------------------
+    // ------------------------ Properties ------------------------
 
     /// The node's unqie identifier
-    lazy public var id: Id = Id()
+    public lazy var id = Id()
 
-    private var _ordering: OrderedSet<Variable>? = nil
+    private var _ordering: OrderedSet<Variable>?
     public var orderedVariables: OrderedSet<Variable> {
         get {
             if let ordering = self._ordering {
@@ -96,16 +90,16 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
         return self as? Function != nil
     }
 
-    internal var isSimplified: Bool  = false
+    internal var isSimplified: Bool = false
 
-    //------------------------ Functions ------------------------
+    // ------------------------ Functions ------------------------
 
     public func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection, C.Element == Variable {
-        try self.variables.forEach({ variable in 
+        try self.variables.forEach { variable in
             guard newOrdering.contains(variable) else {
                 throw SymbolicMathError.misc("New ordering \(newOrdering) does not contain variable \(variable).")
             }
-        })
+        }
         self.orderedVariables = OrderedSet<Variable>(newOrdering)
     }
 
@@ -116,29 +110,30 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
     }
 
     /// Evaluate the node. This should be overridden.
-    public func evaluate(withValues values: [Node: Double]) throws -> Double {
+    public func evaluate(withValues _: [Node: Double]) throws -> Double {
         preconditionFailure("This method must be overridden")
     }
 
-    public func evaluate(_ x: Vector, withParameters parameterValues: Dictionary<Parameter, Double> = [:]) throws -> Double {
+    public func evaluate(_ x: Vector, withParameters parameterValues: [Parameter: Double] = [:]) throws -> Double {
         // Ensure the vector is the right length
         guard x.count == self.orderedVariables.count else {
-            throw SymbolicMathError.misc("Vector \(x) is the wrong length (\(x.count) != \(self.orderedVariables.count)")
+            throw SymbolicMathError
+                .misc("Vector \(x) is the wrong length (\(x.count) != \(self.orderedVariables.count)")
         }
 
         // We don't check that all parameters are represented. It will throw a clear error if one is missing when
         // it tries to evaluate it.
 
-        var values = Dictionary<Node, Double>()
+        var values = [Node: Double]()
         let orderedVariables = self.orderedVariables
-        for i in 0..<x.count {
+        for i in 0 ..< x.count {
             values[orderedVariables[i]] = x[i]
         }
 
         // merge in the parameters. The closure is meaningless, as there will never be conflicting
-        // keys in this case (only variables present in values, and only parameters present in 
+        // keys in this case (only variables present in values, and only parameters present in
         // parameterValues).
-        values.merge(parameterValues, uniquingKeysWith: {(current, _) in current})
+        values.merge(parameterValues, uniquingKeysWith: { current, _ in current })
 
         return try self.evaluate(withValues: values)
     }
@@ -146,7 +141,7 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
     /// Function returns whether the other node logically equals this function
     /// Note that this assumes both sides are simplified already, so it doesn't
     /// call simplify itself.
-    internal func equals(_ otherNode: Node) -> Bool {
+    internal func equals(_: Node) -> Bool {
         preconditionFailure("This method must be overridden")
     }
 
@@ -154,7 +149,7 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
     ///
     /// - Parameter nodeType: Type interested in
     /// - Returns: The number found.
-    public func contains<T: Node>(nodeType: T.Type) -> [Id] {
+    public func contains<T: Node>(nodeType _: T.Type) -> [Id] {
         preconditionFailure("This method must be overridden")
     }
 
@@ -166,7 +161,7 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
     /// - Returns: Returns true if the node was replaced, and false otherwise.
     /// - Throws: If the node cannot be replaced.
     /// Replace a node with another node.
-    @discardableResult public func replace(_ targetNode: Node, with replacement: Node) -> Node {
+    @discardableResult public func replace(_: Node, with _: Node) -> Node {
         preconditionFailure("This method must be overridden.")
     }
 
@@ -174,7 +169,7 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
     ///
     /// - Parameter id: Id of the node to get.
     /// - Returns: The node with the given id, if it exists in the tree.
-    public func getNode(withId id: Id) -> Node? {
+    public func getNode(withId _: Id) -> Node? {
         preconditionFailure("This method must be overridden")
     }
 
@@ -185,14 +180,14 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
         preconditionFailure("This method must be overridden")
     }
 
-    public func hash(into hasher: inout Hasher) {
+    public func hash(into _: inout Hasher) {
         preconditionFailure("This method must be overriden")
     }
 
     /// A Swift representation of the node value. This should be overridden.
     /// It is really f******* verbose (lots of parenthesis)
     /// Assumes access to swift-numerics real module
-    public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
+    public func swiftCode(using _: [Node: String]) throws -> String {
         preconditionFailure("This method must be overriden")
     }
 
@@ -204,8 +199,9 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
 
         var terms: Node = Number(0)
         var derivatives: [Node] = [self]
-        for i in 0...order {
-            terms = terms + derivatives.last!.replace(variable, with: location)/Number(i.factorial())*(variable - location)**Number(i)
+        for i in 0 ... order {
+            terms = terms + derivatives.last!
+                .replace(variable, with: location) / Number(i.factorial()) * (variable - location) ** Number(i)
             // Find the ith derivative
             guard let nextDerivative = differentiate(derivatives.last!, wrt: variable) else {
                 return nil
@@ -216,13 +212,13 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
         return terms
     }
 
-    //--------------Comparable Conformance-----------------
+    // --------------Comparable Conformance-----------------
 
-    public static func ==(_ lhs: Node, _ rhs: Node) -> Bool {
+    public static func == (_ lhs: Node, _ rhs: Node) -> Bool {
         return lhs.equals(rhs)
     }
 
-    public static func ~=(_ lhs: Node, _ rhs: Node) -> Bool {
+    public static func ~= (_ lhs: Node, _ rhs: Node) -> Bool {
         return lhs.simplify() == rhs.simplify()
     }
 
@@ -230,20 +226,20 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
     /// nut otherwise only compares the types of the nodes.
     ///
     /// Opertions < Variables < Numbers
-    public static func <(_ lhs: Node, _ rhs: Node) -> Bool {
-        if(lhs.isOperation && rhs.isOperation) {
+    public static func < (_ lhs: Node, _ rhs: Node) -> Bool {
+        if lhs.isOperation, rhs.isOperation {
             return lhs.typeIdentifier < rhs.typeIdentifier
-        } else if(lhs.isOperation &&  rhs.isBasic) {
+        } else if lhs.isOperation, rhs.isBasic {
             return true
-        } else if(lhs.isBasic && rhs.isOperation) {
+        } else if lhs.isBasic, rhs.isOperation {
             return false
-        } else if(lhs.isVariable && rhs.isVariable) {
+        } else if lhs.isVariable, rhs.isVariable {
             return (lhs as! Variable).string < (rhs as! Variable).string
-        } else if(lhs.isVariable && rhs.isNumber) {
+        } else if lhs.isVariable, rhs.isNumber {
             return true
-        } else if(lhs.isNumber && rhs.isVariable) {
+        } else if lhs.isNumber, rhs.isVariable {
             return false
-        } else if(lhs.isNumber && rhs.isNumber) {
+        } else if lhs.isNumber, rhs.isNumber {
             return (lhs as! Number).value < (rhs as! Number).value
         } else {
             // This shouldn't ever run, but just in case

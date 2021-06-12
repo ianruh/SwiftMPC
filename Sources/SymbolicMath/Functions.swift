@@ -1,30 +1,26 @@
-//
-//  File.swift
-//  
-//
-//  Created by Ian Ruh on 5/15/20.
-//
+// Created 2020 github @ianruh
 
 import RealModule
 
-//######################### Define the protocol #########################
+// ######################### Define the protocol #########################
 
 /**
  Protocol for a function. Example of the properties:
  */
 public protocol Function: Operation {
-    var numArguments: Int {get}
+    var numArguments: Int { get }
 }
 
-extension Function {
-
-    public var precedence: OperationPrecedence {
+public extension Function {
+    var precedence: OperationPrecedence {
         OperationPrecedence(higherThan: Factorial.staticPrecedence)
     }
-    public var type: OperationType {
+
+    var type: OperationType {
         .function
     }
-    public var associativity: OperationAssociativity {
+
+    var associativity: OperationAssociativity {
         .none
     }
 }

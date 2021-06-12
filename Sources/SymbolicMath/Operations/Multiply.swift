@@ -1,25 +1,26 @@
+// Created 2020 github @ianruh
+
+import Collections
 import Foundation
 import RealModule
-import Collections
 
 /// Multiply one node by the other.
 public class Multiply: Node, Operation {
-    
-    public static let staticPrecedence: OperationPrecedence = OperationPrecedence(higherThan: Add.staticPrecedence)
+    public static let staticPrecedence = OperationPrecedence(higherThan: Add.staticPrecedence)
     public let precedence: OperationPrecedence = Multiply.staticPrecedence
     public let type: OperationType = .infix
     public let associativity: OperationAssociativity = .left
     public let identifier: String = "*"
-    
+
     // Store the parameters for the node
     public var arguments: [Node]
-    
+
     override public var description: String {
         var str = ""
 
-        for i in 0..<self.arguments.count-1 {
+        for i in 0 ..< self.arguments.count - 1 {
             if let op = self.arguments[i] as? Operation {
-                if(op.precedence <= self.precedence && op.type == .infix) {
+                if op.precedence <= self.precedence, op.type == .infix {
                     str += "(\(op))"
                 } else {
                     str += "\(op)"
@@ -29,20 +30,20 @@ public class Multiply: Node, Operation {
             }
             str += "*"
         }
-        
-        if let op = self.arguments[self.arguments.count-1] as? Operation {
-            if(op.precedence <= self.precedence && op.type == .infix) {
+
+        if let op = self.arguments[self.arguments.count - 1] as? Operation {
+            if op.precedence <= self.precedence, op.type == .infix {
                 str += "(\(op))"
             } else {
                 str += "\(op)"
             }
         } else {
-            str += self.arguments[self.arguments.count-1].description
+            str += self.arguments[self.arguments.count - 1].description
         }
-        
+
         return str
     }
-    
+
     override public var latex: String {
         return self.description
     }
@@ -51,9 +52,9 @@ public class Multiply: Node, Operation {
         if let variables = self._variables {
             return variables
         } else {
-            self._variables = self.arguments.reduce(Set<Variable>(), {(currentSet, nextArg) in
-                return currentSet + nextArg.variables
-            })
+            self._variables = self.arguments.reduce(Set<Variable>()) { currentSet, nextArg in
+                currentSet + nextArg.variables
+            }
             return self._variables!
         }
     }
@@ -62,16 +63,16 @@ public class Multiply: Node, Operation {
         if let parameters = self._parameters {
             return parameters
         } else {
-            self._parameters = self.arguments.reduce(Set<Parameter>(), {(currentSet, nextArg) in
-                return currentSet + nextArg.parameters
-            })
+            self._parameters = self.arguments.reduce(Set<Parameter>()) { currentSet, nextArg in
+                currentSet + nextArg.parameters
+            }
             return self._parameters!
         }
     }
 
     override public var derivatives: Set<Derivative> {
         var derivatives: Set<Derivative> = []
-        
+
         for arg in self.arguments {
             derivatives = derivatives + arg.derivatives
         }
@@ -84,15 +85,15 @@ public class Multiply: Node, Operation {
         self.hash(into: &hasher)
         return "multiplication\(hasher.finalize())"
     }
-    
-    required public init(_ params: [Node]) {
+
+    public required init(_ params: [Node]) {
         self.arguments = params
     }
 
     public convenience init(_ params: Node...) {
         self.init(params)
     }
-    
+
     @inlinable
     override public func evaluate(withValues values: [Node: Double]) throws -> Double {
         var current: Double = 1
@@ -104,10 +105,10 @@ public class Multiply: Node, Operation {
 
     override internal func equals(_ otherNode: Node) -> Bool {
         if let mul = otherNode as? Multiply {
-            if(self.arguments.count == mul.arguments.count) {
+            if self.arguments.count == mul.arguments.count {
                 var isEqual = true
-                for i in 0..<self.arguments.count {
-                    isEqual = isEqual && (self.arguments[i].equals(mul.arguments[i]))
+                for i in 0 ..< self.arguments.count {
+                    isEqual = isEqual && self.arguments[i].equals(mul.arguments[i])
                 }
                 return isEqual
             } else {
@@ -120,7 +121,7 @@ public class Multiply: Node, Operation {
 
     override public func contains<T: Node>(nodeType: T.Type) -> [Id] {
         var ids: [Id] = []
-        if(nodeType == Multiply.self) {
+        if nodeType == Multiply.self {
             ids.append(self.id)
         }
         for arg in self.arguments {
@@ -131,16 +132,15 @@ public class Multiply: Node, Operation {
     }
 
     @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
-        if(targetNode == self) {
+        if targetNode == self {
             return replacement
         } else {
-            return Multiply(self.arguments.map({$0.replace(targetNode, with: replacement)}))
+            return Multiply(self.arguments.map { $0.replace(targetNode, with: replacement) })
         }
     }
 
-    public override func simplify() -> Node {
-
-        if(self.isSimplified) { return self }
+    override public func simplify() -> Node {
+        if self.isSimplified { return self }
 
         func level(_ node: Multiply) -> Multiply {
             // Level the operator to only one level of multipliation
@@ -166,13 +166,13 @@ public class Multiply: Node, Operation {
                     other.append(term)
                 }
             }
-            if(numbers.count > 1) {
+            if numbers.count > 1 {
                 var sum: Double = 1
                 for num in numbers {
                     sum *= num.value
                 }
                 other.append(Number(sum))
-            } else if(numbers.count == 1) {
+            } else if numbers.count == 1 {
                 other.append(contentsOf: numbers)
             }
             return Multiply(other)
@@ -195,21 +195,21 @@ public class Multiply: Node, Operation {
             bottoms.sort()
 
             // We call simplify again because not everything may be level anymore
-            if(bottoms.count == 0) {
-                if(tops.count == 1) {
+            if bottoms.count == 0 {
+                if tops.count == 1 {
                     return tops[0]
                 } else {
                     return Multiply(tops)
                 }
-            } else if(bottoms.count == 1) {
-                if(tops.count == 1) {
+            } else if bottoms.count == 1 {
+                if tops.count == 1 {
                     let temp = Divide(tops[0], bottoms[0]).simplify()
                     return temp
                 } else {
                     return Divide(Multiply(tops).simplify(), bottoms[0]).simplify()
                 }
             } else {
-                if(tops.count == 1) {
+                if tops.count == 1 {
                     return Divide(tops[0], Multiply(bottoms).simplify()).simplify()
                 } else {
                     return Divide(Multiply(tops).simplify(), Multiply(bottoms).simplify()).simplify()
@@ -222,29 +222,29 @@ public class Multiply: Node, Operation {
             var reducedTerms: [Node] = []
 
             // Base: exponent
-            var termsDict: Dictionary<Node, Node> = [:]
-            args.forEach({arg in
+            var termsDict: [Node: Node] = [:]
+            args.forEach { arg in
                 if let pow = arg as? Power {
                     let base = pow.left
                     let exponent = pow.right
-                    if(termsDict.keys.contains(base)) {
+                    if termsDict.keys.contains(base) {
                         termsDict[base] = termsDict[base]! + exponent
                     } else {
                         termsDict[base] = exponent
                     }
                 } else {
-                    if(termsDict.keys.contains(arg)) {
+                    if termsDict.keys.contains(arg) {
                         termsDict[arg] = termsDict[arg]! + Number(1)
                     } else {
                         termsDict[arg] = Number(1)
                     }
                 }
-            })
+            }
 
             for (base, exponent) in termsDict {
-                if(exponent ==  Number(1)) {
+                if exponent == Number(1) {
                     reducedTerms.append(base)
-                } else if(exponent == Number(0)) {
+                } else if exponent == Number(0) {
                     continue
                 } else {
                     let temp = Power(base, exponent.simplify())
@@ -258,28 +258,29 @@ public class Multiply: Node, Operation {
 
         func removeOne(_ node: Multiply) -> Multiply {
             var args = node.arguments
-            args.removeAll(where: {$0 == Number(1)})
+            args.removeAll(where: { $0 == Number(1) })
             return Multiply(args)
         }
 
         func expandAddition(_ node: Multiply) -> Node {
             var additionTerms: [Add] = []
             var otherTerms: [Node] = []
-            node.arguments.forEach({ term in
+            node.arguments.forEach { term in
                 if let add = term as? Add {
                     additionTerms.append(add)
                 } else {
                     otherTerms.append(term)
                 }
-            })
-            
-            if(additionTerms.count == 0) {
+            }
+
+            if additionTerms.count == 0 {
                 return node
             }
 
             // We no convert x*(y+1)*(z+1) --> x*y*(z+1) + x*1*(z+1), which then needs to get simplified again
             let firstAdd = additionTerms[0]
-            let allOthers = otherTerms + (additionTerms.count >= 2 ? Array<Add>(additionTerms[1..<additionTerms.count]) : Array<Add>())
+            let allOthers = otherTerms +
+                (additionTerms.count >= 2 ? [Add](additionTerms[1 ..< additionTerms.count]) : [Add]())
 
             var newNodeArguments: [Node] = []
             for el in firstAdd.arguments {
@@ -289,7 +290,7 @@ public class Multiply: Node, Operation {
             return Add(newNodeArguments).simplify()
         }
 
-        let args = self.arguments.map({$0.simplify()})
+        let args = self.arguments.map { $0.simplify() }
 
         var simplifiedMul = Multiply(args)
         simplifiedMul = level(simplifiedMul)
@@ -314,17 +315,17 @@ public class Multiply: Node, Operation {
         simplifiedMul = level(simplifiedMul)
         simplifiedMul = combineNumbers(simplifiedMul)
 
-        if(simplifiedMul.arguments.contains(Number(0))) {
+        if simplifiedMul.arguments.contains(Number(0)) {
             let new = Number(0)
             try! new.setVariableOrder(from: self)
             new.isSimplified = true
             return new
-        } else if(simplifiedMul.arguments.count == 1) {
+        } else if simplifiedMul.arguments.count == 1 {
             let new = simplifiedMul.arguments[0]
             try! new.setVariableOrder(from: self)
             new.isSimplified = true
             return new
-        } else if(simplifiedMul.arguments.count == 0) {
+        } else if simplifiedMul.arguments.count == 0 {
             let new = Number(1)
             try! new.setVariableOrder(from: self)
             new.isSimplified = true
@@ -342,12 +343,12 @@ public class Multiply: Node, Operation {
         hasher.combine(self.arguments)
     }
 
-    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
+    override public func swiftCode(using representations: [Node: String]) throws -> String {
         var str = ""
 
-        for i in 0..<self.arguments.count {
+        for i in 0 ..< self.arguments.count {
             if let op = self.arguments[i] as? Operation {
-                if(op.precedence <= self.precedence && op.type == .infix) {
+                if op.precedence <= self.precedence, op.type == .infix {
                     str += "(\(try op.swiftCode(using: representations)))"
                 } else {
                     str += "\(try op.swiftCode(using: representations))"
@@ -355,11 +356,11 @@ public class Multiply: Node, Operation {
             } else {
                 str += try self.arguments[i].swiftCode(using: representations)
             }
-            if(i != self.arguments.count-1) {
+            if i != self.arguments.count - 1 {
                 str += " * "
             }
         }
-        
+
         return str
     }
 }

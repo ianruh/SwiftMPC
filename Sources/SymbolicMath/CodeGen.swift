@@ -1,5 +1,4 @@
-
-//===================== Vector =================
+// Created 2020 github @ianruh
 
 // var str = ""
 
@@ -27,11 +26,10 @@
 // return "Matrix(\(self.rows), \(self.cols), \(flat))"
 
 public extension SymbolicVector {
-
-    func swiftCode(using representations: Dictionary<Node, String>, onlyElements: Bool = false) throws -> String {
+    func swiftCode(using representations: [Node: String], onlyElements: Bool = false) throws -> String {
         var elementsStr = ""
         if self.elements.count > 0 {
-            for i in 0..<self.elements.count-1 {
+            for i in 0 ..< self.elements.count - 1 {
                 var rep: String = try self.elements[i].swiftCode(using: representations)
                 rep += ", "
 
@@ -40,14 +38,14 @@ public extension SymbolicVector {
             elementsStr += "\(try self.elements.last!.swiftCode(using: representations))"
         }
 
-        if(onlyElements) {
+        if onlyElements {
             return elementsStr
         } else {
             return "Vector([\(elementsStr)])"
         }
     }
 
-    func swiftCode2(using representations: Dictionary<Node, String>, onlyElements: Bool = false) throws -> String {
+    func swiftCode2(using representations: [Node: String], onlyElements _: Bool = false) throws -> String {
         var str = ""
 
         // Write the numeric flat vector placeholder
@@ -57,9 +55,9 @@ public extension SymbolicVector {
         str += "flat.withUnsafeMutableBufferPointer({ buffer in\n"
 
         // Write every one that needs updating
-        for i in 0..<self.elements.count {
+        for i in 0 ..< self.elements.count {
             // Only write it if the element is not equal to 0
-            if(self.elements[i] != Number(0.0)) {
+            if self.elements[i] != Number(0.0) {
                 str += "buffer[\(i)] = \(try self.elements[i].swiftCode(using: representations))\n"
             }
         }
@@ -72,17 +70,15 @@ public extension SymbolicVector {
 
         return str
     }
-
 }
 
 //===================== Matrix =================
 
 public extension SymbolicMatrix {
-
-    func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
+    func swiftCode(using representations: [Node: String]) throws -> String {
         var elementsStr = ""
         if self.vectors.count > 0 {
-            for i in 0..<self.vectors.count-1 {
+            for i in 0 ..< self.vectors.count - 1 {
                 var rep: String = try self.vectors[i].swiftCode(using: representations, onlyElements: true)
                 rep += ",\n    "
                 elementsStr += rep
@@ -93,7 +89,7 @@ public extension SymbolicMatrix {
         return "Matrix(\(self.rows), \(self.cols), [\n    \(elementsStr)\n])"
     }
 
-    func swiftCode2(using representations: Dictionary<Node, String>, onlyElements: Bool = false) throws -> String {
+    func swiftCode2(using representations: [Node: String], onlyElements _: Bool = false) throws -> String {
         var str = ""
 
         let symbolicFlat: [Node] = self.flat
@@ -105,9 +101,9 @@ public extension SymbolicMatrix {
         str += "flat.withUnsafeMutableBufferPointer({ buffer in\n"
 
         // Write every one that needs updating
-        for i in 0..<symbolicFlat.count {
+        for i in 0 ..< symbolicFlat.count {
             // Only write it if the element is not equal to 0
-            if(symbolicFlat[i] != Number(0.0)) {
+            if symbolicFlat[i] != Number(0.0) {
                 str += "buffer[\(i)] = \(try symbolicFlat[i].swiftCode(using: representations))\n"
             }
         }
@@ -120,5 +116,4 @@ public extension SymbolicMatrix {
 
         return str
     }
-
 }

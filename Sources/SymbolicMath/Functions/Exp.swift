@@ -1,5 +1,7 @@
-import RealModule
+// Created 2020 github @ianruh
+
 import Collections
+import RealModule
 
 public class Exp: Node, Function {
     public let identifier: String = "exp"
@@ -44,7 +46,7 @@ public class Exp: Node, Function {
         return "exponential\(hasher.finalize())"
     }
 
-    required public init(_ params: [Node]) {
+    public required init(_ params: [Node]) {
         self.argument = params[0]
     }
 
@@ -54,7 +56,7 @@ public class Exp: Node, Function {
 
     @inlinable
     override public func evaluate(withValues values: [Node: Double]) throws -> Double {
-        return try  Double.exp(self.argument.evaluate(withValues: values))
+        return try Double.exp(self.argument.evaluate(withValues: values))
     }
 
     override internal func equals(_ otherNode: Node) -> Bool {
@@ -67,20 +69,19 @@ public class Exp: Node, Function {
 
     override public func contains<T: Node>(nodeType: T.Type) -> [Id] {
         var ids: [Id] = []
-        if(nodeType == Exp.self) {
+        if nodeType == Exp.self {
             ids.append(self.id)
         }
         ids.append(contentsOf: self.argument.contains(nodeType: nodeType))
         return ids
     }
 
-    public override func simplify() -> Node {
-
-        if(self.isSimplified) { return self }
+    override public func simplify() -> Node {
+        if self.isSimplified { return self }
 
         let simplifiedArg = self.argument.simplify()
 
-        if(simplifiedArg == Number(0)) {
+        if simplifiedArg == Number(0) {
             let new = Number(1)
             try! new.setVariableOrder(from: self)
             new.isSimplified = true
@@ -94,7 +95,7 @@ public class Exp: Node, Function {
     }
 
     @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
-        if(targetNode == self) {
+        if targetNode == self {
             return replacement
         } else {
             return Exp(self.argument.replace(targetNode, with: replacement))
@@ -106,7 +107,7 @@ public class Exp: Node, Function {
         hasher.combine(self.argument)
     }
 
-    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
+    override public func swiftCode(using representations: [Node: String]) throws -> String {
         return "Double.exp(\(try self.argument.swiftCode(using: representations)))"
     }
 }

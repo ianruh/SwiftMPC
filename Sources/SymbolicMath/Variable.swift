@@ -1,3 +1,4 @@
+// Created 2020 github @ianruh
 
 public class Variable: Node, ExpressibleByStringLiteral {
     public typealias StringLiteralType = String
@@ -10,11 +11,11 @@ public class Variable: Node, ExpressibleByStringLiteral {
     }
 
     public var string: String
-    
+
     override public var description: String {
         return self.string
     }
-    
+
     override public var latex: String {
         return "\(self.string)"
     }
@@ -45,10 +46,10 @@ public class Variable: Node, ExpressibleByStringLiteral {
         }
     }
 
-    public static func ==(_ lhs: Variable, _ rhs: Variable) -> Bool {
+    public static func == (_ lhs: Variable, _ rhs: Variable) -> Bool {
         return lhs.string == rhs.string
     }
-    
+
     public required init(stringLiteral str: String) {
         self.string = str
     }
@@ -65,10 +66,10 @@ public class Variable: Node, ExpressibleByStringLiteral {
     override public convenience init() {
         self.init(stringLiteral: Self.nextName)
     }
-    
+
     @inlinable
-    override public func evaluate(withValues values: [Node : Double]) throws -> Double {
-        if let value  = values[self] {
+    override public func evaluate(withValues values: [Node: Double]) throws -> Double {
+        if let value = values[self] {
             return value
         } else {
             throw SymbolicMathError.noValue(forVariable: self.description)
@@ -84,7 +85,7 @@ public class Variable: Node, ExpressibleByStringLiteral {
     }
 
     override public func contains<T: Node>(nodeType: T.Type) -> [Id] {
-        if(nodeType == Variable.self) {
+        if nodeType == Variable.self {
             return [self.id]
         } else {
             return []
@@ -92,7 +93,7 @@ public class Variable: Node, ExpressibleByStringLiteral {
     }
 
     @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
-        if(targetNode == self) {
+        if targetNode == self {
             return replacement
         } else {
             return self
@@ -109,7 +110,7 @@ public class Variable: Node, ExpressibleByStringLiteral {
         hasher.combine(self.string)
     }
 
-    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
+    override public func swiftCode(using representations: [Node: String]) throws -> String {
         if let rep = representations[self] {
             return rep
         } else {
@@ -118,12 +119,10 @@ public class Variable: Node, ExpressibleByStringLiteral {
     }
 }
 
-
 public extension Variable {
-
     static func vector(_ name: String, count: Int) -> [Variable] {
         var arr: [Variable] = []
-        for i in 0..<count {
+        for i in 0 ..< count {
             arr.append(Variable("\(name)[\(i)]"))
         }
         return arr
@@ -131,19 +130,18 @@ public extension Variable {
 
     static func matrix(_ name: String, rows: Int, cols: Int) -> [[Variable]] {
         var arrs: [[Variable]] = []
-        for i in 0..<rows {
+        for i in 0 ..< rows {
             var arr: [Variable] = []
-            for j in 0..<cols {
+            for j in 0 ..< cols {
                 arr.append(Variable("\(name)[\(i),\(j)]"))
             }
             arrs.append(arr)
         }
         return arrs
     }
-
 }
 
-public extension Array where Array.Element == Array<Variable> {
+public extension Array where Array.Element == [Variable] {
     subscript(_ row: Int, _ col: Int) -> Variable {
         return self[row][col]
     }

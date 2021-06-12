@@ -1,5 +1,7 @@
-import RealModule
+// Created 2020 github @ianruh
+
 import Collections
+import RealModule
 
 public class Sqrt: Node, Function {
     public let identifier: String = "sqrt"
@@ -44,7 +46,7 @@ public class Sqrt: Node, Function {
         return "squareroot\(hasher.finalize())"
     }
 
-    required public init(_ params: [Node]) {
+    public required init(_ params: [Node]) {
         self.argument = params[0]
     }
 
@@ -67,7 +69,7 @@ public class Sqrt: Node, Function {
 
     override public func contains<T: Node>(nodeType: T.Type) -> [Id] {
         var ids: [Id] = []
-        if(nodeType == Sqrt.self) {
+        if nodeType == Sqrt.self {
             ids.append(self.id)
         }
         ids.append(contentsOf: self.argument.contains(nodeType: nodeType))
@@ -75,16 +77,15 @@ public class Sqrt: Node, Function {
     }
 
     @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
-        if(targetNode == self) {
+        if targetNode == self {
             return replacement
         } else {
             return Sqrt(self.argument.replace(targetNode, with: replacement))
         }
     }
 
-    public override func simplify() -> Node {
-
-        if(self.isSimplified) { return self }
+    override public func simplify() -> Node {
+        if self.isSimplified { return self }
 
         let new = Sqrt(self.argument.simplify())
         try! new.setVariableOrder(from: self)
@@ -97,7 +98,7 @@ public class Sqrt: Node, Function {
         hasher.combine(self.argument)
     }
 
-    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
+    override public func swiftCode(using representations: [Node: String]) throws -> String {
         return "Double.sqrt(\(try self.argument.swiftCode(using: representations)))"
     }
 }

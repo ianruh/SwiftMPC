@@ -1,11 +1,11 @@
+// Created 2020 github @ianruh
 
 public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLiteral {
     public typealias IntegerLiteralType = Int
     public typealias FloatLiteralType = Double
-    
 
     public var value: Double
-    
+
     override public var description: String {
         return "\(self.value)"
     }
@@ -17,7 +17,7 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
     override public var typeIdentifier: String {
         return "\(self.value)"
     }
-    
+
     override public var latex: String {
         return "\(self.value)"
     }
@@ -39,7 +39,7 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
             return self._parameters!
         }
     }
-    
+
     public convenience init(_ num: Int) {
         self.init(Double(num))
     }
@@ -48,16 +48,16 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
         self.value = num
     }
 
-    required public convenience init(integerLiteral value: Int) {
+    public required convenience init(integerLiteral value: Int) {
         self.init(Double(value))
     }
 
-    required public convenience init(floatLiteral value: Double) {
+    public required convenience init(floatLiteral value: Double) {
         self.init(value)
     }
-    
+
     @inlinable
-    override public func evaluate(withValues values: [Node : Double]) throws -> Double {
+    override public func evaluate(withValues _: [Node: Double]) throws -> Double {
         return self.value
     }
 
@@ -70,7 +70,7 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
     }
 
     override public func contains<T: Node>(nodeType: T.Type) -> [Id] {
-        if(nodeType == Number.self) {
+        if nodeType == Number.self {
             return [self.id]
         } else {
             return []
@@ -78,7 +78,7 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
     }
 
     @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
-        if(targetNode == self) {
+        if targetNode == self {
             return replacement
         } else {
             return self
@@ -95,7 +95,7 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
         hasher.combine(self.value)
     }
 
-    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
+    override public func swiftCode(using _: [Node: String]) throws -> String {
         return "\(self.value)"
     }
 }

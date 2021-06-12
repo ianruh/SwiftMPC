@@ -1,9 +1,7 @@
-//
-// Created by Ian Ruh on 5/10/21.
-//
+// Created 2020 github @ianruh
 
-import LASwift
 import Collections
+import LASwift
 
 public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
     public typealias Element = SymbolicVector
@@ -17,8 +15,9 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
     public var rows: Int {
         return self.count
     }
+
     public var cols: Int {
-        if(self.rows == 0) {
+        if self.rows == 0 {
             return 0
         } else {
             return self[0].count
@@ -35,7 +34,7 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
 
     internal var vectors: [SymbolicVector]
 
-    private var _ordering: OrderedSet<Variable>? = nil
+    private var _ordering: OrderedSet<Variable>?
     public var orderedVariables: OrderedSet<Variable> {
         if let ordering = self._ordering {
             return ordering
@@ -46,15 +45,15 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
     }
 
     public lazy var variables: Set<Variable> = {
-        return self.vectors.reduce(Set<Variable>(),{(currentSet, nextVector) in
-            return currentSet.union(nextVector.variables)
-        })
+        self.vectors.reduce(Set<Variable>()) { currentSet, nextVector in
+            currentSet.union(nextVector.variables)
+        }
     }()
 
     public lazy var parameters: Set<Parameter> = {
-        return self.vectors.reduce(Set<Parameter>(),{(currentSet, nextVector) in
-            return currentSet.union(nextVector.parameters)
-        })
+        self.vectors.reduce(Set<Parameter>()) { currentSet, nextVector in
+            currentSet.union(nextVector.parameters)
+        }
     }()
 
     public var sparsityString: String {
@@ -62,11 +61,11 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
         let zeroNode: Node = Number(0)
 
         // First line
-        str += "┌\(" "*self.cols)┐\n"
+        str += "┌\(" " * self.cols)┐\n"
         for row in self {
             str += "│"
             for el in row {
-                if(el == zeroNode) {
+                if el == zeroNode {
                     str += " "
                 } else {
                     str += "*"
@@ -74,7 +73,7 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
             }
             str += "│\n"
         }
-        str += "└\(" "*self.cols)┘"
+        str += "└\(" " * self.cols)┘"
 
         return str
     }
@@ -88,7 +87,6 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
     }
 
     public func evaluate(withValues values: [Node: Double]) throws -> Matrix {
-
         guard self.count != 0 else {
             throw SymbolicMathError.misc("Cannot evaluate empty symbolic matrix")
         }
@@ -111,7 +109,7 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
         return Matrix(self.count, self.first!.count, matrixValues)
     }
 
-    public func evaluate(_ x: Vector, withParameters parameterValues: Dictionary<Parameter, Double> = [:]) throws -> Matrix {
+    public func evaluate(_ x: Vector, withParameters parameterValues: [Parameter: Double] = [:]) throws -> Matrix {
         // Ensure the vector is the right length
         guard x.count == self.orderedVariables.count else {
             throw SymbolicMathError.misc("Vector \(x) is the wrong length (\(x.count) != \(self.variables.count)")
@@ -120,16 +118,16 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
         // We don't check that all parameters are represented. It will throw a clear error if one is missing when
         // it tries to evaluate it.
 
-        var values = Dictionary<Node, Double>()
+        var values = [Node: Double]()
         let orderedVariables = self.orderedVariables
-        for i in 0..<x.count {
+        for i in 0 ..< x.count {
             values[orderedVariables[i]] = x[i]
         }
 
         // merge in the parameters. The closure is meaningless, as there will never be conflicting
-        // keys in this case (only variables present in values, and only parameters present in 
+        // keys in this case (only variables present in values, and only parameters present in
         // parameterValues).
-        values.merge(parameterValues, uniquingKeysWith: {(current, _) in current})
+        values.merge(parameterValues, uniquingKeysWith: { current, _ in current })
 
         return try self.evaluate(withValues: values)
     }
@@ -142,7 +140,6 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
         return self.vectors[row][col]
     }
 
-
     public func index(after i: Index) -> Index {
         return self.vectors.index(after: i)
     }
@@ -154,16 +151,15 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
         // The elements set ordering will throw if there is a missing variable, so no need to
         // check here as well
 
-        for i in 0..<self.count {
+        for i in 0 ..< self.count {
             try self.vectors[i].setVariableOrder(self.orderedVariables)
         }
     }
 
     public func simplify() -> SymbolicMatrix {
+        if self.isSimplified { return self }
 
-        if(self.isSimplified) { return self }
-
-        let new = SymbolicMatrix(self.vectors.parallelMap({ $0.simplify() }))
+        let new = SymbolicMatrix(self.vectors.parallelMap { $0.simplify() })
         try! new.setVariableOrder(self.orderedVariables)
         new.isSimplified = true
         return new
@@ -173,8 +169,8 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
 public extension Matrix {
     var symbolic: SymbolicMatrix {
         var arrs: [SymbolicVector] = []
-        for i in 0..<self.rows {
-            arrs.append(SymbolicVector(self[row: i].map({ Number($0) })))
+        for i in 0 ..< self.rows {
+            arrs.append(SymbolicVector(self[row: i].map { Number($0) }))
         }
         return SymbolicMatrix(arrs)
     }

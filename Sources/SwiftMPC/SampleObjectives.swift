@@ -1,3 +1,5 @@
+// Created 2020 github @ianruh
+
 //
 // Created by Ian Ruh on 5/5/21.
 //
@@ -23,15 +25,15 @@ public struct QuinticObjective: Objective {
     }
 
     public func value(_ x: Vector) -> Double {
-        return x.map({ $0**4 }).reduce(0, +)
+        return x.map { $0 ** 4 }.reduce(0, +)
     }
 
     public func gradient(_ x: Vector) -> Vector {
-        return x.map({ 4*$0**3 })
+        return x.map { 4 * $0 ** 3 }
     }
 
     public func hessian(_ x: Vector) -> Matrix {
-        return diag(x.map({ 12*$0**2 }))
+        return diag(x.map { 12 * $0 ** 2 })
     }
 }
 
@@ -58,10 +60,10 @@ public struct QuadraticObjective: Objective {
     }
 
     public func gradient(_ x: Vector) -> Vector {
-        return 2.0.*x
+        return 2.0 .* x
     }
 
-    public func hessian(_ x: Vector) -> Matrix {
-        return 2.0.*eye(self.numVariables, self.numVariables)
+    public func hessian(_: Vector) -> Matrix {
+        return 2.0 .* eye(self.numVariables, self.numVariables)
     }
 }

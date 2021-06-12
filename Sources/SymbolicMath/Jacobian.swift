@@ -1,10 +1,12 @@
+// Created 2020 github @ianruh
+
 ////
 //// Created by Ian Ruh on 11/4/20.
 ////
 //
-//import LASwift
+// import LASwift
 //
-//public class Jacobian<Engine: SymbolicMathEngine>: CustomStringConvertible {
+// public class Jacobian<Engine: SymbolicMathEngine>: CustomStringConvertible {
 //    // Row major
 //    public var elements: [[Node]]
 //    public let system: System
@@ -85,4 +87,4 @@
 //        }
 //        return try self.eval(map)
 //    }
-//}
+// }

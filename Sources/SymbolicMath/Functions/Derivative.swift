@@ -1,5 +1,7 @@
-import RealModule
+// Created 2020 github @ianruh
+
 import Collections
+import RealModule
 
 public class Derivative: Node, Function {
     public let identifier: String = "d"
@@ -16,10 +18,10 @@ public class Derivative: Node, Function {
     override public var latex: String {
         var topStr = "\(self.diffOf.latex)"
         var bottomStr = "\(self.withRespectTo.latex)"
-        if(!self.diffOf.isBasic && !self.diffOf.isFunction) {
+        if !self.diffOf.isBasic, !self.diffOf.isFunction {
             topStr = "(\(topStr)"
         }
-        if(!self.withRespectTo.isBasic) {
+        if !self.withRespectTo.isBasic {
             bottomStr = "(\(bottomStr)"
         }
         return "\\frac{d \(topStr)}{d \(bottomStr)}"
@@ -53,7 +55,7 @@ public class Derivative: Node, Function {
         return "derivative\(hasher.finalize())"
     }
 
-    required public init(_ params: [Node]) {
+    public required init(_ params: [Node]) {
         self.diffOf = params[0]
         self.withRespectTo = params[1]
     }
@@ -72,7 +74,7 @@ public class Derivative: Node, Function {
     /// - Returns: The value the node evaluates to at the given points.
     /// - Throws: If evaluation fails for some reason.
     @inlinable
-    override public func evaluate(withValues values: [Node : Double]) throws -> Double {
+    override public func evaluate(withValues values: [Node: Double]) throws -> Double {
         // Try numerically
         guard let variable = self.withRespectTo as? Variable else {
             // TODO: Numerical derivatives with respect to non-variables (aka other functions)
@@ -81,13 +83,13 @@ public class Derivative: Node, Function {
         // assume machine precision ~ 2^-52
         let sqrtEpsilon = 0.000000014899
         let variableVal = try variable.evaluate(withValues: values)
-        let h = variableVal*sqrtEpsilon
+        let h = variableVal * sqrtEpsilon
         var x_back = values
         x_back[variable]! -= h
         var x_forward = values
         x_forward[variable]! += h
 
-        return try (self.diffOf.evaluate(withValues: x_forward) - self.diffOf.evaluate(withValues: x_back)) / (2*h)
+        return try (self.diffOf.evaluate(withValues: x_forward) - self.diffOf.evaluate(withValues: x_back)) / (2 * h)
     }
 
     override internal func equals(_ otherNode: Node) -> Bool {
@@ -100,7 +102,7 @@ public class Derivative: Node, Function {
 
     override public func contains<T: Node>(nodeType: T.Type) -> [Id] {
         var ids: [Id] = []
-        if(nodeType == Derivative.self) {
+        if nodeType == Derivative.self {
             ids.append(self.id)
         }
         ids.append(contentsOf: self.withRespectTo.contains(nodeType: nodeType))
@@ -109,16 +111,18 @@ public class Derivative: Node, Function {
     }
 
     @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
-        if(targetNode == self) {
+        if targetNode == self {
             return replacement
         } else {
-            return Derivative(self.diffOf.replace(targetNode, with: replacement), self.withRespectTo.replace(targetNode, with: replacement))
+            return Derivative(
+                self.diffOf.replace(targetNode, with: replacement),
+                self.withRespectTo.replace(targetNode, with: replacement)
+            )
         }
     }
 
-    public override func simplify() -> Node {
-
-        if(self.isSimplified) { return self }
+    override public func simplify() -> Node {
+        if self.isSimplified { return self }
 
         if let newNode = differentiate(self.diffOf.simplify(), wrt: self.withRespectTo.simplify()) {
             if let _ = newNode as? Derivative {
@@ -144,7 +148,7 @@ public class Derivative: Node, Function {
         hasher.combine(self.withRespectTo)
     }
 
-    override public func swiftCode(using representations: Dictionary<Node, String>) throws -> String {
+    override public func swiftCode(using _: [Node: String]) throws -> String {
         throw SymbolicMathError.noCodeRepresentation("Derivative node")
     }
 }
