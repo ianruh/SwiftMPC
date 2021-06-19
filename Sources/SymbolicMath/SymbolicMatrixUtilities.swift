@@ -4,11 +4,18 @@ import LASwift
 import RealModule
 
 public extension SymbolicMatrix {
+    
+    /// Initialize a symbolic matrix from a double list of variables. It is assumed that each nested `[Variable]` array is the same length,
+    /// otherwise the behavior is undefined.
+    /// - Parameter vecs: The variables that constitute each element of the symbolic matrix (in row major form).
     convenience init(_ vecs: [[Variable]]) {
         self.init(vecs.map { SymbolicVector($0) })
     }
 }
 
+/// Take the element wise sum of the symbolic matrix.
+/// - Parameter mat: The symbolic matrix to sum.
+/// - Returns: The node representing the sum of the matrix.
 public func sum(_ mat: SymbolicMatrix) -> Node {
     return mat.flat.reduce(Number(0)) { currentSum, nextNode in
         currentSum + nextNode

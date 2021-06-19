@@ -3,6 +3,9 @@
 import LASwift
 import RealModule
 
+/// Take an elementwise sum of the nodes  in the vector.
+/// - Parameter vec: The vector to sum.
+/// - Returns: The node representing the sum of each element in the vector.
 public func sum(_ vec: SymbolicVector) -> Node {
     return vec.elements.reduce(Number(0)) { currentSum, nextNode in
         currentSum + nextNode

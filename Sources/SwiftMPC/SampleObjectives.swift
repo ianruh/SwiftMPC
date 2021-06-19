@@ -9,7 +9,7 @@ import SymbolicMath
 ///
 /// Just a simple quintic objective
 ///
-public struct QuinticObjective: Objective {
+internal struct QuinticObjective: Objective {
     public let numVariables: Int
     public let numConstraints: Int = 0
 
@@ -40,7 +40,7 @@ public struct QuinticObjective: Objective {
 ///
 /// Just a simple quadratic objective
 ///
-public struct QuadraticObjective: Objective {
+internal struct QuadraticObjective: Objective {
     public let numVariables: Int
     public let numConstraints: Int = 0
 

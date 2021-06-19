@@ -6,6 +6,9 @@
 import LASwift
 
 public extension Node {
+    
+    /// Find the hessian of the node using the node's variable ordering.
+    /// - Returns: A symbolic Matrix representing the hessian of the node.
     func hessian() -> SymbolicMatrix? {
         let variables = self.orderedVariables
 

@@ -120,6 +120,12 @@ public class Variable: Node, ExpressibleByStringLiteral {
 }
 
 public extension Variable {
+    
+    /// Construct an array of variables with the given base name.
+    /// - Parameters:
+    ///   - name: The base name for the array.
+    ///   - count: The length of the array.
+    /// - Returns: An array of variables with the given base name and length.
     static func vector(_ name: String, count: Int) -> [Variable] {
         var arr: [Variable] = []
         for i in 0 ..< count {
@@ -127,7 +133,13 @@ public extension Variable {
         }
         return arr
     }
-
+    
+    /// Construct a matrix (really a doubly nested array) of variables with the given base name.
+    /// - Parameters:
+    ///   - name: The base name for the matrix.
+    ///   - rows: The number of rows of variables.
+    ///   - cols: The number of columns of variables.
+    /// - Returns: The double nested  list of variables.
     static func matrix(_ name: String, rows: Int, cols: Int) -> [[Variable]] {
         var arrs: [[Variable]] = []
         for i in 0 ..< rows {

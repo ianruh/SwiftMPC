@@ -3,10 +3,9 @@
 /// Differentiate a given node.
 ///
 /// - Parameters:
-///   - term:
-///   - variable:
-/// - Returns: The derivative, or nil for 0
-/// - Throws:
+///   - term: The term to differentuate.
+///   - variable: The variable to differentiate with respect to.
+/// - Returns: The derivative, or nil if the derivative could not be found.
 public func differentiate(_ term: Node, wrt variableNode: Node, partially: Bool = true) -> Node? {
     guard let variable = variableNode as? Variable else {
         // TODO: Figure out how to do this with matching
@@ -184,6 +183,7 @@ public func differentiate(_ term: Node, wrt variableNode: Node, partially: Bool 
     }
 }
 
+/// This is just a utility to help simplify doing the chain rule.
 private struct BinaryMultiply {
     var left: Node
     var right: Node
@@ -198,6 +198,12 @@ private struct BinaryMultiply {
         self.right = Multiply(right.left, right.right)
     }
 
+    /// Function is of the same for as the Node deirvative, so is essenntially interchangable.
+    ///
+    /// - Parameters:
+    ///   - variable: The variable to take the derivative with respect to.
+    ///   - partially: Whether to take a full or partial derivative.
+    /// - Returns: The derivative, if found.
     func derivative(wrt variable: Node, partially: Bool) -> Node? {
         let dleftOp = differentiate(self.left, wrt: variable, partially: partially)
         let drightOp = differentiate(self.right, wrt: variable, partially: partially)

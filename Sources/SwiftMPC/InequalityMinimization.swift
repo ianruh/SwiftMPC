@@ -4,26 +4,31 @@ import LASwift
 import RealModule
 
 public struct InequalitySolver {
+    
+    /// The hyper parameters used by the solver.
     public var hyperParameters = HyperParameters()
 
+    
     @usableFromInline
     internal var hasEqaulityConstraints: Bool = false
 
     public init() { }
-
+    
     /// The norm of
+    ///
+    /// ```
     /// ┌          ┐
     /// │ ∇f + Aᵀν │
     /// │  Ax - b  │
     /// └          ┘
+    /// ```
     ///
     /// - Parameters:
-    ///   - objective:
-    ///   - equalityConstraintMatrix:
-    ///   - equalityConstraintVector:
-    ///   - primal:
-    ///   - dual:
-    /// - Returns:
+    ///   - objective: The objective veing minimized.
+    ///   - primal: The current primal value.
+    ///   - dual: The current dual value
+    ///   - t: The current barrier parameter.
+    /// - Returns: The residual  of the norm.
     @inlinable
     internal func residualNorm(
         objective: Objective,
@@ -44,7 +49,21 @@ public struct InequalitySolver {
             return norm(self.barrierGradient(objective: objective, at: primal, t: t))
         }
     }
-
+    
+    /// Perform an infeasible start line search on the problem.
+    ///
+    /// If an exception is thrown saying that the maximum number of line search iterations has been reached,
+    /// That usually means the current  primal/dual is infeasible, so it can't progress in any direction.
+    ///
+    /// - Parameters:
+    ///   - objective: The objective being minimized.
+    ///   - primalDirection: The primal direction to search in.
+    ///   - dualDirection: The dual direction to seach in.
+    ///   - startPrimal: The starting primal values.
+    ///   - startDual: The starting dual value.
+    ///   - t: The current barrier parameter.
+    /// - Throws: If the maximum number of line search iterations has been hit.
+    /// - Returns: The step length found.
     @inlinable
     internal func infeasibleLinesearch(objective: Objective,
                                        primalDirection: Vector,
@@ -87,22 +106,44 @@ public struct InequalitySolver {
         }
         return s
     }
-
+    
+    /// The value of the barrier augmented objective.
+    /// - Parameters:
+    ///   - objective: The objective  being minimized.
+    ///   - x: The current primal values.
+    ///   - t: The current barrier  parameter.
+    /// - Returns: The augmented  objective value.
     @inlinable
     internal func barrierValue(objective: Objective, at x: Vector, t: Double) -> Double {
         return t * objective.value(x) + objective.inequalityConstraintsValue(x)
     }
-
+    
+    /// The value of the barrier augmented objective's gradient.
+    /// - Parameters:
+    ///   - objective: The objective being minimized.
+    ///   - x: The current primal value.
+    ///   - t: The current barrier parameter.
+    /// - Returns: The augmented objective's gradient.
     @inlinable
     internal func barrierGradient(objective: Objective, at x: Vector, t: Double) -> Vector {
         return t .* objective.gradient(x) + objective.inequalityConstraintsGradient(x)
     }
-
+    
+    /// The value  of the augmented objective's hessian.
+    /// - Parameters:
+    ///   - objective: The objective being minimized.
+    ///   - x: The cureent primal value.
+    ///   - t: The current barrier parameter.
+    /// - Returns: The augmented  objective's hessian.
     @inlinable
     internal func barrierHessian(objective: Objective, at x: Vector, t: Double) -> Matrix {
         return t .* objective.hessian(x) + objective.inequalityConstraintsHessian(x)
     }
-
+    
+    /// Minimize an infeasible start, inequality constrained objective.
+    /// - Parameter objective: The objective to minimize.
+    /// - Throws: For many reasons, including (ill formed problems, evaluation problems, line search problems, and others).
+    /// - Returns: The minimum objective value, the minimum's primal, and the minimum's dual).
     public mutating func infeasibleInequalityMinimize(objective: Objective) throws
         -> (minimum: Double, primal: Vector, dual: Vector)
     {
@@ -243,26 +284,48 @@ public struct InequalitySolver {
 
         return (minimum: minimum, primal: currentPoint, dual: currentDual)
     }
-
+    
+    /// This struct is just a container for the hyper parameters that can be used to customize the behavior of the solver.
+    ///
+    /// The default values of fairly aggressive, so will find pretty precisely the minimum. For real time applications, many of the
+    /// iteration maximums can be heavily restricted.
     public struct HyperParameters {
-        // Iteration Maximums
+        //==== Iteration Maximums ====
+        
+        /// The maximum number of newton steps per homotopy stage.
         public var newtonStepsStageMaximum: Int = 100
+        
+        /// The maximum number of homotopy stages to to perform.
         public var homotopyStagesMaximum: Int = 50
 
-        // Epsilons
+        //==== Epsilons ====
+        
+        /// The epsilon value used for the residual.
         public var residualEpsilon: Double = 1.0e-3
+        
+        /// The epsilon value used for the primal-dual gap.
         public var dualGapEpsilon: Double = 1.0e-3
 
-        // Homtopy Parameters
+        //==== Homtopy Parameters ====
+        
+        /// The starting value of the homotopy barrier parameter.
         public var homotopyParameterStart: Double = 1.0
+        
+        /// The multiplier for the homotopy barrier parameter. It is the factor that the parameter
+        /// increases by after every stage.
         public var homotopyParameterMultiplier: Double = 20.0
 
-        // Line Search
+        //==== Line Search ====
+        /// Back tracking line search alpha parameter [reference](https://en.wikipedia.org/wiki/Backtracking_line_search
         public var lineSearchAlpha: Double = 0.25
+        /// Back tracking line  search beta  parameter [reference](https://en.wikipedia.org/wiki/Backtracking_line_search)
         public var lineSearchBeta: Double = 0.5
+        /// The maximum number  of line search iterations.
         public var lineSearchMaximumIterations: Int = 100
 
-        // Misc
+        //==== Misc ====
+        /// A threshold for the value of the objective, If this value is achieved, then the solver returns.
+        /// By default, the value is -inf, so has no effect on the solver.
         public var valueThreshold: Double = -1 * Double.infinity
     }
 }

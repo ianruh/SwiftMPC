@@ -5,12 +5,15 @@ import LASwift
 import RealModule
 
 extension String {
+
+    /// Returns true is the string is an integer.
     var isInteger: Bool {
         guard self.count > 0 else { return false }
         let nums: Set<Character> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
         return Set(self).isSubset(of: nums)
     }
 
+    /// Returns true if the string is a double
     var isDouble: Bool {
         guard self.count > 0 else { return false }
         let parts = self.split(separator: ".")
@@ -22,10 +25,12 @@ extension String {
         return false
     }
 
+    /// Returns true if it is an integer or a double.
     var isNumber: Bool {
         return self.isInteger || self.isDouble
     }
 
+    /// Returns true if it is only letters
     var isAlphabetic: Bool {
         guard self.count > 0 else { return false }
         let nums: Set<Character> = [
@@ -85,6 +90,7 @@ extension String {
         return Set(self).isSubset(of: nums)
     }
 
+    /// Removes all whitespace (space, tab, new line) from the string.
     public func cleanWhiteSpace() -> String {
         var str = ""
         let whitespace: Set<Character> = [" ", "\t", "\n"]
@@ -96,6 +102,7 @@ extension String {
         return str
     }
 
+    /// Does the string have a valid set of opening and closing parantheses.
     var hasValidParetheses: Bool {
         var level = 0
         for c in self {

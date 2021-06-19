@@ -114,6 +114,11 @@ public class Parameter: Node {
 }
 
 public extension Parameter {
+    /// Construct an array of parameters with the given base name.
+    /// - Parameters:
+    ///   - name: The base name for the array.
+    ///   - count: The length of the array.
+    /// - Returns: An array of parameters  with the given base name and length.
     static func vector(_ name: String, count: Int) -> [Parameter] {
         var arr: [Parameter] = []
         for i in 0 ..< count {
@@ -122,6 +127,12 @@ public extension Parameter {
         return arr
     }
 
+    /// Construct a matrix (really a doubly nested array) of parameters with the given base name.
+    /// - Parameters:
+    ///   - name: The base name for the matrix.
+    ///   - rows: The number of rows of parameters.
+    ///   - cols: The number of columns of parameters.
+    /// - Returns: The double nested list of parameters.
     static func matrix(_ name: String, rows: Int, cols: Int) -> [[Parameter]] {
         var arrs: [[Parameter]] = []
         for i in 0 ..< rows {

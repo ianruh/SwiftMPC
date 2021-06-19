@@ -81,6 +81,7 @@ public func .<= (_ lhs: [Double?]?, _ rhs: Vector) -> Bool {
 
 // Matrix
 public extension Matrix {
+    /// A string describing the sparsity pattern of the matrix.
     var sparsityString: String {
         var str: String = ""
 

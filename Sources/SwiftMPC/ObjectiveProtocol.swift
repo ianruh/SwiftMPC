@@ -34,49 +34,80 @@ public protocol Objective {
 
     //================= Equality ================
 
+    /// The equality constraint matrix. If the equality constraints are non-linear,
+    /// this has to be the linearized equality constraints (possibly about the current/previous state).
     var equalityConstraintMatrix: Matrix? { get }
-
+    
+    /// The reuality constraint vector (the right hand side of  Ax=b).
     var equalityConstraintVector: Vector? { get }
 
     //=========== Inequality Constraints ============
 
+    /// The sum of the `-1*log(-1*constraint)` of the inequality constraints in normal form  (e.g.  ≤ 0).
+    /// Other barrier functions should work, but I haven't tried them.
+    /// - Parameter x: The current primal value.
     func inequalityConstraintsValue(_ x: Vector) -> Double
 
+    /// The value of the gradient of the inequality constraints value.
+    /// - Parameter x: The current primal value.
     func inequalityConstraintsGradient(_ x: Vector) -> Vector
 
+    /// The value of the hessian of the inequality constraints value.
+    /// - Parameter x: The current primal value.
     func inequalityConstraintsHessian(_ x: Vector) -> Matrix
 
     //=============== Start Point ================
 
-    /// Strictly feasible start point
-    /// dual should be zeros is you don't have one or care
+    /// Strictly feasible start point.
+    /// dual should be zeros is you don't have one or care (though of the current dimmensions)
+    ///
+    /// For reference,  `primal.count` = numbe of variables, `dual.count` = number of equality constraints.
     func startPoint() throws -> (primal: Vector, dual: Vector)
 }
 
 public extension Objective {
     //================= Place holders that should be overriden if there are constraints ================
 
+    /// Place holder incase the provided objective has no inequality constraints.
+    /// - Returns: 0.0
     func inequalityConstraintsValue(_: Vector) -> Double {
         return 0.0
     }
 
+    /// Place holder incase the provided objective has no inequality constraints.
+    /// - Returns: Vector of 0's.
     func inequalityConstraintsGradient(_: Vector) -> Vector {
         return zeros(self.numVariables)
     }
 
+    /// Place holder incase the provided objective has no inequality constraints.
+    /// - Returns: Matrix of 0's.
     func inequalityConstraintsHessian(_: Vector) -> Matrix {
         return zeros(self.numVariables, self.numVariables)
     }
 
     //================= Step Solver Default Implementation ================
-    // TODO: This doesn't handle the case of singular H (it will explode in some random direction)
-    // Here are some options: https://math.stackexchange.com/questions/2092999/a-question-about-newtons-method-for-equality-constrained-convex-minimization
-    // It shouldn't come up if our objective is strongly convex, as then we are gaurenteed the hessian
-    // will be non-singular. However, for the problem of finding a feasible point, we  minimize the scalar
-    // function s, which is clearly not convex (it doesn't even have a minimum). We adapted the solver to
-    // stop when s became negative, but it will explode before  then. In stead, we add a  onstraint to that
-    // problem that s >= -10. This *shouldn't* restrict any feasible objectives, and will gaurentee that our
-    // barrier augmented objective is non-singular.
+    
+    /// Step Solver Default Implementation
+    ///
+    /// TODO: This doesn't handle the case of singular H (it will explode in some random direction)
+    ///
+    /// [Here are some options](https://math.stackexchange.com/questions/2092999/a-question-about-newtons-method-for-equality-constrained-convex-minimization)
+    ///
+    /// It shouldn't come up if our objective is strongly convex, as then we are gaurenteed the hessian
+    /// will be non-singular. However, for the problem of finding a feasible point, we  minimize the scalar
+    /// function s, which is clearly not convex (it doesn't even have a minimum). We adapted the solver to
+    /// stop when s became negative, but it will explode before then. In stead, we add a constraint to that
+    /// problem that s >= -10. This *shouldn't* restrict any feasible objectives, and will gaurentee that our
+    /// barrier augmented objective is non-singular.
+    ///
+    /// - Parameters:
+    ///   - gradient: The current gradient of the objective.
+    ///   - hessian: The current hessian of the objective.
+    ///   - primal: The current primal.
+    ///   - dual: The current dual.
+    /// - Throws: If some part of the objective cannot be evaulated or the resulting system is infeasible.
+    /// - Returns: The primal and dual newton steps.
     func stepSolver(gradient: Vector, hessian: Matrix, primal: Vector,
                     dual: Vector) throws -> (primalStepDirection: Vector, dualStepDirection: Vector)
     {

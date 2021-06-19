@@ -6,18 +6,39 @@ import LASwift
 import RealModule
 import SymbolicMath
 
+/// A symbolic objectibe that can be passed to a solver to be minimized.
+///
+/// Due to representing almost everything symbolically internally, it isn't the most
+/// performant way of represnting a problem. However, it can also generate
+/// a 'numeric' objective that can then be compiled and passed to a solver. Since
+/// the compiler can perform optimizations on the generated code, numeric objectives
+/// are much faster and should be used for anything requiring realtime operation, except  for
+/// the simplest of toy problems.
 public struct SymbolicObjective: Objective {
+    
+    /// The set of variables involved in any form in the objective.
     public let variables: Set<Variable>
+    
+    /// The number of variables involved in the objective.
     public var numVariables: Int {
         return self.variables.count
     }
-
+    
+    /// The ordering of the variables used by the objective. This is very important when it
+    /// comes to exploiting the structure of the problem to solve for newton steps more
+    /// efficiently.
     public var orderedVariables: OrderedSet<Variable>
-
+    
+    /// The node describing the objective of the problem.
     public var objectiveNode: Node
+    
+    /// The symbolic gradient of the objective
     public var symbolicGradient: SymbolicVector = []
+    
+    /// The symbolic hessian  of the objective
     public var symbolicHessian: SymbolicMatrix = []
-
+    
+    /// The number of inequality constraints involved in the objective.
     public var numConstraints: Int {
         if let constraints = self.symbolicConstraintsVector {
             return constraints.count
@@ -25,32 +46,66 @@ public struct SymbolicObjective: Objective {
             return 0
         }
     }
-
+    
+    /// A symbolic vector of the inequality constraints in normal form (e.g. ≤ 0).
     public var symbolicConstraintsVector: SymbolicVector?
+    
+    /// The sum of the -log(-1*constraint) of the values.
     public var symbolicConstraintsValue: Node?
+    
+    /// The gradient of the sum of the negative log of the negative of the constraints
     public var symbolicConstraintsGradient: SymbolicVector?
+    
+    /// The hessian of the sum of the negative log of the negative of the constraints
     public var symbolicConstraintsHessian: SymbolicMatrix?
-
+    
+    /// The symbolic representation of the equality constraint matrix
     public var symbolicEqualityConstraintMatrix: SymbolicMatrix?
+    
+    /// The symbolic representation of the equality constraint vector.
     public var symbolicEqualityConstraintVector: SymbolicVector?
-
+    
+    /// The numeric equality constraint matrix using the objective's parameter values.
     public var equalityConstraintMatrix: Matrix? {
         return try! self.symbolicEqualityConstraintMatrix?.evaluate(withValues: self.parameterValues)
     }
 
+    /// The numeric equality constraint vector using the objective's parameter values.
     public var equalityConstraintVector: Vector? {
         return try! self.symbolicEqualityConstraintVector?.evaluate(withValues: self.parameterValues)
     }
-
+    
+    /// The starting value for the primal that is passed to the solver
     let startPrimal: Vector?
+    
+    /// The starting value for the dual that is passed to the solver
     let startDual: Vector?
-
+    
+    /// The parameter values to be used when solving the system. Right now, only passing them in when constructed is supported.
     @usableFromInline
     var parameterValues: [Parameter: Double] = [:]
+    
+    /// The parameters used in the objective
     var parameters: Set<Parameter> = []
 
-    // TODO: The equality constraints have some very strong assumptions
-    // The equality constraint matrix and vector overule the symbolic equality constraints
+    /// Initialize a symbolic objective
+    ///
+    /// TODO: The equality constraints have some very strong assumptions
+    ///
+    /// The equality constraint matrix and vector overule the symbolic equality constraints
+    ///
+    /// The parameter values are not relevant if the symbolic objective is only being used for code generation.
+    ///
+    /// - Parameters:
+    ///   - node: The node representing the objective to me minimized.
+    ///   - optionalConstraints: The inequality constraints in normal form (e.g. ≤ 0)
+    ///   - optionalEqualityConstraints: An array of assignment nodes representing linear equality constraints.
+    ///   - optionalEqualityConstraintMatrix: A symbolic matrix representing A in the equation Ax=b.
+    ///   - optionalEqualityConstraintVector: A symbolic vector representing b in the equation Ax=b.
+    ///   - startPrimal: The starting primal value. If not provided, then a strictly feasible one is found.
+    ///   - startDual: The starting dual value. If not provided, then a zero vector is used.
+    ///   - optionalOrdering: The ordering of the variables to use in the objective
+    ///   - optionalParameterValues: The parameter values used throughout the problem.
     public init?(
         min node: Node,
         subjectTo optionalConstraints: SymbolicVector? = nil,
@@ -400,8 +455,13 @@ public struct SymbolicObjective: Objective {
             return nil
         }
     }
-
-    public mutating func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection, C.Element == Variable {
+    
+    /// Set the variable order for the objective, gradient, hessian, and all constraints. Does not make sense to call after initialization, as gradients and
+    /// hessians will have already been constructed.
+    ///
+    /// - Parameter newOrdering: The new variable ordering.
+    /// - Throws: If not all variables are represented in the new ordering.
+    internal mutating func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection, C.Element == Variable {
         try self.variables.forEach { variable in
             guard newOrdering.contains(variable) else {
                 throw SwiftMPCError.misc("New ordering \(newOrdering) does not contain variable \(variable)")
@@ -428,12 +488,17 @@ public struct SymbolicObjective: Objective {
     }
 
     /// We want to solve the system
+    ///
+    /// ```
     ///  min s over x,s
     ///      f_i(x) <= s
     ///      Ax = b
+    /// ```
     ///
     /// If s is negative then we are strictly feasible, if positive then not feasible
     /// If 0, then it's tricky, but we'll call it infeasible to be safe
+    /// - Throws: If a start point cannot be found.
+    /// - Returns: A strictly feasible primal vector and a dual vector.
     public func startPoint() throws -> (primal: Vector, dual: Vector) {
         // We only need to find a strictly feasible point if we actually have inequality constraints
         if let symbolicConstraints = self.symbolicConstraintsVector {
@@ -640,7 +705,10 @@ public struct SymbolicObjective: Objective {
             return Matrix(self.numVariables, self.numVariables, Double.nan)
         }
     }
-
+    
+    /// The sum of the negative logs of the negative of the constraints. Required by the `Objective` protocol.
+    /// - Parameter x: The current primal.
+    /// - Returns: The sum of the negative logs of the negative of the constraints
     @inlinable
     public func inequalityConstraintsValue(_ x: Vector) -> Double {
         // Check that we actually have constraints
@@ -656,7 +724,10 @@ public struct SymbolicObjective: Objective {
             return Double.nan
         }
     }
-
+    
+    /// The gradient of the negative logs of the negative of the constraints. Required by the `Objective` protocol.
+    /// - Parameter x: The current primal.
+    /// - Returns: The gradient of the negative logs of the negative of the constraints.
     @inlinable
     public func inequalityConstraintsGradient(_ x: Vector) -> Vector {
         // Check that we actually have constraints
@@ -672,7 +743,10 @@ public struct SymbolicObjective: Objective {
             return Array(repeating: Double.nan, count: self.numConstraints)
         }
     }
-
+    
+    /// The hessian of the negative logs of the negative of the constraints. Required by the `Objective` protocol.
+    /// - Parameter x: The current primal.
+    /// - Returns: The hessian of the negative logs of the negative of the constraints.
     @inlinable
     public func inequalityConstraintsHessian(_ x: Vector) -> Matrix {
         // Check that we actually have constraints
