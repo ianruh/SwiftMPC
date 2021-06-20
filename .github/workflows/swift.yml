@@ -16,8 +16,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build
-      run: swift build  -v
+      run: swift build -Xswiftc -D -Xswiftc NO_PRINT
     - name: Run tests
-      run: swift test -v
-    - name: Build With Options
-      run: make build
+      run: swift test -Xswiftc -D -Xswiftc NO_PRINT
