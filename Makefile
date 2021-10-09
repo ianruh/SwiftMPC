@@ -10,6 +10,9 @@ COMPILER_OPT = -Xcc -Ofast
 NO_NUMERIC_OBJECTIVE = -Xswiftc -D -Xswiftc NO_NUMERIC_OBJECTIVE
 RELEASE = -c release # Release build is broken on linux (compiler bug), so disabled for now
 
+# Utility Variables
+current_dir = $(shell pwd)
+
 build:
 	swift build $(RELEASE) --build-tests $(WHOLE_MODULE) $(UNCHECKED) $(FAST_MATH) $(COMPILER_OPT) $(EXTRAS)
 
@@ -24,6 +27,20 @@ test-debug:
 
 format:
 	swiftformat --config .swiftformat Sources/
+
+documentation:
+	rm -rf docs/ && mkdir docs/
+	jazzy --output docs/ \
+		--sdk macosx \
+		--source-directory ./ \
+		--author "Ian Ruh" \
+		--author_url "https://ian.ruh.io" \
+		--module SwiftMPC \
+		--module-version "0.0.1" \
+		--readme README.md \
+		--root-url http://ian.ruh.io/SwiftMPC/  \
+		--github_url https://github.com/ianruh/SwiftMPC \
+		--use-safe-filenames
 
 clean:
 	rm -rf .build/
