@@ -5,6 +5,7 @@
 //
 import LASwift
 
+/// The protocol that defines the operations all objectives must conform to.
 public protocol Objective {
     /// Number of variables taken by the objective
     var numVariables: Int { get }
