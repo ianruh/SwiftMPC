@@ -1,9 +1,8 @@
-FROM swift:bionic
+FROM swift:5.5.0-focal
 
 # install miniconda
 RUN apt update && apt install -y make liblapacke-dev
 
-# Copy over the conetnts
-COPY . /SwiftMPC
-
 WORKDIR /SwiftMPC
+
+COPY . /SwiftMPC
