@@ -1,0 +1,10 @@
+language: ruby
+
+services:
+  - docker
+
+before_install:
+  - docker build -t swift-mpc .
+
+script:
+  - docker run swift-mpc make test-debug
