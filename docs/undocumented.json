@@ -1,0 +1,145 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/CodeGen.swift",
+      "line": 7,
+      "symbol": "SymbolicObjective.printSwiftCode(objectiveName:stateVectorName:parameterRepresentations:matrixExtractors:vectorExtractors:variableExtractors:toFile:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/CodeGen.swift",
+      "line": 245,
+      "symbol": "SymbolicObjective.printSwiftCode2(objectiveName:stateVectorName:parameterRepresentations:matrixExtractors:vectorExtractors:variableExtractors:primalConstructor:toFile:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Errors.swift",
+      "line": 3,
+      "symbol": "SwiftMPCError",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Errors.swift",
+      "line": 4,
+      "symbol": "SwiftMPCError.wrongNumberOfVariables(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Errors.swift",
+      "line": 5,
+      "symbol": "SwiftMPCError.misc(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/InequalityMinimization.swift",
+      "line": 6,
+      "symbol": "InequalitySolver",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/InequalityMinimization.swift",
+      "line": 15,
+      "symbol": "InequalitySolver.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/ObjectiveProtocol.swift",
+      "line": 8,
+      "symbol": "Objective",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/ObjectiveProtocol.swift",
+      "line": 68,
+      "symbol": "Objective",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Utilities.swift",
+      "line": 15,
+      "symbol": "**(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Utilities.swift",
+      "line": 19,
+      "symbol": "norm(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Utilities.swift",
+      "line": 31,
+      "symbol": ".<=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Utilities.swift",
+      "line": 37,
+      "symbol": ".<=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Utilities.swift",
+      "line": 43,
+      "symbol": ".>=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Utilities.swift",
+      "line": 49,
+      "symbol": ".>=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Utilities.swift",
+      "line": 56,
+      "symbol": ".<=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Utilities.swift",
+      "line": 69,
+      "symbol": ".<=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Utilities.swift",
+      "line": 107,
+      "symbol": "*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Utilities.swift",
+      "line": 115,
+      "symbol": ".==(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Utilities.swift",
+      "line": 121,
+      "symbol": ".==(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/ianruh/Dev/SwiftMPC"
+}

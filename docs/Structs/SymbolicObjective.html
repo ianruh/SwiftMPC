@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SymbolicObjective Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Struct/SymbolicObjective" class="dashAnchor"></a>
+    <a title="SymbolicObjective Structure Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">SwiftMPC 0.0.1 Docs</a> (73% documented)</p>
+        <p class="header-right"><a href="https://github.com/ianruh/SwiftMPC"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://http%3A%2F%2Fian.ruh.io%2FSwiftMPC%2Fdocsets%2FSwiftMPC.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">SwiftMPC Reference</a>
+        <img id="carat" src="../img/carat.png" alt=""/>
+        SymbolicObjective Structure Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/SwiftMPCError.html">SwiftMPCError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Matrix.html">Matrix</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC1moiyS2S_SitF">*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC2mmoiyS2d_SdtF">**(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zleoiySbSaySdG_SaySdSgGSgtF">.&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zleoiySbSaySdG_SdtF">.&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zleoiySbSaySdSgGSg_SaySdGtF">.&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zleoiySbSd_SaySdGtF">.&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zeeoiySbSaySdG_SdtF">.==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zeeoiySbSd_SaySdGtF">.==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zgeoiySbSaySdG_SdtF">.&gt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zgeoiySbSd_SaySdGtF">.&gt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC4normySdSaySdGF">norm(_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Objective.html">Objective</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/InequalitySolver.html">InequalitySolver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/InequalitySolver/HyperParameters.html">– HyperParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SymbolicObjective.html">SymbolicObjective</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>SymbolicObjective</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SymbolicObjective</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/Objective.html">Objective</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>A symbolic objectibe that can be passed to a solver to be minimized.</p>
+
+<p>Due to representing almost everything symbolically internally, it isn&rsquo;t the most
+performant way of represnting a problem. However, it can also generate
+a &lsquo;numeric&rsquo; objective that can then be compiled and passed to a solver. Since
+the compiler can perform optimizations on the generated code, numeric objectives
+are much faster and should be used for anything requiring realtime operation, except  for
+the simplest of toy problems.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV9variablesShy0C4Math8VariableCGvp"></a>
+                    <a name="//apple_ref/swift/Property/variables" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV9variablesShy0C4Math8VariableCGvp">variables</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The set of variables involved in any form in the objective.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">variables</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">Variable</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV12numVariablesSivp"></a>
+                    <a name="//apple_ref/swift/Property/numVariables" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV12numVariablesSivp">numVariables</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The number of variables involved in the objective.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">numVariables</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV16orderedVariables18OrderedCollections0G3SetVy0C4Math8VariableCGvp"></a>
+                    <a name="//apple_ref/swift/Property/orderedVariables" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV16orderedVariables18OrderedCollections0G3SetVy0C4Math8VariableCGvp">orderedVariables</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The ordering of the variables used by the objective. This is very important when it
+comes to exploiting the structure of the problem to solve for newton steps more
+efficiently.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">orderedVariables</span><span class="p">:</span> <span class="kt">OrderedSet</span><span class="o">&lt;</span><span class="kt">Variable</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV13objectiveNode0C4Math0F0Cvp"></a>
+                    <a name="//apple_ref/swift/Property/objectiveNode" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV13objectiveNode0C4Math0F0Cvp">objectiveNode</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The node describing the objective of the problem.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">objectiveNode</span><span class="p">:</span> <span class="kt">Node</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV16symbolicGradient0C4Math0C6VectorCvp"></a>
+                    <a name="//apple_ref/swift/Property/symbolicGradient" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV16symbolicGradient0C4Math0C6VectorCvp">symbolicGradient</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The symbolic gradient of the objective</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">symbolicGradient</span><span class="p">:</span> <span class="kt">SymbolicVector</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV15symbolicHessian0C4Math0C6MatrixCvp"></a>
+                    <a name="//apple_ref/swift/Property/symbolicHessian" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV15symbolicHessian0C4Math0C6MatrixCvp">symbolicHessian</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The symbolic hessian  of the objective</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">symbolicHessian</span><span class="p">:</span> <span class="kt">SymbolicMatrix</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV14numConstraintsSivp"></a>
+                    <a name="//apple_ref/swift/Property/numConstraints" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV14numConstraintsSivp">numConstraints</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The number of inequality constraints involved in the objective.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">numConstraints</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV25symbolicConstraintsVector0C4Math0cG0CSgvp"></a>
+                    <a name="//apple_ref/swift/Property/symbolicConstraintsVector" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV25symbolicConstraintsVector0C4Math0cG0CSgvp">symbolicConstraintsVector</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A symbolic vector of the inequality constraints in normal form (e.g. ≤ 0).</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">symbolicConstraintsVector</span><span class="p">:</span> <span class="kt">SymbolicVector</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV24symbolicConstraintsValue0C4Math4NodeCSgvp"></a>
+                    <a name="//apple_ref/swift/Property/symbolicConstraintsValue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV24symbolicConstraintsValue0C4Math4NodeCSgvp">symbolicConstraintsValue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The sum of the -log(-1*constraint) of the values.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">symbolicConstraintsValue</span><span class="p">:</span> <span class="kt">Node</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV27symbolicConstraintsGradient0C4Math0C6VectorCSgvp"></a>
+                    <a name="//apple_ref/swift/Property/symbolicConstraintsGradient" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV27symbolicConstraintsGradient0C4Math0C6VectorCSgvp">symbolicConstraintsGradient</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The gradient of the sum of the negative log of the negative of the constraints</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">symbolicConstraintsGradient</span><span class="p">:</span> <span class="kt">SymbolicVector</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV26symbolicConstraintsHessian0C4Math0C6MatrixCSgvp"></a>
+                    <a name="//apple_ref/swift/Property/symbolicConstraintsHessian" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV26symbolicConstraintsHessian0C4Math0C6MatrixCSgvp">symbolicConstraintsHessian</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The hessian of the sum of the negative log of the negative of the constraints</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">symbolicConstraintsHessian</span><span class="p">:</span> <span class="kt">SymbolicMatrix</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV32symbolicEqualityConstraintMatrix0C4Math0cH0CSgvp"></a>
+                    <a name="//apple_ref/swift/Property/symbolicEqualityConstraintMatrix" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV32symbolicEqualityConstraintMatrix0C4Math0cH0CSgvp">symbolicEqualityConstraintMatrix</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The symbolic representation of the equality constraint matrix</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">symbolicEqualityConstraintMatrix</span><span class="p">:</span> <span class="kt">SymbolicMatrix</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV32symbolicEqualityConstraintVector0C4Math0cH0CSgvp"></a>
+                    <a name="//apple_ref/swift/Property/symbolicEqualityConstraintVector" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV32symbolicEqualityConstraintVector0C4Math0cH0CSgvp">symbolicEqualityConstraintVector</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The symbolic representation of the equality constraint vector.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">symbolicEqualityConstraintVector</span><span class="p">:</span> <span class="kt">SymbolicVector</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV24equalityConstraintMatrix7LASwift0G0CSgvp"></a>
+                    <a name="//apple_ref/swift/Property/equalityConstraintMatrix" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV24equalityConstraintMatrix7LASwift0G0CSgvp">equalityConstraintMatrix</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The numeric equality constraint matrix using the objective&rsquo;s parameter values.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">equalityConstraintMatrix</span><span class="p">:</span> <span class="kt">Matrix</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV24equalityConstraintVectorSaySdGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/equalityConstraintVector" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV24equalityConstraintVectorSaySdGSgvp">equalityConstraintVector</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The numeric equality constraint vector using the objective&rsquo;s parameter values.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">equalityConstraintVector</span><span class="p">:</span> <span class="kt">Vector</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV3min9subjectTo19equalityConstraints0H16ConstraintMatrix0hJ6Vector11startPrimal0M4Dual8ordering15parameterValuesACSg0C4Math4NodeC_AN0cL0CSgSayAN6AssignCGSgAN0cK0CSgASSaySdGSgA0_18OrderedCollections0V3SetVyAN8VariableCGSgSDyAN9ParameterCSdGtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(min:subjectTo:equalityConstraints:equalityConstraintMatrix:equalityConstraintVector:startPrimal:startDual:ordering:parameterValues:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV3min9subjectTo19equalityConstraints0H16ConstraintMatrix0hJ6Vector11startPrimal0M4Dual8ordering15parameterValuesACSg0C4Math4NodeC_AN0cL0CSgSayAN6AssignCGSgAN0cK0CSgASSaySdGSgA0_18OrderedCollections0V3SetVyAN8VariableCGSgSDyAN9ParameterCSdGtcfc">init(min:<wbr>subjectTo:<wbr>equalityConstraints:<wbr>equalityConstraintMatrix:<wbr>equalityConstraintVector:<wbr>startPrimal:<wbr>startDual:<wbr>ordering:<wbr>parameterValues:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialize a symbolic objective</p>
+
+<p>TODO: The equality constraints have some very strong assumptions</p>
+
+<p>The equality constraint matrix and vector overule the symbolic equality constraints</p>
+
+<p>The parameter values are not relevant if the symbolic objective is only being used for code generation.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">?(</span>
+    <span class="n">min</span> <span class="nv">node</span><span class="p">:</span> <span class="kt">Node</span><span class="p">,</span>
+    <span class="n">subjectTo</span> <span class="nv">optionalConstraints</span><span class="p">:</span> <span class="kt">SymbolicVector</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="n">equalityConstraints</span> <span class="nv">optionalEqualityConstraints</span><span class="p">:</span> <span class="p">[</span><span class="kt">Assign</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="n"><a href="../Structs/SymbolicObjective.html#/s:8SwiftMPC17SymbolicObjectiveV24equalityConstraintMatrix7LASwift0G0CSgvp">equalityConstraintMatrix</a></span> <span class="nv">optionalEqualityConstraintMatrix</span><span class="p">:</span> <span class="kt">SymbolicMatrix</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="n"><a href="../Structs/SymbolicObjective.html#/s:8SwiftMPC17SymbolicObjectiveV24equalityConstraintVectorSaySdGSgvp">equalityConstraintVector</a></span> <span class="nv">optionalEqualityConstraintVector</span><span class="p">:</span> <span class="kt">SymbolicVector</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">startPrimal</span><span class="p">:</span> <span class="kt">Vector</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">startDual</span><span class="p">:</span> <span class="kt">Vector</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="n">ordering</span> <span class="nv">optionalOrdering</span><span class="p">:</span> <span class="kt">OrderedSet</span><span class="o">&lt;</span><span class="kt">Variable</span><span class="o">&gt;</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="n">parameterValues</span> <span class="nv">optionalParameterValues</span><span class="p">:</span> <span class="p">[</span><span class="kt">Parameter</span><span class="p">:</span> <span class="kt">Double</span><span class="p">]</span> <span class="o">=</span> <span class="p">[:]</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>node</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The node representing the objective to me minimized.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>optionalConstraints</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The inequality constraints in normal form (e.g. ≤ 0)</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>optionalEqualityConstraints</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of assignment nodes representing linear equality constraints.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>optionalEqualityConstraintMatrix</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A symbolic matrix representing A in the equation Ax=b.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>optionalEqualityConstraintVector</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A symbolic vector representing b in the equation Ax=b.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>startPrimal</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The starting primal value. If not provided, then a strictly feasible one is found.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>startDual</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The starting dual value. If not provided, then a zero vector is used.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>optionalOrdering</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The ordering of the variables to use in the objective</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>optionalParameterValues</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameter values used throughout the problem.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV10startPointSaySdG6primal_AE4dualtyKF"></a>
+                    <a name="//apple_ref/swift/Method/startPoint()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV10startPointSaySdG6primal_AE4dualtyKF">startPoint()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>We want to solve the system</p>
+<pre class="highlight swift"><code> <span class="n">min</span> <span class="n">s</span> <span class="n">over</span> <span class="n">x</span><span class="p">,</span><span class="n">s</span>
+     <span class="nf">f_i</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">s</span>
+     <span class="kt">Ax</span> <span class="o">=</span> <span class="n">b</span>
+</code></pre>
+
+<p>If s is negative then we are strictly feasible, if positive then not feasible
+If 0, then it&rsquo;s tricky, but we&rsquo;ll call it infeasible to be safe</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    If a start point cannot be found.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">startPoint</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nv">primal</span><span class="p">:</span> <span class="kt">Vector</span><span class="p">,</span> <span class="nv">dual</span><span class="p">:</span> <span class="kt">Vector</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A strictly feasible primal vector and a dual vector.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV5valueySdSaySdGF"></a>
+                    <a name="//apple_ref/swift/Method/value(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV5valueySdSaySdGF">value(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The value of the objective at a given point</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@inlinable</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">value</span><span class="p">(</span><span class="n">_</span> <span class="nv">x</span><span class="p">:</span> <span class="kt">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Double</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>x</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The point to evaluate the objective at</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The value of teh objective</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV8gradientySaySdGAEF"></a>
+                    <a name="//apple_ref/swift/Method/gradient(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV8gradientySaySdGAEF">gradient(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The value of the gradient at a given point</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@inlinable</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">gradient</span><span class="p">(</span><span class="n">_</span> <span class="nv">x</span><span class="p">:</span> <span class="kt">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Vector</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>x</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The point to evaluate the gradient at</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The value of teh gradient</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV7hessiany7LASwift6MatrixCSaySdGF"></a>
+                    <a name="//apple_ref/swift/Method/hessian(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV7hessiany7LASwift6MatrixCSaySdGF">hessian(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The value of the Hessian at a given point.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@inlinable</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">hessian</span><span class="p">(</span><span class="n">_</span> <span class="nv">x</span><span class="p">:</span> <span class="kt">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Matrix</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>x</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The point to evaluate the Hessian at.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The value of the Hessian.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV26inequalityConstraintsValueySdSaySdGF"></a>
+                    <a name="//apple_ref/swift/Method/inequalityConstraintsValue(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV26inequalityConstraintsValueySdSaySdGF">inequalityConstraintsValue(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The sum of the negative logs of the negative of the constraints. Required by the <code><a href="../Protocols/Objective.html">Objective</a></code> protocol.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@inlinable</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">inequalityConstraintsValue</span><span class="p">(</span><span class="n">_</span> <span class="nv">x</span><span class="p">:</span> <span class="kt">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Double</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>x</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The current primal.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The sum of the negative logs of the negative of the constraints</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV29inequalityConstraintsGradientySaySdGAEF"></a>
+                    <a name="//apple_ref/swift/Method/inequalityConstraintsGradient(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV29inequalityConstraintsGradientySaySdGAEF">inequalityConstraintsGradient(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The gradient of the negative logs of the negative of the constraints. Required by the <code><a href="../Protocols/Objective.html">Objective</a></code> protocol.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@inlinable</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">inequalityConstraintsGradient</span><span class="p">(</span><span class="n">_</span> <span class="nv">x</span><span class="p">:</span> <span class="kt">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Vector</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>x</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The current primal.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The gradient of the negative logs of the negative of the constraints.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV28inequalityConstraintsHessiany7LASwift6MatrixCSaySdGF"></a>
+                    <a name="//apple_ref/swift/Method/inequalityConstraintsHessian(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV28inequalityConstraintsHessiany7LASwift6MatrixCSaySdGF">inequalityConstraintsHessian(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The hessian of the negative logs of the negative of the constraints. Required by the <code><a href="../Protocols/Objective.html">Objective</a></code> protocol.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@inlinable</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">inequalityConstraintsHessian</span><span class="p">(</span><span class="n">_</span> <span class="nv">x</span><span class="p">:</span> <span class="kt">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Matrix</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>x</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The current primal.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The hessian of the negative logs of the negative of the constraints.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV05printA4Code13objectiveName011stateVectorH024parameterRepresentations16matrixExtractors06vectorN008variableN06toFileySS_SSSDy0C4Math9ParameterCSSGSDySSSaySayAL8VariableCGGGSDySSARGSDySSAQGSSSgtKF"></a>
+                    <a name="//apple_ref/swift/Method/printSwiftCode(objectiveName:stateVectorName:parameterRepresentations:matrixExtractors:vectorExtractors:variableExtractors:toFile:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV05printA4Code13objectiveName011stateVectorH024parameterRepresentations16matrixExtractors06vectorN008variableN06toFileySS_SSSDy0C4Math9ParameterCSSGSDySSSaySayAL8VariableCGGGSDySSARGSDySSAQGSSSgtKF">printSwiftCode(objectiveName:<wbr>stateVectorName:<wbr>parameterRepresentations:<wbr>matrixExtractors:<wbr>vectorExtractors:<wbr>variableExtractors:<wbr>toFile:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">printSwiftCode</span><span class="p">(</span>
+    <span class="nv">objectiveName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">stateVectorName</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"x"</span><span class="p">,</span>
+    <span class="nv">parameterRepresentations</span><span class="p">:</span> <span class="p">[</span><span class="kt">Parameter</span><span class="p">:</span> <span class="kt">String</span><span class="p">]</span> <span class="o">=</span> <span class="p">[:],</span>
+    <span class="nv">matrixExtractors</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="p">[[</span><span class="kt">Variable</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[:],</span>
+    <span class="nv">vectorExtractors</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="p">[</span><span class="kt">Variable</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[:],</span>
+    <span class="nv">variableExtractors</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Variable</span><span class="p">]</span> <span class="o">=</span> <span class="p">[:],</span>
+    <span class="n">toFile</span> <span class="nv">file</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC17SymbolicObjectiveV05printA5Code213objectiveName011stateVectorH024parameterRepresentations16matrixExtractors06vectorN008variableN017primalConstructor6toFileySS_SSSDy0C4Math9ParameterCSSGSDySSSaySayAM8VariableCGGGSDySSASGSDySSARGSbSSSgtKF"></a>
+                    <a name="//apple_ref/swift/Method/printSwiftCode2(objectiveName:stateVectorName:parameterRepresentations:matrixExtractors:vectorExtractors:variableExtractors:primalConstructor:toFile:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC17SymbolicObjectiveV05printA5Code213objectiveName011stateVectorH024parameterRepresentations16matrixExtractors06vectorN008variableN017primalConstructor6toFileySS_SSSDy0C4Math9ParameterCSSGSDySSSaySayAM8VariableCGGGSDySSASGSDySSARGSbSSSgtKF">printSwiftCode2(objectiveName:<wbr>stateVectorName:<wbr>parameterRepresentations:<wbr>matrixExtractors:<wbr>vectorExtractors:<wbr>variableExtractors:<wbr>primalConstructor:<wbr>toFile:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">printSwiftCode2</span><span class="p">(</span>
+    <span class="nv">objectiveName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">stateVectorName</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"x"</span><span class="p">,</span>
+    <span class="nv">parameterRepresentations</span><span class="p">:</span> <span class="p">[</span><span class="kt">Parameter</span><span class="p">:</span> <span class="kt">String</span><span class="p">]</span> <span class="o">=</span> <span class="p">[:],</span>
+    <span class="nv">matrixExtractors</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="p">[[</span><span class="kt">Variable</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[:],</span>
+    <span class="nv">vectorExtractors</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="p">[</span><span class="kt">Variable</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[:],</span>
+    <span class="nv">variableExtractors</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Variable</span><span class="p">]</span> <span class="o">=</span> <span class="p">[:],</span>
+    <span class="nv">primalConstructor</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="n">toFile</span> <span class="nv">file</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2021 <a class="link" href="https://ian.ruh.io" target="_blank" rel="external noopener">Ian Ruh</a>. All rights reserved. (Last updated: 2021-10-09)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</html>

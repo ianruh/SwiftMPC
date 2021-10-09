@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>HyperParameters Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../../js/jquery.min.js" defer></script>
+    <script src="../../js/jazzy.js" defer></script>
+    
+    <script src="../../js/lunr.min.js" defer></script>
+    <script src="../../js/typeahead.jquery.js" defer></script>
+    <script src="../../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Struct/HyperParameters" class="dashAnchor"></a>
+    <a title="HyperParameters Structure Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../../index.html">SwiftMPC 0.0.1 Docs</a> (73% documented)</p>
+        <p class="header-right"><a href="https://github.com/ianruh/SwiftMPC"><img src="../../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://http%3A%2F%2Fian.ruh.io%2FSwiftMPC%2Fdocsets%2FSwiftMPC.xml"><img src="../../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../../index.html">SwiftMPC Reference</a>
+        <img id="carat" src="../../img/carat.png" alt=""/>
+        HyperParameters Structure Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../../Enums/SwiftMPCError.html">SwiftMPCError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../../Extensions/Matrix.html">Matrix</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../../Functions.html#/s:8SwiftMPC1moiyS2S_SitF">*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Functions.html#/s:8SwiftMPC2mmoiyS2d_SdtF">**(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Functions.html#/s:8SwiftMPC3zleoiySbSaySdG_SaySdSgGSgtF">.&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Functions.html#/s:8SwiftMPC3zleoiySbSaySdG_SdtF">.&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Functions.html#/s:8SwiftMPC3zleoiySbSaySdSgGSg_SaySdGtF">.&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Functions.html#/s:8SwiftMPC3zleoiySbSd_SaySdGtF">.&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Functions.html#/s:8SwiftMPC3zeeoiySbSaySdG_SdtF">.==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Functions.html#/s:8SwiftMPC3zeeoiySbSd_SaySdGtF">.==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Functions.html#/s:8SwiftMPC3zgeoiySbSaySdG_SdtF">.&gt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Functions.html#/s:8SwiftMPC3zgeoiySbSd_SaySdGtF">.&gt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Functions.html#/s:8SwiftMPC4normySdSaySdGF">norm(_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../../Protocols/Objective.html">Objective</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../../Structs/InequalitySolver.html">InequalitySolver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/InequalitySolver/HyperParameters.html">– HyperParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/SymbolicObjective.html">SymbolicObjective</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>HyperParameters</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">HyperParameters</span></code></pre>
+
+                </div>
+              </div>
+            <p>This struct is just a container for the hyper parameters that can be used to customize the behavior of the solver.</p>
+
+<p>The default values of fairly aggressive, so will find pretty precisely the minimum. For real time applications, many of the
+iteration maximums can be heavily restricted.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC16InequalitySolverV15HyperParametersV23newtonStepsStageMaximumSivp"></a>
+                    <a name="//apple_ref/swift/Property/newtonStepsStageMaximum" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC16InequalitySolverV15HyperParametersV23newtonStepsStageMaximumSivp">newtonStepsStageMaximum</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The maximum number of newton steps per homotopy stage.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">newtonStepsStageMaximum</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC16InequalitySolverV15HyperParametersV21homotopyStagesMaximumSivp"></a>
+                    <a name="//apple_ref/swift/Property/homotopyStagesMaximum" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC16InequalitySolverV15HyperParametersV21homotopyStagesMaximumSivp">homotopyStagesMaximum</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The maximum number of homotopy stages to to perform.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">homotopyStagesMaximum</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC16InequalitySolverV15HyperParametersV15residualEpsilonSdvp"></a>
+                    <a name="//apple_ref/swift/Property/residualEpsilon" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC16InequalitySolverV15HyperParametersV15residualEpsilonSdvp">residualEpsilon</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The epsilon value used for the residual.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">residualEpsilon</span><span class="p">:</span> <span class="kt">Double</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC16InequalitySolverV15HyperParametersV14dualGapEpsilonSdvp"></a>
+                    <a name="//apple_ref/swift/Property/dualGapEpsilon" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC16InequalitySolverV15HyperParametersV14dualGapEpsilonSdvp">dualGapEpsilon</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The epsilon value used for the primal-dual gap.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">dualGapEpsilon</span><span class="p">:</span> <span class="kt">Double</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC16InequalitySolverV15HyperParametersV22homotopyParameterStartSdvp"></a>
+                    <a name="//apple_ref/swift/Property/homotopyParameterStart" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC16InequalitySolverV15HyperParametersV22homotopyParameterStartSdvp">homotopyParameterStart</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The starting value of the homotopy barrier parameter.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">homotopyParameterStart</span><span class="p">:</span> <span class="kt">Double</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC16InequalitySolverV15HyperParametersV27homotopyParameterMultiplierSdvp"></a>
+                    <a name="//apple_ref/swift/Property/homotopyParameterMultiplier" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC16InequalitySolverV15HyperParametersV27homotopyParameterMultiplierSdvp">homotopyParameterMultiplier</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The multiplier for the homotopy barrier parameter. It is the factor that the parameter
+increases by after every stage.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">homotopyParameterMultiplier</span><span class="p">:</span> <span class="kt">Double</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC16InequalitySolverV15HyperParametersV15lineSearchAlphaSdvp"></a>
+                    <a name="//apple_ref/swift/Property/lineSearchAlpha" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC16InequalitySolverV15HyperParametersV15lineSearchAlphaSdvp">lineSearchAlpha</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Back tracking line search alpha parameter [reference](<a href="https://en.wikipedia.org/wiki/Backtracking_line_search">https://en.wikipedia.org/wiki/Backtracking_line_search</a></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">lineSearchAlpha</span><span class="p">:</span> <span class="kt">Double</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC16InequalitySolverV15HyperParametersV14lineSearchBetaSdvp"></a>
+                    <a name="//apple_ref/swift/Property/lineSearchBeta" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC16InequalitySolverV15HyperParametersV14lineSearchBetaSdvp">lineSearchBeta</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Back tracking line  search beta  parameter <a href="https://en.wikipedia.org/wiki/Backtracking_line_search">reference</a></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">lineSearchBeta</span><span class="p">:</span> <span class="kt">Double</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC16InequalitySolverV15HyperParametersV27lineSearchMaximumIterationsSivp"></a>
+                    <a name="//apple_ref/swift/Property/lineSearchMaximumIterations" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC16InequalitySolverV15HyperParametersV27lineSearchMaximumIterationsSivp">lineSearchMaximumIterations</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The maximum number  of line search iterations.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">lineSearchMaximumIterations</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftMPC16InequalitySolverV15HyperParametersV14valueThresholdSdvp"></a>
+                    <a name="//apple_ref/swift/Property/valueThreshold" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftMPC16InequalitySolverV15HyperParametersV14valueThresholdSdvp">valueThreshold</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A threshold for the value of the objective, If this value is achieved, then the solver returns.
+By default, the value is -inf, so has no effect on the solver.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">valueThreshold</span><span class="p">:</span> <span class="kt">Double</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2021 <a class="link" href="https://ian.ruh.io" target="_blank" rel="external noopener">Ian Ruh</a>. All rights reserved. (Last updated: 2021-10-09)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</html>
