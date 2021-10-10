@@ -17,6 +17,6 @@
     <key>DashDocSetFamily</key>
       <string>dashtoc</string>
     <key>DashDocSetFallbackURL</key>
-      <string>http://ian.ruh.io/SwiftMPC/</string>
+      <string>https://ian.ruh.io/SwiftMPC/</string>
   </dict>
 </plist>

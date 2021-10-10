@@ -29,18 +29,9 @@ format:
 	swiftformat --config .swiftformat Sources/
 
 documentation:
-	rm -rf docs/ && mkdir docs/
-	jazzy --output docs/ \
-		--sdk macosx \
-		--source-directory ./ \
-		--author "Ian Ruh" \
-		--author_url "https://ian.ruh.io" \
-		--module SwiftMPC \
-		--module-version "0.0.1" \
-		--readme README.md \
-		--root-url http://ian.ruh.io/SwiftMPC/  \
-		--github_url https://github.com/ianruh/SwiftMPC \
-		--use-safe-filenames
+	sourcekitten doc --spm --module-name SwiftMPC > .SwiftMPC.json
+	sourcekitten doc --spm --module-name SymbolicMath > .SymbolicMath.json
+	jazzy
 
 clean:
 	rm -rf .build/
