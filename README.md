@@ -12,8 +12,6 @@ SwiftMPC allows a user to specify the model of the system in an intuitive and fl
 
 The cartpole proof of concept code is in [SwiftMPC Gym](https://github.com/ianruh/SwiftMPC-Gym), and the most interesting file (the model definition in symbolic form) is [here](https://github.com/ianruh/SwiftMPC-Gym/blob/main/Sources/CartPole/CartPoleSymbolicObjective.swift).
 
-https://user-images.githubusercontent.com/7023667/136676048-56452fea-a503-45a7-9a9c-7ca5bf97414b.mov
-
 [Video Link](https://user-images.githubusercontent.com/7023667/136676048-56452fea-a503-45a7-9a9c-7ca5bf97414b.mov)
 
 The above simulation was run with a 20 step time horizon, with a uniform timestep of 0.2 seconds. The controller ran at 50 Hz, with each MPC step taking between 2 ms (while the pole is balancing and the dynamics are slow) to 6 ms (while the pole is swinging up and the dynamics are faster).
