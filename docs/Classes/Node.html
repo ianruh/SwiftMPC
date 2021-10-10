@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Node Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/Node" class="dashAnchor"></a>
+    <a title="Node Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">SwiftMPC 0.0.1 Docs</a> (57% documented)</p>
+        <p class="header-right"><a href="https://github.com/ianruh/SwiftMPC"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fian.ruh.io%2FSwiftMPC%2Fdocsets%2FSwiftMPC.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">SwiftMPC Reference</a>
+        <img id="carat" src="../img/carat.png" alt=""/>
+        Node Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/AbsoluteValue.html">AbsoluteValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Add.html">Add</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Assign.html">Assign</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Cos.html">Cos</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Derivative.html">Derivative</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Divide.html">Divide</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Exp.html">Exp</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Factorial.html">Factorial</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Ln.html">Ln</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Multiply.html">Multiply</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Negative.html">Negative</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Node.html">Node</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Number.html">Number</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OperationPrecedence.html">OperationPrecedence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Parameter.html">Parameter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Power.html">Power</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Sin.html">Sin</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Sqrt.html">Sqrt</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Subtract.html">Subtract</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SymbolicMatrix.html">SymbolicMatrix</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SymbolicVector.html">SymbolicVector</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Tan.html">Tan</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Variable.html">Variable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/OperationAssociativity.html">OperationAssociativity</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/OperationType.html">OperationType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SwiftMPCError.html">SwiftMPCError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SymbolicMathError.html">SymbolicMathError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Array.html">Array</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Collection.html">Collection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Double.html">Double</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Int.html">Int</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Matrix.html">Matrix</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Set.html">Set</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/String.html">String</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Vector.html">Vector</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1moiyAA0A6MatrixCAA0A6VectorC_AFtF">*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1moiyAA4NodeCAD_ADtF">*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1moiyAA4NodeCAD_SdtF">*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1moiyAA4NodeCSd_ADtF">*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1moiyS2S_SitF">*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1moiySaySdGSd_ACtF">*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC1moiyS2S_SitF">*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2mmoiyAA4NodeCAA6NumberC_ADtF">**(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2mmoiyAA4NodeCAD_AA6NumberCtF">**(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2mmoiyAA4NodeCAD_ADtF">**(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC2mmoiyS2d_SdtF">**(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1poiyAA0A6MatrixCAD_ADtF">+(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1poiyAA0A6VectorCAD_ADtF">+(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1poiyAA4NodeCAA6NumberC_ADtF">+(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1poiyAA4NodeCAD_AA6NumberCtF">+(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1poiyAA4NodeCAD_ADtF">+(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1poiySaySdGSd_ACtF">+(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1soiyAA4NodeCAA6NumberC_ADtF">-(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1soiyAA4NodeCAD_AA6NumberCtF">-(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1soiyAA4NodeCAD_ADtF">-(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2zmoiyAA0A6MatrixCAA4NodeC_ADtF">.*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2zmoiyAA0A6MatrixCAD_AA4NodeCtF">.*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2zmoiyAA0A6MatrixCAD_SdtF">.*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2zmoiyAA0A6MatrixCSaySayAA8VariableCGG_SdtF">.*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2zmoiyAA0A6MatrixCSd_ADtF">.*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2zmoiyAA0A6MatrixCSd_SaySayAA8VariableCGGtF">.*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2zmoiyAA0A6VectorCAA4NodeC_ADtF">.*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2zmoiyAA0A6VectorCAD_AA4NodeCtF">.*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2zmoiyAA0A6VectorCAD_SdtF">.*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2zmoiyAA0A6VectorCSayAA8VariableCG_SdtF">.*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2zmoiyAA0A6VectorCSd_ADtF">.*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2zmoiyAA0A6VectorCSd_SayAA8VariableCGtF">.*(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath3zmmoiyAA0A6MatrixCAD_SitF">.**(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath3zmmoiyAA0A6MatrixCSaySayAA8VariableCGG_SitF">.**(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath3zmmoiyAA0A6VectorCAD_SitF">.**(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath3zmmoiyAA0A6VectorCSayAA8VariableCG_SitF">.**(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zleoiySbSaySdG_SaySdSgGSgtF">.&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zleoiySbSaySdG_SdtF">.&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zleoiySbSaySdSgGSg_SaySdGtF">.&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zleoiySbSd_SaySdGtF">.&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zeeoiySbSaySdG_SdtF">.==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zeeoiySbSd_SaySdGtF">.==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zgeoiySbSaySdG_SdtF">.&gt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC3zgeoiySbSd_SaySdGtF">.&gt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1doiyAA4NodeCAA6NumberC_ADtF">/(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1doiyAA4NodeCAD_AA6NumberCtF">/(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1doiyAA4NodeCAD_ADtF">/(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2leoiyAA4NodeCAA6NumberC_ADtF">&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2leoiyAA4NodeCAD_AA6NumberCtF">&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2leoiyAA4NodeCAD_ADtF">&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2leoiyAA4NodeCAD_SdtF">&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2leoiyAA4NodeCSd_ADtF">&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2geoiyAA4NodeCAA6NumberC_ADtF">&gt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2geoiyAA4NodeCAD_AA6NumberCtF">&gt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2geoiyAA4NodeCAD_ADtF">&gt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2geoiyAA4NodeCAD_SdtF">&gt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath2geoiyAA4NodeCSd_ADtF">&gt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC28approxBackTrackingLineSearch9objective10startPoint0I5Value0I8Gradient13stepDirection5alpha4betaSdAA9Objective_p_SaySdGSdA2KS2dtF">approxBackTrackingLineSearch(objective:startPoint:startValue:startGradient:stepDirection:alpha:beta:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath13differentiate_3wrt9partiallyAA4NodeCSgAF_AFSbtF">differentiate(_:wrt:partially:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC27equalityConstrainedMinimize9objective0C16ConstraintMatrix10startPoint11gradEpsilon13maxIterations9debugInfoSaySdGAA9Objective_p_7LASwift0H0CAISdSiSbtKF">equalityConstrainedMinimize(objective:equalityConstraintMatrix:startPoint:gradEpsilon:maxIterations:debugInfo:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC26infeasibleEqualityMinimize9objective24equalityConstraintMatrix0gH6Vector10startPoint11gradEpsilon13maxIterations9debugInfoSaySdGAA9Objective_p_7LASwift0I0CA2JSdSiSbtKF">infeasibleEqualityMinimize(objective:equalityConstraintMatrix:equalityConstraintVector:startPoint:gradEpsilon:maxIterations:debugInfo:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC20infeasibleLinesearch9objective24equalityConstraintMatrix0fG6Vector15primalDirection04dualK011startPrimal0M4Dual5alpha4betaSdAA9Objective_p_7LASwift0H0CSaySdGA4PS2dtF">infeasibleLinesearch(objective:equalityConstraintMatrix:equalityConstraintVector:primalDirection:dualDirection:startPrimal:startDual:alpha:beta:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC19newtonStepDirection13startingPoint8gradient7hessianSaySdGAF_AF7LASwift6MatrixCtKF">newtonStepDirection(startingPoint:gradient:hessian:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC4normySdSaySdGF">norm(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath4normySdSaySdG_SitF">norm(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath10printDebug_4file4lineyyp_s12StaticStringVSutF">printDebug(_:file:line:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC10printDebug_4file4lineyyp_s12StaticStringVSutF">printDebug(_:file:line:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC12residualNorm9objective24equalityConstraintMatrix0fG6Vector6primal4dualSdAA9Objective_p_7LASwift0H0CSaySdGA2LtF">residualNorm(objective:equalityConstraintMatrix:equalityConstraintVector:primal:dual:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath3sumyAA4NodeCAA0A6MatrixCF">sum(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath3sumyAA4NodeCAA0A6VectorCF">sum(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath3sumyAA4NodeCSayAA8VariableCGF">sum(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath3sumyAA4NodeCSaySayAA8VariableCGGF">sum(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8SwiftMPC21unconstrainedMinimize_10startPoint11gradEpsilon13maxIterations9debugInfoSaySdGAA9Objective_p_AGSdSiSbtKF">unconstrainedMinimize(_:startPoint:gradEpsilon:maxIterations:debugInfo:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1toiyAA6AssignCAA4NodeC_AA6NumberCtF">~(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1toiyAA6AssignCAA4NodeC_AFtF">~(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath1toiyAA6AssignCAA6NumberC_AA4NodeCtF">~(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath003dchoiyAA6AssignCAA4NodeC_AA6NumberCtF">≈(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath003dchoiyAA6AssignCAA4NodeC_AFtF">≈(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:12SymbolicMath003dchoiyAA6AssignCAA6NumberC_AA4NodeCtF">≈(_:_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Function.html">Function</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Objective.html">Objective</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Operation.html">Operation</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/BinaryMultiply.html">BinaryMultiply</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Id.html">Id</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/InequalitySolver.html">InequalitySolver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/InequalitySolver/HyperParameters.html">– HyperParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/QuadraticObjective.html">QuadraticObjective</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/QuinticObjective.html">QuinticObjective</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SymbolicObjective.html">SymbolicObjective</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Node</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Node</span> <span class="p">:</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Comparable</span><span class="p">,</span> <span class="kt">Hashable</span></code></pre>
+
+                </div>
+              </div>
+            <p>This symbol has no documentation text.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC2idAA2IdVvp"></a>
+                    <a name="//apple_ref/swift/Property/id" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC2idAA2IdVvp">id</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The node&rsquo;s unqie identifier</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">id</span><span class="p">:</span> <span class="kt"><a href="../Structs/Id.html">Id</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC9_ordering33_FBEB8209D70CDE4D46090471BE3275A6LL18OrderedCollections0K3SetVyAA8VariableCGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/_ordering" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC9_ordering33_FBEB8209D70CDE4D46090471BE3275A6LL18OrderedCollections0K3SetVyAA8VariableCGSgvp">_ordering</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This symbol has no documentation text.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">private</span> <span class="k">var</span> <span class="nv">_ordering</span><span class="p">:</span> <span class="kt">OrderedSet</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/Variable.html">Variable</a></span><span class="o">&gt;</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC16orderedVariables18OrderedCollections0F3SetVyAA8VariableCGvp"></a>
+                    <a name="//apple_ref/swift/Property/orderedVariables" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC16orderedVariables18OrderedCollections0F3SetVyAA8VariableCGvp">orderedVariables</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The node&rsquo;s ordering of the variables. It uses the default ordering, unless one is
+set using the <code>setOrdering</code> method. This should not be assigned to.
+TODO: Refactor to remove the set option here.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">orderedVariables</span><span class="p">:</span> <span class="kt">OrderedSet</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/Variable.html">Variable</a></span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC11descriptionSSvp"></a>
+                    <a name="//apple_ref/swift/Property/description" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC11descriptionSSvp">description</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A string representation of the node. This should be overridden.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC5latexSSvp"></a>
+                    <a name="//apple_ref/swift/Property/latex" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC5latexSSvp">latex</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A latex representation of the node. This should be overridden.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">latex</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC10_variablesShyAA8VariableCGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/_variables" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC10_variablesShyAA8VariableCGSgvp">_variables</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The set of variables in the node. This should be overridden.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">internal</span> <span class="k">var</span> <span class="nv">_variables</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/Variable.html">Variable</a></span><span class="o">&gt;</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC9variablesShyAA8VariableCGvp"></a>
+                    <a name="//apple_ref/swift/Property/variables" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC9variablesShyAA8VariableCGvp">variables</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This symbol has no documentation text.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">variables</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/Variable.html">Variable</a></span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC11_parametersShyAA9ParameterCGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/_parameters" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC11_parametersShyAA9ParameterCGSgvp">_parameters</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The set of variables in the node. This should be overridden.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">internal</span> <span class="k">var</span> <span class="nv">_parameters</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/Parameter.html">Parameter</a></span><span class="o">&gt;</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC10parametersShyAA9ParameterCGvp"></a>
+                    <a name="//apple_ref/swift/Property/parameters" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC10parametersShyAA9ParameterCGvp">parameters</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This symbol has no documentation text.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/Parameter.html">Parameter</a></span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC11derivativesShyAA10DerivativeCGvp"></a>
+                    <a name="//apple_ref/swift/Property/derivatives" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC11derivativesShyAA10DerivativeCGvp">derivatives</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The set of derivatives in the node. This should be overridden.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">derivatives</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/Derivative.html">Derivative</a></span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC14typeIdentifierSSvp"></a>
+                    <a name="//apple_ref/swift/Property/typeIdentifier" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC14typeIdentifierSSvp">typeIdentifier</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The type identifier of the class. This should be overridden.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">typeIdentifier</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC7isBasicSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isBasic" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC7isBasicSbvp">isBasic</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Determine if the node is basic</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isBasic</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC10isVariableSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isVariable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC10isVariableSbvp">isVariable</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Dertermine if the node is a variable</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isVariable</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC8isNumberSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isNumber" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC8isNumberSbvp">isNumber</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Dertermine if the node is a variable</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isNumber</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC11isOperationSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isOperation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC11isOperationSbvp">isOperation</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Determine if the node is an operation</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isOperation</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC10isFunctionSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isFunction" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC10isFunctionSbvp">isFunction</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Determine is the node is a function</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isFunction</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC12isSimplifiedSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isSimplified" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC12isSimplifiedSbvp">isSimplified</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This symbol has no documentation text.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">internal</span> <span class="k">var</span> <span class="nv">isSimplified</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC16setVariableOrderyyxKSlRzAA0E0C7ElementRtzlF"></a>
+                    <a name="//apple_ref/swift/Method/setVariableOrder(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC16setVariableOrderyyxKSlRzAA0E0C7ElementRtzlF">setVariableOrder(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Set the variable ordering of the node</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    If the new ordering does not contain all variables in the node
+
+</div>
+
+<p>The new ordering may contain more than the variables in just this node.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">setVariableOrder</span><span class="o">&lt;</span><span class="kt">C</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">newOrdering</span><span class="p">:</span> <span class="kt">C</span><span class="p">)</span> <span class="k">throws</span> <span class="k">where</span> <span class="kt">C</span> <span class="p">:</span> <span class="kt">Collection</span><span class="p">,</span> <span class="kt">C</span><span class="o">.</span><span class="kt">Element</span> <span class="o">==</span> <span class="kt"><a href="../Classes/Variable.html">Variable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>newOrdering</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The new ordering of variables</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC16setVariableOrder4fromyAC_tKF"></a>
+                    <a name="//apple_ref/swift/Method/setVariableOrder(from:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC16setVariableOrder4fromyAC_tKF">setVariableOrder(from:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Set the variable order by inheriting it from another node.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    If the new node contains variable(s) not in the progenitor node.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">setVariableOrder</span><span class="p">(</span><span class="n">from</span> <span class="nv">node</span><span class="p">:</span> <span class="kt">Node</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>node</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The node to inherit the order from.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC8evaluate10withValuesSdSDyACSdG_tKF"></a>
+                    <a name="//apple_ref/swift/Method/evaluate(withValues:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC8evaluate10withValuesSdSDyACSdG_tKF">evaluate(withValues:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Evaluate the node. This should be overridden.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">withValues</span> <span class="nv">_</span><span class="p">:</span> <span class="p">[</span><span class="kt">Node</span> <span class="p">:</span> <span class="kt">Double</span><span class="p">])</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Double</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC8evaluate_14withParametersSdSaySdG_SDyAA9ParameterCSdGtKF"></a>
+                    <a name="//apple_ref/swift/Method/evaluate(_:withParameters:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC8evaluate_14withParametersSdSaySdG_SDyAA9ParameterCSdGtKF">evaluate(_:<wbr>withParameters:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Evaluate the node using a given set of variable and parameter values.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    If the node cannot be evaluated (e.g. if not all variables or parameter&rsquo;s are given values).
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">_</span> <span class="nv">x</span><span class="p">:</span> <span class="kt">Vector</span><span class="p">,</span> <span class="n">withParameters</span> <span class="nv">parameterValues</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Parameter.html">Parameter</a></span> <span class="p">:</span> <span class="kt">Double</span><span class="p">]</span> <span class="o">=</span> <span class="p">[:])</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Double</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>x</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A vector (with the values in the order of the node&rsquo;s variable ordering) containing the values for the variables.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parameterValues</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The values of the parameters to evaluate at.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The value of the node at the given location.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC6equalsySbACF"></a>
+                    <a name="//apple_ref/swift/Method/equals(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC6equalsySbACF">equals(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Function returns whether the other node logically equals this function
+Note that this assumes both sides are simplified already, so it doesn&rsquo;t
+call simplify itself.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">internal</span> <span class="kd">func</span> <span class="nf">equals</span><span class="p">(</span><span class="nv">_</span><span class="p">:</span> <span class="kt">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC8contains8nodeTypeSayAA2IdVGxm_tACRbzlF"></a>
+                    <a name="//apple_ref/swift/Method/contains(nodeType:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC8contains8nodeTypeSayAA2IdVGxm_tACRbzlF">contains(nodeType:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get the count of how many of the given elements are in the node.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">contains</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">nodeType</span> <span class="nv">_</span><span class="p">:</span> <span class="kt">T</span><span class="o">.</span><span class="k">Type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/Id.html">Id</a></span><span class="p">]</span> <span class="k">where</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt">Node</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>nodeType</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Type interested in</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The number found.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC7replace_4withA2C_ACtF"></a>
+                    <a name="//apple_ref/swift/Method/replace(_:with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC7replace_4withA2C_ACtF">replace(_:<wbr>with:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Replace the node with the given id with another node.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    If the node cannot be replaced.
+Replace a node with another node.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">replace</span><span class="p">(</span><span class="nv">_</span><span class="p">:</span> <span class="kt">Node</span><span class="p">,</span> <span class="n">with</span> <span class="nv">_</span><span class="p">:</span> <span class="kt">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Node</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>id</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The ID of the node to be replaced.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>replacement</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The replacement node.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Returns true if the node was replaced, and false otherwise.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC03getC06withIdACSgAA0F0V_tF"></a>
+                    <a name="//apple_ref/swift/Method/getNode(withId:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC03getC06withIdACSgAA0F0V_tF">getNode(withId:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get the node with the given id.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getNode</span><span class="p">(</span><span class="n">withId</span> <span class="nv">_</span><span class="p">:</span> <span class="kt"><a href="../Structs/Id.html">Id</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Node</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>id</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Id of the node to get.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The node with the given id, if it exists in the tree.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC8simplifyACyF"></a>
+                    <a name="//apple_ref/swift/Method/simplify()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC8simplifyACyF">simplify()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Simplify the node</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">simplify</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Node</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The simplified node, or the same node if no simplification has been performed.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC4hash4intoys6HasherVz_tF"></a>
+                    <a name="//apple_ref/swift/Method/hash(into:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC4hash4intoys6HasherVz_tF">hash(into:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Has of the node. Does not simplify  the node, so is dependent on the node structure.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">hash</span><span class="p">(</span><span class="n">into</span> <span class="nv">_</span><span class="p">:</span> <span class="k">inout</span> <span class="kt">Hasher</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC9swiftCode5usingSSSDyACSSG_tKF"></a>
+                    <a name="//apple_ref/swift/Method/swiftCode(using:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC9swiftCode5usingSSSDyACSSG_tKF">swiftCode(using:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A Swift representation of the node value. This should be overridden.
+It is really f******* verbose (lots of parenthesis)
+Assumes access to swift-numerics real module</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">swiftCode</span><span class="p">(</span><span class="n">using</span> <span class="nv">_</span><span class="p">:</span> <span class="p">[</span><span class="kt">Node</span> <span class="p">:</span> <span class="kt">String</span><span class="p">])</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC12taylorExpand2in5about7ofOrderACSgAC_ACSitF"></a>
+                    <a name="//apple_ref/swift/Method/taylorExpand(in:about:ofOrder:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC12taylorExpand2in5about7ofOrderACSgAC_ACSitF">taylorExpand(in:<wbr>about:<wbr>ofOrder:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Taylor expand the node.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">taylorExpand</span><span class="p">(</span><span class="k">in</span> <span class="nv">variable</span><span class="p">:</span> <span class="kt">Node</span><span class="p">,</span> <span class="n">about</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">Node</span><span class="p">,</span> <span class="n">ofOrder</span> <span class="nv">order</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Node</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>variable</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The variable to taylor expand in (may be any node).</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>location</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The location to taylor expand around (may be  any node).</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>order</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The order of the taylor expansion.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The taylor expansion of the node if it can be found. May return nil if a deriavtive could not be calculated.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC2eeoiySbAC_ACtFZ"></a>
+                    <a name="//apple_ref/swift/Method/==(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC2eeoiySbAC_ACtFZ">==(_:<wbr>_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Determine if two nodes are equal (without simplifying, so it is structure dependent)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">==</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="kt">Node</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>lhs</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Left hand node</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>rhs</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Right hand node</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>If the nodes are equal.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC2teoiySbAC_ACtFZ"></a>
+                    <a name="//apple_ref/swift/Method/~=(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC2teoiySbAC_ACtFZ">~=(_:<wbr>_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Attempt to determine if two nodes are nathematically equal. If they simplify to the same representation, then it will return true.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">~=</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="kt">Node</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>lhs</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Left hand node</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>rhs</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Right hand node</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>True if the simplification of the nodes are equal.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC1loiySbAC_ACtFZ"></a>
+                    <a name="//apple_ref/swift/Method/&lt;(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC1loiySbAC_ACtFZ"><(_:<wbr>_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Only does a cursory comparison of types. Will be correct for numbers and variables,
+nut otherwise only compares the types of the nodes.</p>
+
+<p>Opertions &lt; Variables &lt; Numbers</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&lt;</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="kt">Node</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC8gradientAA0A6VectorCSgyF"></a>
+                    <a name="//apple_ref/swift/Method/gradient()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC8gradientAA0A6VectorCSgyF">gradient()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>FInd the gradient of the node using the node&rsquo;s variable ordering.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">gradient</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/SymbolicVector.html">SymbolicVector</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A symbolic vector representing the gradient.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SymbolicMath4NodeC7hessianAA0A6MatrixCSgyF"></a>
+                    <a name="//apple_ref/swift/Method/hessian()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SymbolicMath4NodeC7hessianAA0A6MatrixCSgyF">hessian()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Find the hessian of the node using the node&rsquo;s variable ordering.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">hessian</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/SymbolicMatrix.html">SymbolicMatrix</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A symbolic Matrix representing the hessian of the node.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2021 <a class="link" href="https://ian.ruh.io" target="_blank" rel="external noopener">Ian Ruh</a>. All rights reserved. (Last updated: 2021-10-10)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</html>

@@ -15,6 +15,13 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/CodeGen.swift",
+      "line": 315,
+      "symbol": "SymbolicObjective.printSwiftCode2(objectiveName:stateVectorName:parameterRepresentations:matrixExtractors:vectorExtractors:variableExtractors:primalConstructor:toFile:).primalConstructorGetVariableString(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Errors.swift",
       "line": 3,
       "symbol": "SwiftMPCError",
@@ -44,23 +51,65 @@
     },
     {
       "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/InequalityMinimization.swift",
+      "line": 13,
+      "symbol": "InequalitySolver.hasEqaulityConstraints",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/InequalityMinimization.swift",
       "line": 15,
       "symbol": "InequalitySolver.init()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/ObjectiveProtocol.swift",
-      "line": 8,
-      "symbol": "Objective",
-      "symbol_kind": "source.lang.swift.decl.protocol",
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Minimization.swift",
+      "line": 9,
+      "symbol": "newtonStepDirection(startingPoint:gradient:hessian:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/ObjectiveProtocol.swift",
-      "line": 68,
-      "symbol": "Objective",
-      "symbol_kind": "source.lang.swift.decl.extension",
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Minimization.swift",
+      "line": 15,
+      "symbol": "approxBackTrackingLineSearch(objective:startPoint:startValue:startGradient:stepDirection:alpha:beta:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Minimization.swift",
+      "line": 33,
+      "symbol": "unconstrainedMinimize(_:startPoint:gradEpsilon:maxIterations:debugInfo:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Minimization.swift",
+      "line": 217,
+      "symbol": "infeasibleLinesearch(objective:equalityConstraintMatrix:equalityConstraintVector:primalDirection:dualDirection:startPrimal:startDual:alpha:beta:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Minimization.swift",
+      "line": 249,
+      "symbol": "infeasibleEqualityMinimize(objective:equalityConstraintMatrix:equalityConstraintVector:startPoint:gradEpsilon:maxIterations:debugInfo:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/SampleObjectives.swift",
+      "line": 19,
+      "symbol": "QuinticObjective.init(n:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/SampleObjectives.swift",
+      "line": 50,
+      "symbol": "QuadraticObjective.init(n:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
@@ -74,6 +123,13 @@
       "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Utilities.swift",
       "line": 19,
       "symbol": "norm(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SwiftMPC/Utilities.swift",
+      "line": 24,
+      "symbol": "printDebug(_:file:line:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     },
@@ -138,6 +194,2092 @@
       "line": 121,
       "symbol": ".==(_:_:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Differentiation.swift",
+      "line": 188,
+      "symbol": "BinaryMultiply.left",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Differentiation.swift",
+      "line": 189,
+      "symbol": "BinaryMultiply.right",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Differentiation.swift",
+      "line": 191,
+      "symbol": "BinaryMultiply.init(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Differentiation.swift",
+      "line": 196,
+      "symbol": "BinaryMultiply.init(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Errors.swift",
+      "line": 7,
+      "symbol": "SymbolicMathError.noValue(forVariable:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Errors.swift",
+      "line": 8,
+      "symbol": "SymbolicMathError.notApplicable(message:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Errors.swift",
+      "line": 9,
+      "symbol": "SymbolicMathError.noVariable(forValue:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Errors.swift",
+      "line": 10,
+      "symbol": "SymbolicMathError.badAssignment(forEquation:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Errors.swift",
+      "line": 11,
+      "symbol": "SymbolicMathError.cannotReplaceNode(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Errors.swift",
+      "line": 12,
+      "symbol": "SymbolicMathError.multipleIndependentVariables(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Errors.swift",
+      "line": 13,
+      "symbol": "SymbolicMathError.misc(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Errors.swift",
+      "line": 14,
+      "symbol": "SymbolicMathError.undefinedValue(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Errors.swift",
+      "line": 15,
+      "symbol": "SymbolicMathError.noCodeRepresentation(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Extensions.swift",
+      "line": 124,
+      "symbol": "Int.random(withDigits:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Extensions.swift",
+      "line": 132,
+      "symbol": "Int.random(withMaxDigits:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Extensions.swift",
+      "line": 138,
+      "symbol": "Array.join(separator:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Extensions.swift",
+      "line": 151,
+      "symbol": "Set.+(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Extensions.swift",
+      "line": 169,
+      "symbol": "Double.symbol",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Extensions.swift",
+      "line": 175,
+      "symbol": "Collection.pprint",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Extensions.swift",
+      "line": 197,
+      "symbol": "*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Extensions.swift",
+      "line": 205,
+      "symbol": "+(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Extensions.swift",
+      "line": 213,
+      "symbol": "*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Extensions.swift",
+      "line": 221,
+      "symbol": "printDebug(_:file:line:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Extensions.swift",
+      "line": 227,
+      "symbol": "Array.parallelMap(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Extensions.swift",
+      "line": 246,
+      "symbol": "Int.factorial()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/AbsoluteValue.swift",
+      "line": 6,
+      "symbol": "AbsoluteValue",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/AbsoluteValue.swift",
+      "line": 7,
+      "symbol": "AbsoluteValue.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/AbsoluteValue.swift",
+      "line": 8,
+      "symbol": "AbsoluteValue.numArguments",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/AbsoluteValue.swift",
+      "line": 11,
+      "symbol": "AbsoluteValue.argument",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/AbsoluteValue.swift",
+      "line": 21,
+      "symbol": "AbsoluteValue.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/AbsoluteValue.swift",
+      "line": 30,
+      "symbol": "AbsoluteValue.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/AbsoluteValue.swift",
+      "line": 49,
+      "symbol": "AbsoluteValue.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/AbsoluteValue.swift",
+      "line": 53,
+      "symbol": "AbsoluteValue.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Cos.swift",
+      "line": 6,
+      "symbol": "Cos",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Cos.swift",
+      "line": 7,
+      "symbol": "Cos.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Cos.swift",
+      "line": 8,
+      "symbol": "Cos.numArguments",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Cos.swift",
+      "line": 11,
+      "symbol": "Cos.argument",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Cos.swift",
+      "line": 21,
+      "symbol": "Cos.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Cos.swift",
+      "line": 30,
+      "symbol": "Cos.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Cos.swift",
+      "line": 49,
+      "symbol": "Cos.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Cos.swift",
+      "line": 53,
+      "symbol": "Cos.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Derivative.swift",
+      "line": 6,
+      "symbol": "Derivative",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Derivative.swift",
+      "line": 7,
+      "symbol": "Derivative.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Derivative.swift",
+      "line": 8,
+      "symbol": "Derivative.numArguments",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Derivative.swift",
+      "line": 11,
+      "symbol": "Derivative.diffOf",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Derivative.swift",
+      "line": 12,
+      "symbol": "Derivative.withRespectTo",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Derivative.swift",
+      "line": 30,
+      "symbol": "Derivative.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Derivative.swift",
+      "line": 39,
+      "symbol": "Derivative.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Derivative.swift",
+      "line": 58,
+      "symbol": "Derivative.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Derivative.swift",
+      "line": 63,
+      "symbol": "Derivative.init(of:wrt:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Exp.swift",
+      "line": 6,
+      "symbol": "Exp",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Exp.swift",
+      "line": 7,
+      "symbol": "Exp.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Exp.swift",
+      "line": 8,
+      "symbol": "Exp.numArguments",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Exp.swift",
+      "line": 11,
+      "symbol": "Exp.argument",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Exp.swift",
+      "line": 21,
+      "symbol": "Exp.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Exp.swift",
+      "line": 30,
+      "symbol": "Exp.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Exp.swift",
+      "line": 49,
+      "symbol": "Exp.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Exp.swift",
+      "line": 53,
+      "symbol": "Exp.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Ln.swift",
+      "line": 9,
+      "symbol": "Ln.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Ln.swift",
+      "line": 10,
+      "symbol": "Ln.numArguments",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Ln.swift",
+      "line": 13,
+      "symbol": "Ln.argument",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Ln.swift",
+      "line": 23,
+      "symbol": "Ln.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Ln.swift",
+      "line": 32,
+      "symbol": "Ln.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Ln.swift",
+      "line": 51,
+      "symbol": "Ln.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Ln.swift",
+      "line": 55,
+      "symbol": "Ln.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sin.swift",
+      "line": 6,
+      "symbol": "Sin",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sin.swift",
+      "line": 7,
+      "symbol": "Sin.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sin.swift",
+      "line": 8,
+      "symbol": "Sin.numArguments",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sin.swift",
+      "line": 11,
+      "symbol": "Sin.argument",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sin.swift",
+      "line": 21,
+      "symbol": "Sin.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sin.swift",
+      "line": 30,
+      "symbol": "Sin.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sin.swift",
+      "line": 49,
+      "symbol": "Sin.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sin.swift",
+      "line": 53,
+      "symbol": "Sin.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sqrt.swift",
+      "line": 6,
+      "symbol": "Sqrt",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sqrt.swift",
+      "line": 7,
+      "symbol": "Sqrt.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sqrt.swift",
+      "line": 8,
+      "symbol": "Sqrt.numArguments",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sqrt.swift",
+      "line": 11,
+      "symbol": "Sqrt.argument",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sqrt.swift",
+      "line": 21,
+      "symbol": "Sqrt.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sqrt.swift",
+      "line": 30,
+      "symbol": "Sqrt.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sqrt.swift",
+      "line": 49,
+      "symbol": "Sqrt.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Sqrt.swift",
+      "line": 53,
+      "symbol": "Sqrt.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Tan.swift",
+      "line": 6,
+      "symbol": "Tan",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Tan.swift",
+      "line": 7,
+      "symbol": "Tan.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Tan.swift",
+      "line": 8,
+      "symbol": "Tan.numArguments",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Tan.swift",
+      "line": 11,
+      "symbol": "Tan.argument",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Tan.swift",
+      "line": 21,
+      "symbol": "Tan.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Tan.swift",
+      "line": 30,
+      "symbol": "Tan.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Tan.swift",
+      "line": 49,
+      "symbol": "Tan.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions/Tan.swift",
+      "line": 53,
+      "symbol": "Tan.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions.swift",
+      "line": 11,
+      "symbol": "Function.numArguments",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions.swift",
+      "line": 15,
+      "symbol": "Function.precedence",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions.swift",
+      "line": 19,
+      "symbol": "Function.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Functions.swift",
+      "line": 23,
+      "symbol": "Function.associativity",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/ID.swift",
+      "line": 5,
+      "symbol": "Id.next",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/ID.swift",
+      "line": 6,
+      "symbol": "Id.value",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/ID.swift",
+      "line": 8,
+      "symbol": "Id.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/ID.swift",
+      "line": 13,
+      "symbol": "Id.==(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/ID.swift",
+      "line": 17,
+      "symbol": "Id.!=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Node.swift",
+      "line": 3,
+      "symbol": "Node",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Node.swift",
+      "line": 6,
+      "symbol": "Node",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Node.swift",
+      "line": 8,
+      "symbol": "Node",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Node.swift",
+      "line": 12,
+      "symbol": "Node._ordering",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Node.swift",
+      "line": 45,
+      "symbol": "Node.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Node.swift",
+      "line": 55,
+      "symbol": "Node.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Node.swift",
+      "line": 98,
+      "symbol": "Node.isSimplified",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 44,
+      "symbol": "+(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 51,
+      "symbol": "+(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 68,
+      "symbol": "-(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 72,
+      "symbol": "-(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 86,
+      "symbol": "/(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 90,
+      "symbol": "/(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 111,
+      "symbol": "*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 118,
+      "symbol": "*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 135,
+      "symbol": "**(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 139,
+      "symbol": "**(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 153,
+      "symbol": "~(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 157,
+      "symbol": "~(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 161,
+      "symbol": "≈(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 165,
+      "symbol": "≈(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 169,
+      "symbol": "≈(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 174,
+      "symbol": "<=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 178,
+      "symbol": "<=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 182,
+      "symbol": "<=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 186,
+      "symbol": ">=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 190,
+      "symbol": ">=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 194,
+      "symbol": ">=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 198,
+      "symbol": "<=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 202,
+      "symbol": "<=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 206,
+      "symbol": ">=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/NodeConvenienceOperations.swift",
+      "line": 210,
+      "symbol": ">=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Number.swift",
+      "line": 3,
+      "symbol": "Number",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Number.swift",
+      "line": 7,
+      "symbol": "Number.value",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Number.swift",
+      "line": 25,
+      "symbol": "Number.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Number.swift",
+      "line": 34,
+      "symbol": "Number.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Number.swift",
+      "line": 43,
+      "symbol": "Number.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Number.swift",
+      "line": 47,
+      "symbol": "Number.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 8,
+      "symbol": "Add.staticPrecedence",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 9,
+      "symbol": "Add.precedence",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 10,
+      "symbol": "Add.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 11,
+      "symbol": "Add.associativity",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 12,
+      "symbol": "Add.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 15,
+      "symbol": "Add.arguments",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 55,
+      "symbol": "Add.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 66,
+      "symbol": "Add.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 93,
+      "symbol": "Add.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 102,
+      "symbol": "Add.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 154,
+      "symbol": "Add.simplify().level(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 167,
+      "symbol": "Add.simplify().combineNumbers(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 191,
+      "symbol": "Add.simplify().combineLike(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 235,
+      "symbol": "Add.simplify().sortNodes(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 239,
+      "symbol": "Add.simplify().removeZero(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Add.swift",
+      "line": 245,
+      "symbol": "Add.simplify().terminal(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Assign.swift",
+      "line": 10,
+      "symbol": "Assign.staticPrecedence",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Assign.swift",
+      "line": 11,
+      "symbol": "Assign.precedence",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Assign.swift",
+      "line": 12,
+      "symbol": "Assign.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Assign.swift",
+      "line": 13,
+      "symbol": "Assign.associativity",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Assign.swift",
+      "line": 14,
+      "symbol": "Assign.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Assign.swift",
+      "line": 17,
+      "symbol": "Assign.left",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Assign.swift",
+      "line": 18,
+      "symbol": "Assign.right",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Assign.swift",
+      "line": 29,
+      "symbol": "Assign.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Assign.swift",
+      "line": 38,
+      "symbol": "Assign.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Assign.swift",
+      "line": 57,
+      "symbol": "Assign.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Assign.swift",
+      "line": 62,
+      "symbol": "Assign.factory(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Divide.swift",
+      "line": 8,
+      "symbol": "Divide.staticPrecedence",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Divide.swift",
+      "line": 9,
+      "symbol": "Divide.precedence",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Divide.swift",
+      "line": 10,
+      "symbol": "Divide.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Divide.swift",
+      "line": 11,
+      "symbol": "Divide.associativity",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Divide.swift",
+      "line": 12,
+      "symbol": "Divide.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Divide.swift",
+      "line": 15,
+      "symbol": "Divide.left",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Divide.swift",
+      "line": 16,
+      "symbol": "Divide.right",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Divide.swift",
+      "line": 41,
+      "symbol": "Divide.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Divide.swift",
+      "line": 50,
+      "symbol": "Divide.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Divide.swift",
+      "line": 69,
+      "symbol": "Divide.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Divide.swift",
+      "line": 73,
+      "symbol": "Divide.init(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Divide.swift",
+      "line": 115,
+      "symbol": "Divide.simplify().toMulPowers(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Divide.swift",
+      "line": 132,
+      "symbol": "Divide.simplify().cancelTerms(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Factorial.swift",
+      "line": 9,
+      "symbol": "Factorial.staticPrecedence",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Factorial.swift",
+      "line": 10,
+      "symbol": "Factorial.precedence",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Factorial.swift",
+      "line": 11,
+      "symbol": "Factorial.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Factorial.swift",
+      "line": 12,
+      "symbol": "Factorial.associativity",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Factorial.swift",
+      "line": 13,
+      "symbol": "Factorial.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Factorial.swift",
+      "line": 16,
+      "symbol": "Factorial.argument",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Factorial.swift",
+      "line": 40,
+      "symbol": "Factorial.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Factorial.swift",
+      "line": 49,
+      "symbol": "Factorial.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Factorial.swift",
+      "line": 68,
+      "symbol": "Factorial.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Factorial.swift",
+      "line": 72,
+      "symbol": "Factorial.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 9,
+      "symbol": "Multiply.staticPrecedence",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 10,
+      "symbol": "Multiply.precedence",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 11,
+      "symbol": "Multiply.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 12,
+      "symbol": "Multiply.associativity",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 13,
+      "symbol": "Multiply.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 16,
+      "symbol": "Multiply.arguments",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 51,
+      "symbol": "Multiply.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 62,
+      "symbol": "Multiply.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 89,
+      "symbol": "Multiply.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 93,
+      "symbol": "Multiply.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 145,
+      "symbol": "Multiply.simplify().level(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 158,
+      "symbol": "Multiply.simplify().combineNumbers(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 181,
+      "symbol": "Multiply.simplify().fractionProduct(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 220,
+      "symbol": "Multiply.simplify().combineLike(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 259,
+      "symbol": "Multiply.simplify().removeOne(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Multiply.swift",
+      "line": 265,
+      "symbol": "Multiply.simplify().expandAddition(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Negative.swift",
+      "line": 9,
+      "symbol": "Negative.staticPrecedence",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Negative.swift",
+      "line": 10,
+      "symbol": "Negative.precedence",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Negative.swift",
+      "line": 11,
+      "symbol": "Negative.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Negative.swift",
+      "line": 12,
+      "symbol": "Negative.associativity",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Negative.swift",
+      "line": 13,
+      "symbol": "Negative.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Negative.swift",
+      "line": 16,
+      "symbol": "Negative.argument",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Negative.swift",
+      "line": 26,
+      "symbol": "Negative.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Negative.swift",
+      "line": 35,
+      "symbol": "Negative.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Negative.swift",
+      "line": 54,
+      "symbol": "Negative.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Negative.swift",
+      "line": 58,
+      "symbol": "Negative.factory(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Power.swift",
+      "line": 9,
+      "symbol": "Power.staticPrecedence",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Power.swift",
+      "line": 10,
+      "symbol": "Power.precedence",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Power.swift",
+      "line": 11,
+      "symbol": "Power.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Power.swift",
+      "line": 12,
+      "symbol": "Power.associativity",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Power.swift",
+      "line": 13,
+      "symbol": "Power.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Power.swift",
+      "line": 16,
+      "symbol": "Power.left",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Power.swift",
+      "line": 17,
+      "symbol": "Power.right",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Power.swift",
+      "line": 48,
+      "symbol": "Power.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Power.swift",
+      "line": 57,
+      "symbol": "Power.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Power.swift",
+      "line": 76,
+      "symbol": "Power.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Power.swift",
+      "line": 80,
+      "symbol": "Power.init(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Subtract.swift",
+      "line": 9,
+      "symbol": "Subtract.staticPrecedence",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Subtract.swift",
+      "line": 10,
+      "symbol": "Subtract.precedence",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Subtract.swift",
+      "line": 11,
+      "symbol": "Subtract.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Subtract.swift",
+      "line": 12,
+      "symbol": "Subtract.associativity",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Subtract.swift",
+      "line": 13,
+      "symbol": "Subtract.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Subtract.swift",
+      "line": 16,
+      "symbol": "Subtract.left",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Subtract.swift",
+      "line": 17,
+      "symbol": "Subtract.right",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Subtract.swift",
+      "line": 42,
+      "symbol": "Subtract.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Subtract.swift",
+      "line": 51,
+      "symbol": "Subtract.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Subtract.swift",
+      "line": 70,
+      "symbol": "Subtract.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations/Subtract.swift",
+      "line": 75,
+      "symbol": "Subtract.factory(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 7,
+      "symbol": "OperationAssociativity",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 8,
+      "symbol": "OperationAssociativity.left",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 8,
+      "symbol": "OperationAssociativity.none",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 8,
+      "symbol": "OperationAssociativity.right",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 11,
+      "symbol": "OperationType",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 12,
+      "symbol": "OperationType.function",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 12,
+      "symbol": "OperationType.infix",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 12,
+      "symbol": "OperationType.postfix",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 12,
+      "symbol": "OperationType.prefix",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 17,
+      "symbol": "OperationPrecedence.higherThan",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 19,
+      "symbol": "OperationPrecedence.init(higherThan:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 23,
+      "symbol": "OperationPrecedence.getLevel()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 44,
+      "symbol": "Operation.precedence",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 45,
+      "symbol": "Operation.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 46,
+      "symbol": "Operation.associativity",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 47,
+      "symbol": "Operation.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 49,
+      "symbol": "Operation.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Operations.swift",
+      "line": 53,
+      "symbol": "Operation.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Parameter.swift",
+      "line": 3,
+      "symbol": "Parameter",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Parameter.swift",
+      "line": 4,
+      "symbol": "Parameter.currentNameIndex",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Parameter.swift",
+      "line": 6,
+      "symbol": "Parameter.nextName",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Parameter.swift",
+      "line": 11,
+      "symbol": "Parameter.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Parameter.swift",
+      "line": 29,
+      "symbol": "Parameter.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Parameter.swift",
+      "line": 38,
+      "symbol": "Parameter.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Parameter.swift",
+      "line": 47,
+      "symbol": "Parameter.==(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Parameter.swift",
+      "line": 60,
+      "symbol": "Parameter.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Parameter.swift",
+      "line": 116,
+      "symbol": "Parameter",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Parameter.swift",
+      "line": 150,
+      "symbol": "Array.subscript(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.subscript",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicMatrix.swift",
+      "line": 44,
+      "symbol": "SymbolicMatrix._ordering",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicMatrix.swift",
+      "line": 165,
+      "symbol": "SymbolicMatrix.subscript(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.subscript",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicMatrixUtilities.swift",
+      "line": 25,
+      "symbol": "sum(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicMatrixUtilities.swift",
+      "line": 29,
+      "symbol": "+(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicMatrixUtilities.swift",
+      "line": 33,
+      "symbol": ".*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicMatrixUtilities.swift",
+      "line": 37,
+      "symbol": ".*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicMatrixUtilities.swift",
+      "line": 41,
+      "symbol": ".*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicMatrixUtilities.swift",
+      "line": 45,
+      "symbol": ".*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicMatrixUtilities.swift",
+      "line": 49,
+      "symbol": ".**(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicMatrixUtilities.swift",
+      "line": 53,
+      "symbol": ".*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicMatrixUtilities.swift",
+      "line": 57,
+      "symbol": ".*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicMatrixUtilities.swift",
+      "line": 61,
+      "symbol": ".**(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicVector.swift",
+      "line": 3,
+      "symbol": "SymbolicVector",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicVector.swift",
+      "line": 6,
+      "symbol": "SymbolicVector",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicVector.swift",
+      "line": 28,
+      "symbol": "SymbolicVector._ordering",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicVectorUtilities.swift",
+      "line": 15,
+      "symbol": "sum(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicVectorUtilities.swift",
+      "line": 19,
+      "symbol": "+(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicVectorUtilities.swift",
+      "line": 23,
+      "symbol": "*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicVectorUtilities.swift",
+      "line": 35,
+      "symbol": ".*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicVectorUtilities.swift",
+      "line": 39,
+      "symbol": ".*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicVectorUtilities.swift",
+      "line": 43,
+      "symbol": ".*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicVectorUtilities.swift",
+      "line": 47,
+      "symbol": ".*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicVectorUtilities.swift",
+      "line": 51,
+      "symbol": ".**(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicVectorUtilities.swift",
+      "line": 55,
+      "symbol": ".*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicVectorUtilities.swift",
+      "line": 59,
+      "symbol": ".*(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/SymbolicVectorUtilities.swift",
+      "line": 63,
+      "symbol": ".**(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Variable.swift",
+      "line": 3,
+      "symbol": "Variable",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Variable.swift",
+      "line": 6,
+      "symbol": "Variable.currentNameIndex",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Variable.swift",
+      "line": 8,
+      "symbol": "Variable.nextName",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Variable.swift",
+      "line": 13,
+      "symbol": "Variable.string",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Variable.swift",
+      "line": 31,
+      "symbol": "Variable.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Variable.swift",
+      "line": 40,
+      "symbol": "Variable.parameters",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Variable.swift",
+      "line": 49,
+      "symbol": "Variable.==(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Variable.swift",
+      "line": 66,
+      "symbol": "Variable.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Variable.swift",
+      "line": 122,
+      "symbol": "Variable",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ianruh/Dev/SwiftMPC/Sources/SymbolicMath/Variable.swift",
+      "line": 157,
+      "symbol": "Array.subscript(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.subscript",
       "warning": "undocumented"
     }
   ],

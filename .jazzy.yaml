@@ -1,0 +1,16 @@
+output: docs/
+clean: True
+sdk: macosx
+author: Ian Ruh
+author_url: https://ian.ruh.io
+module: SwiftMPC
+module_version: 0.0.1
+readme: ./README.md
+root_url: https://ian.ruh.io/SwiftMPC
+source_host_url: https://github.com/ianruh/SwiftMPC
+min_acl: private
+skip_undocumented: False
+theme: apple
+use_safe_filenames: True
+undocumented_text: "This symbol has no documentation text."
+sourcekitten_sourcefile: [".SwiftMPC.json", ".SymbolicMath.json"]

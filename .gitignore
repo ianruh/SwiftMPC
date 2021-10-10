@@ -5,3 +5,5 @@
 xcuserdata/
 .idea/
 Package.resolved
+.SwiftMPC.json
+.SymbolicMath.json
