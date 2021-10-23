@@ -1,5 +1,0 @@
-version: "Apple Swift version 5.4.2 (swiftlang-1205.0.28.2 clang-1205.0.19.57)"
-options: "31363962a34d36f5e84cf04d8176f567"
-build_time: [1633883800, 240298000]
-inputs:
-  "/Users/ianruh/Dev/SwiftMPC/.build/checkouts/swift-collections/Sources/Collections/Collections.swift": [9223372036, 854775807]

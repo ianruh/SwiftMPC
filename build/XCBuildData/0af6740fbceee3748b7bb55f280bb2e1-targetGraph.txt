@@ -1,6 +1,0 @@
-Target dependency graph (3 targets)
-OrderedCollections in SwiftMPC
-DequeModule in SwiftMPC
-Collections in SwiftMPC, depends on:
-OrderedCollections in SwiftMPC (explicit)
-DequeModule in SwiftMPC (explicit)
