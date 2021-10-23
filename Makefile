@@ -32,6 +32,7 @@ documentation:
 	sourcekitten doc --spm --module-name SwiftMPC > .SwiftMPC.json
 	sourcekitten doc --spm --module-name SymbolicMath > .SymbolicMath.json
 	jazzy
+	rm -rf build/
 
 clean:
 	rm -rf .build/
