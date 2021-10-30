@@ -3,7 +3,7 @@
 import LASwift
 import OrderedCollections
 
-public class Node: CustomStringConvertible, Comparable, Hashable {
+public class Node: CustomStringConvertible, Comparable, Hashable, CustomDebugStringConvertible {
     // ------------------------ Properties ------------------------
 
     /// The node's unqie identifier
@@ -28,6 +28,11 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
         set {
             self._ordering = newValue
         }
+    }
+
+    /// For CustomDebugStringConvertible
+    public var debugDescription: String {
+        return self.description
     }
 
     /// A string representation of the node. This should be overridden.
@@ -268,7 +273,7 @@ public class Node: CustomStringConvertible, Comparable, Hashable {
     }
 
     /// Only does a cursory comparison of types. Will be correct for numbers and variables,
-    /// nut otherwise only compares the types of the nodes.
+    /// but otherwise only compares the types of the nodes.
     ///
     /// Opertions < Variables < Numbers
     public static func < (_ lhs: Node, _ rhs: Node) -> Bool {

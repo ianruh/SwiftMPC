@@ -33,6 +33,11 @@ public func differentiate(_ term: Node, wrt variableNode: Node, partially: Bool 
         return Number(0)
     case is Parameter:
         return Number(0)
+    case is BinaryVariable:
+        // Binary variables are just treated as constants for now. We only do
+        // combinatorial searches looking at the objective, not a relaxation
+        // of the discrete states.
+        return Number(0)
     case is Assign:
         return nil
     case let negative as Negative:

@@ -487,6 +487,62 @@ final class SymbolicMathTests: XCTestCase {
         }
     }
 
+    func testBinaryVariable() {
+
+        // Test the derivative is 0
+        do {
+            let x = Variable("x")
+            let b = BinaryVariable("b")
+
+            assertNodesEqual(differentiate(x*b, wrt: x), b)
+        }
+
+        // Test that they compare correctly
+        do {
+            let b1 = BinaryVariable("b1", values: (0,1))
+            let b2 = BinaryVariable("b2", values: (0,1))
+            let b1_same = BinaryVariable("b1", values: (0,1))
+            let b1_diff = BinaryVariable("b1", values: (-1,1))
+
+            XCTAssertTrue(b1 == b1_same)
+            XCTAssertFalse(b1 == b2)
+
+            print("b1: \(b1), \(b1.values)")
+            print("b1_diff: \(b1_diff), \(b1_diff.values)")
+            // print("b1 == b1_diff: \(b1 == b1_diff)")
+
+
+            XCTAssertFalse(b1 == b1_diff)
+        }
+
+        // Test that the contains works
+        do {
+            let b: BinaryVariable = "binary_var"
+            let x: Variable = "x"
+
+            XCTAssertTrue(((b*x)**Number(2)).contains(nodeType: BinaryVariable.self).count == 1)
+        }
+
+        // Test Evalation
+        do {
+            let b1 = BinaryVariable("b1", values: (0, 1))
+            let b2 = BinaryVariable("b2", values: (-1, 1))
+            
+            XCTAssertEqual(try b1.evaluate(withValues: [b1: 1.0]), 1.0)
+            XCTAssertEqual(try b1.evaluate(withValues: [b1: 0.0]), 0.0)
+            
+            do {
+                // Should fail as 0.0 is not an allowed value
+                let _ = try b2.evaluate(withValues: [b2: 0.0])
+                XCTFail("Binary variable evaluated to invalid value.")
+            } catch {
+                // Do nothing, as this should happen
+                // The test case is just so it actually counts as a test
+                XCTAssertTrue(true)
+            }
+        }
+    }
+
     func testTaylor() {
         do {
             let x = Variable("x")
@@ -524,6 +580,7 @@ final class SymbolicMathTests: XCTestCase {
         ("Hessian", testHessian),
         ("Variable Ordering", testOrdering),
         ("Parameter Derivative", testParameter),
+        ("Binary Variable", testBinaryVariable),
         ("Taylor Expansion", testTaylor)
     ]
 }
