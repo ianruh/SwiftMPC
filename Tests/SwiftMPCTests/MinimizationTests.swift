@@ -1,8 +1,10 @@
-import XCTest
+// Created 2020 github @ianruh
+
 import Collections
 import LASwift
-import SymbolicMath
 import SwiftMPC
+import SymbolicMath
+import XCTest
 
 /// Tests to do:
 /// -[ ] One variable, no constraints
@@ -23,10 +25,7 @@ import SwiftMPC
 /// -[ ] Random ordering
 
 final class SwiftMPCTests: XCTestCase {
-
-    func testConstrainedMinimization1() {
-        
-    }
+    func testConstrainedMinimization1() { }
 
     static var allTests = [
         ("Constrained Minimization 1", testConstrainedMinimization1),

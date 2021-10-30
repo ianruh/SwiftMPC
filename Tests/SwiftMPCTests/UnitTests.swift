@@ -1,11 +1,12 @@
-import XCTest
+// Created 2020 github @ianruh
+
 import Collections
 import LASwift
-import SymbolicMath
 import SwiftMPC
+import SymbolicMath
+import XCTest
 
 final class UnitTests: XCTestCase {
-
     func testBinaryVariableContain() {
         do {
             let x = Variable("x")
@@ -15,7 +16,7 @@ final class UnitTests: XCTestCase {
             let b1 = BinaryVariable("b1")
             let b2 = BinaryVariable("b2")
 
-            let exp = x**4 + b1**4 + z**4 / (Ln(b2) + y)
+            let exp = x ** 4 + b1 ** 4 + z ** 4 / (Ln(b2) + y)
 
             XCTAssertEqual(exp.binaryVariables, Set([b1, b2]))
         } catch {
@@ -23,8 +24,8 @@ final class UnitTests: XCTestCase {
             XCTFail("Unnexpected excpetion thrown")
         }
     }
- 
+
     static var allTests = [
         ("Binary Variables in Expression", testBinaryVariableContain),
-   ]
+    ]
 }

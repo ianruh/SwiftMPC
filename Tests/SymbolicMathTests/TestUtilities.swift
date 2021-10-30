@@ -1,9 +1,6 @@
-//
-// Created by Ian Ruh on 4/23/21.
-//
+// Created 2020 github @ianruh
 
-extension Double {
-
+public extension Double {
     /**
      Determine if a double is approximately equal to a given number.
      - Parameters:
@@ -11,8 +8,8 @@ extension Double {
        - delta: The tolerance in the comparions
      - Returns: True if the value is within the given tolerance
      */
-    public func isApprox(_ expectedValue: Double, within delta: Double = 0.0001) -> Bool {
-        if(self > expectedValue - delta && self < expectedValue + delta) {
+    func isApprox(_ expectedValue: Double, within delta: Double = 0.0001) -> Bool {
+        if self > expectedValue - delta, self < expectedValue + delta {
             return true
         } else {
             return false

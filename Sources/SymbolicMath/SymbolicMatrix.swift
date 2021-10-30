@@ -74,7 +74,6 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
         }
     }()
 
-
     /// A string shows which elements of the matrix are zero, and which  are non-zero.
     public var sparsityString: String {
         var str: String = ""

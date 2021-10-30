@@ -74,9 +74,10 @@ public class Multiply: Node, Operation {
         if let binaryVariables = self._binaryVariables {
             return binaryVariables
         } else {
-            self._binaryVariables = self.arguments.reduce(Set<BinaryVariable>()) { currentSet, nextArg in
-                currentSet + nextArg.binaryVariables
-            }
+            self._binaryVariables = self.arguments
+                .reduce(Set<BinaryVariable>()) { currentSet, nextArg in
+                    currentSet + nextArg.binaryVariables
+                }
             return self._binaryVariables!
         }
     }

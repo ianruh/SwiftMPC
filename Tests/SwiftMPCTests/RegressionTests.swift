@@ -1,30 +1,35 @@
-import XCTest
+// Created 2020 github @ianruh
+
 import Collections
 import LASwift
-import SymbolicMath
 import SwiftMPC
+import SymbolicMath
+import XCTest
 
 final class RegressionTests: XCTestCase {
-
     func testRegression1() {
         do {
             let x = Variable("x")
             let y = Variable("y")
             let z = Variable("z")
 
-            let obj = x**4 + y**4 + z**4
+            let obj = x ** 4 + y ** 4 + z ** 4
             let constraints: SymbolicVector = [
-                1.0 <= y,
-                5.0 <= z
+                y >= 1.0,
+                z >= 5.0,
             ]
             let equalityConstraints: [Assign] = [
                 10.0 ≈ y,
-                x ≈ 3.0
+                x ≈ 3.0,
             ]
 
             let expectedLocation: Vector = [3.0, 10.0, 5.0]
 
-            guard let objective = SymbolicObjective(min: obj, subjectTo: constraints, equalityConstraints: equalityConstraints) else {
+            guard let objective = SymbolicObjective(
+                min: obj,
+                subjectTo: constraints,
+                equalityConstraints: equalityConstraints
+            ) else {
                 print("Unable to construct symbolic objective")
                 XCTFail("Unable to construct symbolic objective for \(obj)")
                 return
@@ -33,7 +38,10 @@ final class RegressionTests: XCTestCase {
             var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
-            XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
+            XCTAssertTrue(
+                pt.isApprox(expectedLocation, within: 0.1),
+                "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)"
+            )
         } catch {
             print(error)
             XCTFail("Unnexpected excpetion thrown")
@@ -46,18 +54,22 @@ final class RegressionTests: XCTestCase {
             let y = Variable("y")
             let z = Variable("z")
 
-            let obj = x**4 + y**4 + z**4
+            let obj = x ** 4 + y ** 4 + z ** 4
             let constraints: SymbolicVector = [
-                1.0 <= y,
-                5.0 <= z
+                y >= 1.0,
+                z >= 5.0,
             ]
             let equalityConstraints: [Assign] = [
-                10.0 ≈ y
+                10.0 ≈ y,
             ]
 
             let expectedLocation: Vector = [0.0, 10.0, 5.0]
 
-            guard let objective = SymbolicObjective(min: obj, subjectTo: constraints, equalityConstraints: equalityConstraints) else {
+            guard let objective = SymbolicObjective(
+                min: obj,
+                subjectTo: constraints,
+                equalityConstraints: equalityConstraints
+            ) else {
                 print("Unable to construct symbolic objective")
                 XCTFail("Unable to construct symbolic objective for \(obj)")
                 return
@@ -66,7 +78,10 @@ final class RegressionTests: XCTestCase {
             var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
-            XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
+            XCTAssertTrue(
+                pt.isApprox(expectedLocation, within: 0.1),
+                "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)"
+            )
         } catch {
             print(error)
             XCTFail("Unnexpected excpetion thrown")
@@ -79,16 +94,20 @@ final class RegressionTests: XCTestCase {
             let y = Variable("y")
             let z = Variable("z")
 
-            let obj = x**4 + y**4 + z**4
+            let obj = x ** 4 + y ** 4 + z ** 4
             let constraints: SymbolicVector = [
-                1.0 <= y,
-                5.0 <= z
+                y >= 1.0,
+                z >= 5.0,
             ]
             let equalityConstraints: [Assign] = []
 
             let expectedLocation: Vector = [0.0, 1.0, 5.0]
 
-            guard let objective = SymbolicObjective(min: obj, subjectTo: constraints, equalityConstraints: equalityConstraints) else {
+            guard let objective = SymbolicObjective(
+                min: obj,
+                subjectTo: constraints,
+                equalityConstraints: equalityConstraints
+            ) else {
                 print("Unable to construct symbolic objective")
                 XCTFail("Unable to construct symbolic objective for \(obj)")
                 return
@@ -97,7 +116,10 @@ final class RegressionTests: XCTestCase {
             var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
-            XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
+            XCTAssertTrue(
+                pt.isApprox(expectedLocation, within: 0.1),
+                "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)"
+            )
         } catch {
             print(error)
             XCTFail("Unnexpected excpetion thrown")
@@ -110,13 +132,17 @@ final class RegressionTests: XCTestCase {
             let y = Variable("y")
             let z = Variable("z")
 
-            let obj = x**4 + y**4 + z**4
+            let obj = x ** 4 + y ** 4 + z ** 4
             let constraints: SymbolicVector = []
             let equalityConstraints: [Assign] = []
 
             let expectedLocation: Vector = [0.0, 0.0, 0.0]
 
-            guard let objective = SymbolicObjective(min: obj, subjectTo: constraints, equalityConstraints: equalityConstraints) else {
+            guard let objective = SymbolicObjective(
+                min: obj,
+                subjectTo: constraints,
+                equalityConstraints: equalityConstraints
+            ) else {
                 print("Unable to construct symbolic objective")
                 XCTFail("Unable to construct symbolic objective for \(obj)")
                 return
@@ -125,7 +151,10 @@ final class RegressionTests: XCTestCase {
             var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
-            XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
+            XCTAssertTrue(
+                pt.isApprox(expectedLocation, within: 0.1),
+                "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)"
+            )
         } catch {
             print(error)
             XCTFail("Unnexpected excpetion thrown")
@@ -139,15 +168,19 @@ final class RegressionTests: XCTestCase {
             let x = Variable("x")
             let y = Variable("y")
 
-            let obj = x + y**4
+            let obj = x + y ** 4
             let constraints: SymbolicVector = [
-                x >= 2.0
+                x >= 2.0,
             ]
             let equalityConstraints: [Assign] = []
 
             let expectedLocation: Vector = [2.0, 0.0]
 
-            guard let objective = SymbolicObjective(min: obj, subjectTo: constraints, equalityConstraints: equalityConstraints) else {
+            guard let objective = SymbolicObjective(
+                min: obj,
+                subjectTo: constraints,
+                equalityConstraints: equalityConstraints
+            ) else {
                 print("Unable to construct symbolic objective")
                 XCTFail("Unable to construct symbolic objective for \(obj)")
                 return
@@ -156,7 +189,10 @@ final class RegressionTests: XCTestCase {
             var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
-            XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
+            XCTAssertTrue(
+                pt.isApprox(expectedLocation, within: 0.1),
+                "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)"
+            )
         } catch {
             print(error)
             XCTFail("Unnexpected excpetion thrown")
@@ -172,36 +208,42 @@ final class RegressionTests: XCTestCase {
 
             let x = Variable.vector("x", count: numSteps)
             let v = Variable.vector("v", count: numSteps)
-            
+
             var ordering: OrderedSet<Variable> = []
-            zip(x, v).forEach({(pos, vel) in 
+            zip(x, v).forEach { pos, vel in
                 ordering.append(pos)
                 ordering.append(vel)
-            })
+            }
 
             // Impose the max acceleration constraints
             var accelerationConstraints: [Node] = []
-            for i in 0..<numSteps-1 {
-                accelerationConstraints.append( v[i+1] - v[i] <= (maxAcceleration*timeStep).symbol )
+            for i in 0 ..< numSteps - 1 {
+                accelerationConstraints
+                    .append(v[i + 1] - v[i] <= (maxAcceleration * timeStep).symbol)
             }
 
             // Impose the dynamics constraints
             var dynamicsConstraints: [Assign] = []
-            for i in 0..<numSteps-1 {
-                dynamicsConstraints.append( x[i+1] - x[i] ≈ v[i]*timeStep.symbol )
+            for i in 0 ..< numSteps - 1 {
+                dynamicsConstraints.append(x[i + 1] - x[i] ≈ v[i] * timeStep.symbol)
             }
 
             // Impose initial conditions
-            dynamicsConstraints.append( x[0] ≈ 0.0 )
-            dynamicsConstraints.append( v[0] ≈ 0.0 )
+            dynamicsConstraints.append(x[0] ≈ 0.0)
+            dynamicsConstraints.append(v[0] ≈ 0.0)
 
-            let obj = -1*x.last! - v.last!
-            let inequalityConstraints: SymbolicVector = SymbolicVector(accelerationConstraints)
+            let obj = -1 * x.last! - v.last!
+            let inequalityConstraints = SymbolicVector(accelerationConstraints)
             let equalityConstraints: [Assign] = dynamicsConstraints
 
             let expectedSolution: Vector = [0.0, 0.0, 0.0, 0.1, 0.01, 0.2]
 
-            guard let objective = SymbolicObjective(min: obj, subjectTo: inequalityConstraints, equalityConstraints: equalityConstraints, ordering: ordering) else {
+            guard let objective = SymbolicObjective(
+                min: obj,
+                subjectTo: inequalityConstraints,
+                equalityConstraints: equalityConstraints,
+                ordering: ordering
+            ) else {
                 print("Unable to construct symbolic objective")
                 XCTFail("Unable to construct symbolic objective for \(obj)")
                 return
@@ -209,7 +251,10 @@ final class RegressionTests: XCTestCase {
 
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
-            XCTAssertTrue(pt.isApprox(expectedSolution, within: 0.1), "Calculate min solution \(pt) is not equal to the expected one \(expectedSolution)")
+            XCTAssertTrue(
+                pt.isApprox(expectedSolution, within: 0.1),
+                "Calculate min solution \(pt) is not equal to the expected one \(expectedSolution)"
+            )
         } catch {
             print(error)
             XCTFail("Unnexpected excpetion thrown")
@@ -221,17 +266,21 @@ final class RegressionTests: XCTestCase {
             let x = Variable("x")
             let y = Variable("y")
 
-            let obj = x**2 + y**2
+            let obj = x ** 2 + y ** 2
             let constraints: SymbolicVector = [
-                y >= 4.0
+                y >= 4.0,
             ]
             let equalityConstraints: [Assign] = [
-                10.0 ≈ y
+                10.0 ≈ y,
             ]
 
             let expectedLocation: Vector = [0.0, 10.0]
 
-            guard let objective = SymbolicObjective(min: obj, subjectTo: constraints, equalityConstraints: equalityConstraints) else {
+            guard let objective = SymbolicObjective(
+                min: obj,
+                subjectTo: constraints,
+                equalityConstraints: equalityConstraints
+            ) else {
                 print("Unable to construct symbolic objective")
                 XCTFail("Unable to construct symbolic objective for \(obj)")
                 return
@@ -240,7 +289,10 @@ final class RegressionTests: XCTestCase {
             var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
-            XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
+            XCTAssertTrue(
+                pt.isApprox(expectedLocation, within: 0.1),
+                "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)"
+            )
         } catch {
             print(error)
             XCTFail("Unnexpected excpetion thrown")
@@ -252,16 +304,20 @@ final class RegressionTests: XCTestCase {
             let x = Variable("x")
             let p = Parameter("p")
 
-            let obj = x**2
+            let obj = x ** 2
             let constraints: SymbolicVector = [
-                p <= x
+                p <= x,
             ]
 
-            let parameterValues: Dictionary<Parameter, Double> = [p: 10.0]
+            let parameterValues: [Parameter: Double] = [p: 10.0]
 
             let expectedLocation: Vector = [10.0]
 
-            guard let objective = SymbolicObjective(min: obj, subjectTo: constraints, parameterValues: parameterValues) else {
+            guard let objective = SymbolicObjective(
+                min: obj,
+                subjectTo: constraints,
+                parameterValues: parameterValues
+            ) else {
                 print("Unable to construct symbolic objective")
                 XCTFail("Unable to construct symbolic objective for \(obj)")
                 return
@@ -270,7 +326,10 @@ final class RegressionTests: XCTestCase {
             var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
-            XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
+            XCTAssertTrue(
+                pt.isApprox(expectedLocation, within: 0.1),
+                "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)"
+            )
         } catch {
             print(error)
             XCTFail("Unnexpected excpetion thrown")
@@ -283,19 +342,24 @@ final class RegressionTests: XCTestCase {
             let y = Variable("y")
             let p = Parameter("p")
 
-            let obj = x**2 + y**2
+            let obj = x ** 2 + y ** 2
             let constraints: SymbolicVector = [
-                p <= x
+                p <= x,
             ]
             let equalityConstraints: [Assign] = [
-                p ≈ y
+                p ≈ y,
             ]
 
-            let parameterValues: Dictionary<Parameter, Double> = [p: 10.0]
+            let parameterValues: [Parameter: Double] = [p: 10.0]
 
             let expectedLocation: Vector = [10.0, 10.0]
 
-            guard let objective = SymbolicObjective(min: obj, subjectTo: constraints, equalityConstraints: equalityConstraints, parameterValues: parameterValues) else {
+            guard let objective = SymbolicObjective(
+                min: obj,
+                subjectTo: constraints,
+                equalityConstraints: equalityConstraints,
+                parameterValues: parameterValues
+            ) else {
                 print("Unable to construct symbolic objective")
                 XCTFail("Unable to construct symbolic objective for \(obj)")
                 return
@@ -304,7 +368,10 @@ final class RegressionTests: XCTestCase {
             var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
-            XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
+            XCTAssertTrue(
+                pt.isApprox(expectedLocation, within: 0.1),
+                "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)"
+            )
         } catch {
             print(error)
             XCTFail("Unnexpected excpetion thrown")

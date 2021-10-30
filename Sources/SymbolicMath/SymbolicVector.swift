@@ -49,7 +49,6 @@ public class SymbolicVector: Collection, ExpressibleByArrayLiteral {
         }
     }()
 
-
     /// Initialize a symbolic vector from an  array of nodes.
     /// - Parameter array: An array of nodes.
     public init(_ array: [Node]) {

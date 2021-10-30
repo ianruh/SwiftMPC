@@ -72,8 +72,6 @@ public class Power: Node, Operation {
         }
     }
 
-
-
     override public var derivatives: Set<Derivative> {
         return self.left.derivatives + self.right.derivatives
     }
