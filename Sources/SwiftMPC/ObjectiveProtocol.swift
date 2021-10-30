@@ -38,7 +38,7 @@ public protocol Objective {
     /// The equality constraint matrix. If the equality constraints are non-linear,
     /// this has to be the linearized equality constraints (possibly about the current/previous state).
     var equalityConstraintMatrix: Matrix? { get }
-    
+
     /// The reuality constraint vector (the right hand side of  Ax=b).
     var equalityConstraintVector: Vector? { get }
 
@@ -88,7 +88,7 @@ public extension Objective {
     }
 
     //================= Step Solver Default Implementation ================
-    
+
     /// Step Solver Default Implementation
     ///
     /// TODO: This doesn't handle the case of singular H (it will explode in some random direction)
@@ -140,7 +140,8 @@ public extension Objective {
                 rows: equalityConstraintMatrix * Matrix(primal) - Matrix(equalityConstraintVector)
             )
 
-            let stepDirectionWithDual = try LASwift.linsolve(newtonStepMatrix, newtonStepRightSide).flat
+            let stepDirectionWithDual = try LASwift.linsolve(newtonStepMatrix, newtonStepRightSide)
+                .flat
 
             // We need to pull out the step direction from the vector as it includes the dual as well
             // ┌         ┐ ┌     ┐    ┌      ┐
@@ -150,7 +151,8 @@ public extension Objective {
             // Where v is our primal step direction, and w would be the next dual (not the dual step)
 
             let primalStepDirection = Array(stepDirectionWithDual[0 ..< self.numVariables])
-            let dualStepDirection = Array(stepDirectionWithDual[self.numVariables ..< stepDirectionWithDual.count]) -
+            let dualStepDirection =
+                Array(stepDirectionWithDual[self.numVariables ..< stepDirectionWithDual.count]) -
                 dual
             // We subtract off the current dual here because w = ν + Δν, while v = Δx
 
@@ -173,7 +175,8 @@ public extension Objective {
             // │ ∇²f │ │  v  │ = -│  ∇f  │
             // └     ┘ └     ┘    └      ┘
             // Where v is our primal step direction
-            let primalStepDirection = try LASwift.linsolve(newtonStepMatrix, newtonStepRightSide).flat
+            let primalStepDirection = try LASwift.linsolve(newtonStepMatrix, newtonStepRightSide)
+                .flat
 
             return (primalStepDirection: primalStepDirection, dualStepDirection: [])
         }

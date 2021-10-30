@@ -92,7 +92,9 @@ public class Variable: Node, ExpressibleByStringLiteral {
         }
     }
 
-    @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
+    @discardableResult override public func replace(_ targetNode: Node,
+                                                    with replacement: Node) -> Node
+    {
         if targetNode == self {
             return replacement
         } else {
@@ -120,7 +122,6 @@ public class Variable: Node, ExpressibleByStringLiteral {
 }
 
 public extension Variable {
-    
     /// Construct an array of variables with the given base name.
     /// - Parameters:
     ///   - name: The base name for the array.
@@ -133,7 +134,7 @@ public extension Variable {
         }
         return arr
     }
-    
+
     /// Construct a matrix (really a doubly nested array) of variables with the given base name.
     /// - Parameters:
     ///   - name: The base name for the matrix.

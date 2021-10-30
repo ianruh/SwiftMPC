@@ -4,16 +4,14 @@ import LASwift
 import RealModule
 
 public struct InequalitySolver {
-    
     /// The hyper parameters used by the solver.
     public var hyperParameters = HyperParameters()
 
-    
     @usableFromInline
     internal var hasEqaulityConstraints: Bool = false
 
     public init() { }
-    
+
     /// The norm of
     ///
     /// ```
@@ -41,7 +39,8 @@ public struct InequalitySolver {
             let firstRow = Matrix(self.barrierGradient(objective: objective, at: primal, t: t)) +
                 transpose(objective.equalityConstraintMatrix!) * Matrix(dual)
             let secondRow = objective
-                .equalityConstraintMatrix! * Matrix(primal) - Matrix(objective.equalityConstraintVector!)
+                .equalityConstraintMatrix! * Matrix(primal) -
+                Matrix(objective.equalityConstraintVector!)
             return norm(append(firstRow, rows: secondRow).flat)
         } else {
             // If there are no equality constraints, then the residual is just the gradient,
@@ -49,7 +48,7 @@ public struct InequalitySolver {
             return norm(self.barrierGradient(objective: objective, at: primal, t: t))
         }
     }
-    
+
     /// Perform an infeasible start line search on the problem.
     ///
     /// If an exception is thrown saying that the maximum number of line search iterations has been reached,
@@ -83,14 +82,19 @@ public struct InequalitySolver {
                                             dual: startDual,
                                             t: t)
 
-        var shiftedValue = self.barrierValue(objective: objective, at: startPrimal + s .* primalDirection, t: t)
+        var shiftedValue = self.barrierValue(
+            objective: objective,
+            at: startPrimal + s .* primalDirection,
+            t: t
+        )
 
         // We need to make sure we aren't jumping over a barrier
         // e.g. if our barrier is -log(-(0.1 - x)), then the gradient is still defined
         // even when the objective isn't. So, we need to make sure our objective always
         // stays defined (e.g. is not NaN)
         var numIterations: Int = 0
-        while shiftedNorm > (1 - self.hyperParameters.lineSearchAlpha * s) * currentNorm || shiftedNorm
+        while shiftedNorm > (1 - self.hyperParameters.lineSearchAlpha * s) * currentNorm ||
+            shiftedNorm
             .isNaN || shiftedValue.isNaN
         {
             s = self.hyperParameters.lineSearchBeta * s
@@ -98,7 +102,11 @@ public struct InequalitySolver {
                                             primal: startPrimal + s .* primalDirection,
                                             dual: startDual + s .* dualDirection,
                                             t: t)
-            shiftedValue = self.barrierValue(objective: objective, at: startPrimal + s .* primalDirection, t: t)
+            shiftedValue = self.barrierValue(
+                objective: objective,
+                at: startPrimal + s .* primalDirection,
+                t: t
+            )
             numIterations += 1
             if numIterations > self.hyperParameters.lineSearchMaximumIterations {
                 throw SwiftMPCError.misc("Reached maximum number of line search iterations")
@@ -106,7 +114,7 @@ public struct InequalitySolver {
         }
         return s
     }
-    
+
     /// The value of the barrier augmented objective.
     /// - Parameters:
     ///   - objective: The objective  being minimized.
@@ -117,7 +125,7 @@ public struct InequalitySolver {
     internal func barrierValue(objective: Objective, at x: Vector, t: Double) -> Double {
         return t * objective.value(x) + objective.inequalityConstraintsValue(x)
     }
-    
+
     /// The value of the barrier augmented objective's gradient.
     /// - Parameters:
     ///   - objective: The objective being minimized.
@@ -128,7 +136,7 @@ public struct InequalitySolver {
     internal func barrierGradient(objective: Objective, at x: Vector, t: Double) -> Vector {
         return t .* objective.gradient(x) + objective.inequalityConstraintsGradient(x)
     }
-    
+
     /// The value  of the augmented objective's hessian.
     /// - Parameters:
     ///   - objective: The objective being minimized.
@@ -139,7 +147,7 @@ public struct InequalitySolver {
     internal func barrierHessian(objective: Objective, at x: Vector, t: Double) -> Matrix {
         return t .* objective.hessian(x) + objective.inequalityConstraintsHessian(x)
     }
-    
+
     /// Minimize an infeasible start, inequality constrained objective.
     /// - Parameter objective: The objective to minimize.
     /// - Throws: For many reasons, including (ill formed problems, evaluation problems, line search problems, and others).
@@ -154,7 +162,9 @@ public struct InequalitySolver {
                 // Check that the equality constraints and objective have the same number of variables
                 guard objective.numVariables == equalityConstraintMatrix.cols else {
                     throw SwiftMPCError
-                        .wrongNumberOfVariables("Number of variables in objective and equality constraint disagree")
+                        .wrongNumberOfVariables(
+                            "Number of variables in objective and equality constraint disagree"
+                        )
                 }
                 // Check that the matrix and vector have the same height
                 guard equalityConstraintMatrix.rows == equalityConstraintVector.count else {
@@ -200,7 +210,12 @@ public struct InequalitySolver {
         var value = objective.value(currentPoint)
         var grad: Vector = self.barrierGradient(objective: objective, at: currentPoint, t: t)
         var H: Matrix = self.barrierHessian(objective: objective, at: currentPoint, t: t)
-        var lambda = self.residualNorm(objective: objective, primal: currentPoint, dual: currentDual, t: t)
+        var lambda = self.residualNorm(
+            objective: objective,
+            primal: currentPoint,
+            dual: currentDual,
+            t: t
+        )
 
         var homotopyStagesExitCondition: Bool = (objective.numConstraints == 0) ||
             (Double(objective.numConstraints) / t > self.hyperParameters.dualGapEpsilon)
@@ -210,7 +225,12 @@ public struct InequalitySolver {
             var iterations: Int = 0
 
             // This needs to be recalulated because we changed  t
-            lambda = self.residualNorm(objective: objective, primal: currentPoint, dual: currentDual, t: t)
+            lambda = self.residualNorm(
+                objective: objective,
+                primal: currentPoint,
+                dual: currentDual,
+                t: t
+            )
 
             #if DEBUG
             printDebug("\(tSteps):\(iterations)     Point:   \(currentPoint)")
@@ -251,7 +271,12 @@ public struct InequalitySolver {
                 value = objective.value(currentPoint)
                 grad = self.barrierGradient(objective: objective, at: currentPoint, t: t)
                 H = self.barrierHessian(objective: objective, at: currentPoint, t: t)
-                lambda = self.residualNorm(objective: objective, primal: currentPoint, dual: currentDual, t: t)
+                lambda = self.residualNorm(
+                    objective: objective,
+                    primal: currentPoint,
+                    dual: currentDual,
+                    t: t
+                )
 
                 #if DEBUG
                 printDebug("\(tSteps):\(iterations)     Point:   \(currentPoint)")
@@ -284,33 +309,33 @@ public struct InequalitySolver {
 
         return (minimum: minimum, primal: currentPoint, dual: currentDual)
     }
-    
+
     /// This struct is just a container for the hyper parameters that can be used to customize the behavior of the solver.
     ///
     /// The default values of fairly aggressive, so will find pretty precisely the minimum. For real time applications, many of the
     /// iteration maximums can be heavily restricted.
     public struct HyperParameters {
         //==== Iteration Maximums ====
-        
+
         /// The maximum number of newton steps per homotopy stage.
         public var newtonStepsStageMaximum: Int = 100
-        
+
         /// The maximum number of homotopy stages to to perform.
         public var homotopyStagesMaximum: Int = 50
 
         //==== Epsilons ====
-        
+
         /// The epsilon value used for the residual.
         public var residualEpsilon: Double = 1.0e-3
-        
+
         /// The epsilon value used for the primal-dual gap.
         public var dualGapEpsilon: Double = 1.0e-3
 
         //==== Homtopy Parameters ====
-        
+
         /// The starting value of the homotopy barrier parameter.
         public var homotopyParameterStart: Double = 1.0
-        
+
         /// The multiplier for the homotopy barrier parameter. It is the factor that the parameter
         /// increases by after every stage.
         public var homotopyParameterMultiplier: Double = 20.0

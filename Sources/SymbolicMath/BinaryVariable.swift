@@ -109,7 +109,9 @@ public class BinaryVariable: Node, ExpressibleByStringLiteral {
         }
     }
 
-    @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
+    @discardableResult override public func replace(_ targetNode: Node,
+                                                    with replacement: Node) -> Node
+    {
         if targetNode == self {
             return replacement
         } else {
@@ -139,8 +141,8 @@ public class BinaryVariable: Node, ExpressibleByStringLiteral {
 
 //====== Commented out for now, maybe use later ======
 
-//public extension Variable {
-//    
+// public extension Variable {
+//
 //    /// Construct an array of variables with the given base name.
 //    /// - Parameters:
 //    ///   - name: The base name for the array.
@@ -153,7 +155,7 @@ public class BinaryVariable: Node, ExpressibleByStringLiteral {
 //        }
 //        return arr
 //    }
-//    
+//
 //    /// Construct a matrix (really a doubly nested array) of variables with the given base name.
 //    /// - Parameters:
 //    ///   - name: The base name for the matrix.
@@ -171,10 +173,10 @@ public class BinaryVariable: Node, ExpressibleByStringLiteral {
 //        }
 //        return arrs
 //    }
-//}
+// }
 //
-//public extension Array where Array.Element == [Variable] {
+// public extension Array where Array.Element == [Variable] {
 //    subscript(_ row: Int, _ col: Int) -> Variable {
 //        return self[row][col]
 //    }
-//}
+// }

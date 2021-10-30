@@ -36,7 +36,8 @@ public struct LTVMPC {
 
     public mutating func getNextControls() throws -> (acceleration: Double, steeringAngle: Double) {
         // Solve the optimization problem
-        let (min, primal, dual) = try solver.infeasibleInequalityMinimize(objective: self.numericObjective)
+        let (min, primal, dual) = try solver
+            .infeasibleInequalityMinimize(objective: self.numericObjective)
 
         // Extract the control and relavent state variables
         let accelerationVector = LTVNumericObjective.extractVector_acceleration(primal)
@@ -57,7 +58,12 @@ public struct LTVMPC {
         return (acceleration: accelerationVector[0], steeringAngle: steeringAngleVector[0])
     }
 
-    public mutating func setInitialState(x: Double, y: Double, vehicleAngle: Double, velocity: Double) {
+    public mutating func setInitialState(
+        x: Double,
+        y: Double,
+        vehicleAngle: Double,
+        velocity: Double
+    ) {
         self.numericObjective.initialXPosition = x
         self.numericObjective.initialYPosition = y
         self.numericObjective.initialVehicleAngle = vehicleAngle

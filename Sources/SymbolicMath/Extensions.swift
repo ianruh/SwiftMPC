@@ -5,7 +5,6 @@ import LASwift
 import RealModule
 
 extension String {
-
     /// Returns true is the string is an integer.
     var isInteger: Bool {
         guard self.count > 0 else { return false }

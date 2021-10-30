@@ -166,7 +166,11 @@ public func differentiate(_ term: Node, wrt variableNode: Node, partially: Bool 
             return nil
         }
     case let sqrt as Sqrt:
-        return differentiate(Power([sqrt.argument, Number(0.5)]), wrt: variable, partially: partially)
+        return differentiate(
+            Power([sqrt.argument, Number(0.5)]),
+            wrt: variable,
+            partially: partially
+        )
     case let exp as Exp:
         let dexp = differentiate(exp.argument, wrt: variable, partially: partially)
 

@@ -98,7 +98,9 @@ public class Divide: Node, Operation {
         return ids
     }
 
-    @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
+    @discardableResult override public func replace(_ targetNode: Node,
+                                                    with replacement: Node) -> Node
+    {
         if targetNode == self {
             return replacement
         } else {
@@ -138,10 +140,12 @@ public class Divide: Node, Operation {
                     // Check the bases are the same
                     if leftTerms[i].left == rightTerms[j].left {
                         if leftTerms[i].right > rightTerms[j].right {
-                            leftTerms[i] = Power(leftTerms[i].left, Subtract(leftTerms[i].right, rightTerms[j].right))
+                            leftTerms[i] = Power(leftTerms[i].left,
+                                                 Subtract(leftTerms[i].right, rightTerms[j].right))
                             rightTerms[j] = Power(Number(1), Number(1))
                         } else if leftTerms[i].right < rightTerms[j].right {
-                            rightTerms[j] = Power(rightTerms[j].left, Subtract(rightTerms[j].right, leftTerms[i].right))
+                            rightTerms[j] = Power(rightTerms[j].left,
+                                                  Subtract(rightTerms[j].right, leftTerms[i].right))
                             leftTerms[i] = Power(Number(1), Number(1))
                         } else {
                             rightTerms[j] = Power(Number(1), Number(1))
@@ -188,7 +192,8 @@ public class Divide: Node, Operation {
             let leftDiv = leftSimplified as! Divide
             let rightDiv = rightSimplified as! Divide
             // let new = Divide(leftDiv.left * rightDiv.right, leftDiv.right * rightDiv.left).simplify()
-            let new = cancelTerms(Divide(leftDiv.left * rightDiv.right, leftDiv.right * rightDiv.left))
+            let new =
+                cancelTerms(Divide(leftDiv.left * rightDiv.right, leftDiv.right * rightDiv.left))
             try! new.setVariableOrder(from: self)
             new.isSimplified = true
             return new

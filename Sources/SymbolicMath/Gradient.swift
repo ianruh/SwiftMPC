@@ -1,7 +1,6 @@
 // Created 2020 github @ianruh
 
 public extension Node {
-    
     /// FInd the gradient of the node using the node's variable ordering.
     /// - Returns: A symbolic vector representing the gradient.
     func gradient() -> SymbolicVector? {

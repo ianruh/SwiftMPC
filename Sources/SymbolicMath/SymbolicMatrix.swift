@@ -19,7 +19,7 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
     public var rows: Int {
         return self.count
     }
-    
+
     /// The number of columns in the matrix
     public var cols: Int {
         if self.rows == 0 {
@@ -37,12 +37,12 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
         }
         return nodes
     }
-    
+
     /// The actual backing of the matrix. Each `SymbolicVector` is a row in the matrix.
     internal var vectors: [SymbolicVector]
 
     private var _ordering: OrderedSet<Variable>?
-    
+
     /// The ording of the variables of the matrix. The elements of the matrix inherit this ordering.
     public var orderedVariables: OrderedSet<Variable> {
         if let ordering = self._ordering {
@@ -59,7 +59,7 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
             currentSet.union(nextVector.variables)
         }
     }()
-    
+
     /// The union of all the parameters in the individual elements of the matrix.
     public lazy var parameters: Set<Parameter> = {
         self.vectors.reduce(Set<Parameter>()) { currentSet, nextVector in
@@ -89,13 +89,13 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
 
         return str
     }
-    
+
     /// Initialize the symbolic natrix from a set of symbolic vectors.
     /// - Parameter array: An array  of  symbolic vectors that form the rows of the matrix.
     public init(_ array: [SymbolicVector]) {
         self.vectors = array
     }
-    
+
     /// To be perfectly honset, I'm not entriely sure how you would use this.
     /// - Parameter arrayLiteral: An array of symbolic vectors.
     public required convenience init(arrayLiteral: Element...) {
@@ -128,17 +128,20 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
 
         return Matrix(self.count, self.first!.count, matrixValues)
     }
-    
+
     /// Evaluate the symbolic matrix using a vector of variable values (in the order of the matrice's `orderedVariables`) and a dict of parameter values.
     /// - Parameters:
     ///   - x: A vector of values for each variable  (in the order of the matrice's `orderedVariables`).
     ///   - parameterValues: The values for each parameter.
     /// - Throws: If not all  parameters or variables have values.
     /// - Returns: The matrix representing the symbolic matrix.
-    public func evaluate(_ x: Vector, withParameters parameterValues: [Parameter: Double] = [:]) throws -> Matrix {
+    public func evaluate(_ x: Vector,
+                         withParameters parameterValues: [Parameter: Double] = [:]) throws -> Matrix
+    {
         // Ensure the vector is the right length
         guard x.count == self.orderedVariables.count else {
-            throw SymbolicMathError.misc("Vector \(x) is the wrong length (\(x.count) != \(self.variables.count)")
+            throw SymbolicMathError
+                .misc("Vector \(x) is the wrong length (\(x.count) != \(self.variables.count)")
         }
 
         // We don't check that all parameters are represented. It will throw a clear error if one is missing when
@@ -165,17 +168,19 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
     public subscript(_ row: Int, _ col: Int) -> Node {
         return self.vectors[row][col]
     }
-    
+
     public func index(after i: Index) -> Index {
         return self.vectors.index(after: i)
     }
-    
+
     /// Set the variable ordering of the matrix.
     /// - Parameter newOrdering: The ordering of the matrix.
     /// - Throws: If not all variables in the matrix are included in the ordering.
     ///
     /// More variables than are present in the matrix may be  supplied
-    public func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection, C.Element == Variable {
+    public func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection,
+        C.Element == Variable
+    {
         self._ordering = OrderedSet<Variable>(newOrdering)
 
         // The elements set ordering will throw if there is a missing variable, so no need to
@@ -185,7 +190,7 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
             try self.vectors[i].setVariableOrder(self.orderedVariables)
         }
     }
-    
+
     /// Simplify the matrix. Does  an element wise  simplification of each node in  the matrix.
     /// - Returns: The symplified matrix
     ///

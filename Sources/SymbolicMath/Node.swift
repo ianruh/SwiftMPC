@@ -10,8 +10,7 @@ public class Node: CustomStringConvertible, Comparable, Hashable, CustomDebugStr
     public lazy var id = Id()
 
     private var _ordering: OrderedSet<Variable>?
-    
-    
+
     /// The node's ordering of the variables. It uses the default ordering, unless one is
     /// set using the `setOrdering` method. This should not be assigned to.
     /// TODO: Refactor to remove the set option here.
@@ -103,23 +102,24 @@ public class Node: CustomStringConvertible, Comparable, Hashable, CustomDebugStr
     internal var isSimplified: Bool = false
 
     // ------------------------ Functions ------------------------
-    
-    
+
     /// Set the variable ordering of the node
     /// - Parameter newOrdering: The new ordering of variables
     /// - Throws: If the new ordering does not contain all variables in the node
     ///
     /// The new ordering may contain more than the variables in just this node.
-    public func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection, C.Element == Variable {
+    public func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection,
+        C.Element == Variable
+    {
         try self.variables.forEach { variable in
             guard newOrdering.contains(variable) else {
-                throw SymbolicMathError.misc("New ordering \(newOrdering) does not contain variable \(variable).")
+                throw SymbolicMathError
+                    .misc("New ordering \(newOrdering) does not contain variable \(variable).")
             }
         }
         self.orderedVariables = OrderedSet<Variable>(newOrdering)
     }
 
-    
     /// Set the variable order by inheriting it from another node.
     /// - Parameter node: The node to inherit the order from.
     /// - Throws: If the new node contains variable(s) not in the progenitor node.
@@ -134,18 +134,21 @@ public class Node: CustomStringConvertible, Comparable, Hashable, CustomDebugStr
         preconditionFailure("This method must be overridden")
     }
 
-    
     /// Evaluate the node using a given set of variable and parameter values.
     /// - Parameters:
     ///   - x: A vector (with the values in the order of the node's variable ordering) containing the values for the variables.
     ///   - parameterValues: The values of the parameters to evaluate at.
     /// - Throws: If the node cannot be evaluated (e.g. if not all variables or parameter's are given values).
     /// - Returns: The value of the node at the given location.
-    public func evaluate(_ x: Vector, withParameters parameterValues: [Parameter: Double] = [:]) throws -> Double {
+    public func evaluate(_ x: Vector,
+                         withParameters parameterValues: [Parameter: Double] = [:]) throws -> Double
+    {
         // Ensure the vector is the right length
         guard x.count == self.orderedVariables.count else {
             throw SymbolicMathError
-                .misc("Vector \(x) is the wrong length (\(x.count) != \(self.orderedVariables.count)")
+                .misc(
+                    "Vector \(x) is the wrong length (\(x.count) != \(self.orderedVariables.count)"
+                )
         }
 
         // We don't check that all parameters are represented. It will throw a clear error if one is missing when
@@ -207,7 +210,6 @@ public class Node: CustomStringConvertible, Comparable, Hashable, CustomDebugStr
         preconditionFailure("This method must be overridden")
     }
 
-    
     /// Has of the node. Does not simplify  the node, so is dependent on the node structure.
     /// - Parameter : The hasher to hash into.
     public func hash(into _: inout Hasher) {
@@ -221,7 +223,6 @@ public class Node: CustomStringConvertible, Comparable, Hashable, CustomDebugStr
         preconditionFailure("This method must be overriden")
     }
 
-    
     /// Taylor expand the node.
     ///
     /// - Parameters:
@@ -238,8 +239,8 @@ public class Node: CustomStringConvertible, Comparable, Hashable, CustomDebugStr
         var terms: Node = Number(0)
         var derivatives: [Node] = [self]
         for i in 0 ... order {
-            terms = terms + derivatives.last!
-                .replace(variable, with: location) / Number(i.factorial()) * (variable - location) ** Number(i)
+            terms = terms + derivatives.last!.replace(variable, with: location) /
+                Number(i.factorial()) * (variable - location) ** Number(i)
             // Find the ith derivative
             guard let nextDerivative = differentiate(derivatives.last!, wrt: variable) else {
                 return nil
@@ -252,7 +253,6 @@ public class Node: CustomStringConvertible, Comparable, Hashable, CustomDebugStr
 
     // --------------Comparable Conformance-----------------
 
-    
     /// Determine if two nodes are equal (without simplifying, so it is structure dependent)
     /// - Parameters:
     ///   - lhs: Left hand node
@@ -262,7 +262,6 @@ public class Node: CustomStringConvertible, Comparable, Hashable, CustomDebugStr
         return lhs.equals(rhs)
     }
 
-    
     /// Attempt to determine if two nodes are nathematically equal. If they simplify to the same representation, then it will return true.
     /// - Parameters:
     ///   - lhs: Left hand node

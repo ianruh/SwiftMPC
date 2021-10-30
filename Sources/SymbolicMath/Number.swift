@@ -77,7 +77,9 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
         }
     }
 
-    @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
+    @discardableResult override public func replace(_ targetNode: Node,
+                                                    with replacement: Node) -> Node
+    {
         if targetNode == self {
             return replacement
         } else {

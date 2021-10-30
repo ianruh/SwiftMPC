@@ -15,29 +15,28 @@ import SymbolicMath
 /// are much faster and should be used for anything requiring realtime operation, except  for
 /// the simplest of toy problems.
 public struct SymbolicObjective: Objective {
-    
     /// The set of variables involved in any form in the objective.
     public let variables: Set<Variable>
-    
+
     /// The number of variables involved in the objective.
     public var numVariables: Int {
         return self.variables.count
     }
-    
+
     /// The ordering of the variables used by the objective. This is very important when it
     /// comes to exploiting the structure of the problem to solve for newton steps more
     /// efficiently.
     public var orderedVariables: OrderedSet<Variable>
-    
+
     /// The node describing the objective of the problem.
     public var objectiveNode: Node
-    
+
     /// The symbolic gradient of the objective
     public var symbolicGradient: SymbolicVector = []
-    
+
     /// The symbolic hessian  of the objective
     public var symbolicHessian: SymbolicMatrix = []
-    
+
     /// The number of inequality constraints involved in the objective.
     public var numConstraints: Int {
         if let constraints = self.symbolicConstraintsVector {
@@ -46,45 +45,47 @@ public struct SymbolicObjective: Objective {
             return 0
         }
     }
-    
+
     /// A symbolic vector of the inequality constraints in normal form (e.g. ≤ 0).
     public var symbolicConstraintsVector: SymbolicVector?
-    
+
     /// The sum of the -log(-1*constraint) of the values.
     public var symbolicConstraintsValue: Node?
-    
+
     /// The gradient of the sum of the negative log of the negative of the constraints
     public var symbolicConstraintsGradient: SymbolicVector?
-    
+
     /// The hessian of the sum of the negative log of the negative of the constraints
     public var symbolicConstraintsHessian: SymbolicMatrix?
-    
+
     /// The symbolic representation of the equality constraint matrix
     public var symbolicEqualityConstraintMatrix: SymbolicMatrix?
-    
+
     /// The symbolic representation of the equality constraint vector.
     public var symbolicEqualityConstraintVector: SymbolicVector?
-    
+
     /// The numeric equality constraint matrix using the objective's parameter values.
     public var equalityConstraintMatrix: Matrix? {
-        return try! self.symbolicEqualityConstraintMatrix?.evaluate(withValues: self.parameterValues)
+        return try! self.symbolicEqualityConstraintMatrix?
+            .evaluate(withValues: self.parameterValues)
     }
 
     /// The numeric equality constraint vector using the objective's parameter values.
     public var equalityConstraintVector: Vector? {
-        return try! self.symbolicEqualityConstraintVector?.evaluate(withValues: self.parameterValues)
+        return try! self.symbolicEqualityConstraintVector?
+            .evaluate(withValues: self.parameterValues)
     }
-    
+
     /// The starting value for the primal that is passed to the solver
     let startPrimal: Vector?
-    
+
     /// The starting value for the dual that is passed to the solver
     let startDual: Vector?
-    
+
     /// The parameter values to be used when solving the system. Right now, only passing them in when constructed is supported.
     @usableFromInline
     var parameterValues: [Parameter: Double] = [:]
-    
+
     /// The parameters used in the objective
     var parameters: Set<Parameter> = []
 
@@ -212,7 +213,9 @@ public struct SymbolicObjective: Objective {
         // Save the equality constraint matrices
         if let equalityConstraintMatrix = optionalEqualityConstraintMatrix {
             guard let equalityConstraintVector = optionalEqualityConstraintVector else {
-                printDebug("literal equality constraint matrix provided, but not literal equality constraint vector")
+                printDebug(
+                    "literal equality constraint matrix provided, but not literal equality constraint vector"
+                )
                 return nil
             }
             // Make sure they are the same height
@@ -251,7 +254,8 @@ public struct SymbolicObjective: Objective {
                 // in another assign node. We always simplify this, even if the NO_SIMPLIFY
                 // variable is set. Otherwise our shitty way detecting linear systems breaks because
                 // the additions aren't flattened.
-                let simplifiedConstraints: [Assign] = equalityConstraints.map { $0.simplify() as! Assign }
+                let simplifiedConstraints: [Assign] = equalityConstraints
+                    .map { $0.simplify() as! Assign }
                 var equalityMatrixRows: [SymbolicVector] = []
                 var equalityVector: [Node] = []
                 for constraint in simplifiedConstraints {
@@ -286,7 +290,9 @@ public struct SymbolicObjective: Objective {
                             let variable = el.variables.first!
                             let multiplier: Node = el
                                 .replace(variable,
-                                         with: Number(1)) // Replace the variable by 1, so the result is the multiplier
+                                         with: Number(
+                                             1
+                                         )) // Replace the variable by 1, so the result is the multiplier
                             if let currentMultiplier = variablesDict[variable] {
                                 variablesDict[variable] = currentMultiplier + multiplier
                             } else {
@@ -314,7 +320,8 @@ public struct SymbolicObjective: Objective {
                 self.symbolicEqualityConstraintMatrix = SymbolicMatrix(equalityMatrixRows)
                 self.symbolicEqualityConstraintVector = SymbolicVector(equalityVector)
                 #else
-                self.symbolicEqualityConstraintMatrix = SymbolicMatrix(equalityMatrixRows).simplify()
+                self.symbolicEqualityConstraintMatrix = SymbolicMatrix(equalityMatrixRows)
+                    .simplify()
                 self.symbolicEqualityConstraintVector = SymbolicVector(equalityVector).simplify()
                 #endif
             } else {
@@ -359,7 +366,8 @@ public struct SymbolicObjective: Objective {
             do {
                 // Set progenator constraints orders
                 if let ordering = optionalOrdering {
-                    try self.symbolicConstraintsVector!.setVariableOrder(ordering.union(self.orderedVariables))
+                    try self.symbolicConstraintsVector!
+                        .setVariableOrder(ordering.union(self.orderedVariables))
                 } else {
                     try self.symbolicConstraintsVector!.setVariableOrder(self.orderedVariables)
                 }
@@ -417,14 +425,17 @@ public struct SymbolicObjective: Objective {
                 }
 
             // Construct the final hessian
-            let symbolicConstraintHessian: SymbolicMatrix = zip(constraints, zip(gradients, hessians))
-                .reduce(zeros(self.orderedVariables.count, self.orderedVariables.count)
-                    .symbolic) { currentSum, nextTriple in
+            let symbolicConstraintHessian: SymbolicMatrix = zip(
+                constraints,
+                zip(gradients, hessians)
+            )
+            .reduce(zeros(self.orderedVariables.count, self.orderedVariables.count)
+                .symbolic) { currentSum, nextTriple in
                     let const = nextTriple.0
                     let grad = nextTriple.1.0
                     let hess = nextTriple.1.1
                     return currentSum + (1 / const ** 2 .* (grad * grad)) + -1 / const .* hess
-                }
+            }
 
             #if DEBUG
             printDebug("Simplifying Constraint Derivatives")
@@ -455,16 +466,19 @@ public struct SymbolicObjective: Objective {
             return nil
         }
     }
-    
+
     /// Set the variable order for the objective, gradient, hessian, and all constraints. Does not make sense to call after initialization, as gradients and
     /// hessians will have already been constructed.
     ///
     /// - Parameter newOrdering: The new variable ordering.
     /// - Throws: If not all variables are represented in the new ordering.
-    internal mutating func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection, C.Element == Variable {
+    internal mutating func setVariableOrder<C>(_ newOrdering: C) throws where C: Collection,
+        C.Element == Variable
+    {
         try self.variables.forEach { variable in
             guard newOrdering.contains(variable) else {
-                throw SwiftMPCError.misc("New ordering \(newOrdering) does not contain variable \(variable)")
+                throw SwiftMPCError
+                    .misc("New ordering \(newOrdering) does not contain variable \(variable)")
             }
         }
         self.orderedVariables = OrderedSet<Variable>(newOrdering)
@@ -504,7 +518,10 @@ public struct SymbolicObjective: Objective {
         if let symbolicConstraints = self.symbolicConstraintsVector {
             //  First check if the provided start points are strictly feasible
             if let startPrimal = self.startPrimal {
-                if try symbolicConstraints.evaluate(startPrimal, withParameters: self.parameterValues) .<= 0.0 {
+                if try symbolicConstraints.evaluate(
+                    startPrimal,
+                    withParameters: self.parameterValues
+                ) .<= 0.0 {
                     // Check if the startDual was provided
                     if let startDual = self.startDual {
                         return (primal: startPrimal, dual: startDual)
@@ -535,7 +552,8 @@ public struct SymbolicObjective: Objective {
             // and a column of all zeros. The conceptual understanding of this is that the problem is strictly feasible,
             // including equality constraints, for any value of x. Therefore, we can remove it from our feasibility
             // search and give it an arbitrary start value (zero).
-            var unusedVariables: Set<Variable> = Set(self.orderedVariables).subtracting(symbolicConstraints.variables)
+            var unusedVariables: Set<Variable> = Set(self.orderedVariables)
+                .subtracting(symbolicConstraints.variables)
 
             if let equalityMatrix = self.equalityConstraintMatrix {
                 var unusedEqualityVariables: Set<Variable> = []
@@ -568,15 +586,19 @@ public struct SymbolicObjective: Objective {
             // Remove the columns from the equality matrix. Need to introduce intermediary though
             var shrunkEqualityMatrix: Matrix? = self.equalityConstraintMatrix
             if let equalityMatrix = self.equalityConstraintMatrix {
-                let indexes: [Int] = unusedVariables.map { self.orderedVariables.firstIndex(of: $0)! }
-                let keptIndexes = Array(0 ..< self.orderedVariables.count).filter { !indexes.contains($0) }
-                shrunkEqualityMatrix = equalityMatrix[(er: Extractor.All, ec: Extractor.Pos(keptIndexes))]
+                let indexes: [Int] = unusedVariables
+                    .map { self.orderedVariables.firstIndex(of: $0)! }
+                let keptIndexes = Array(0 ..< self.orderedVariables.count)
+                    .filter { !indexes.contains($0) }
+                shrunkEqualityMatrix =
+                    equalityMatrix[(er: Extractor.All, ec: Extractor.Pos(keptIndexes))]
             }
 
             // We can always find a strictly feasible point for this problem. We choose an arbitrary x
             // and set s to be the maximum value of the  constraints  plus a little bit to make sure
             // s is strictly feasible
-            let xStart = ones(self.numVariables - unusedVariables.count) // Account for any variables that were rmeoved
+            let xStart = ones(self.numVariables - unusedVariables
+                .count) // Account for any variables that were rmeoved
             let startConstraintValues = try originalConstraintsSymbolicVector.evaluate(
                 xStart,
                 withParameters: self.parameterValues
@@ -616,7 +638,8 @@ public struct SymbolicObjective: Objective {
 
             // Min should be negative if we have a feasible point
             guard min < 0.0 else {
-                throw SwiftMPCError.misc("Problem may be infeasible. Found minimum feasible point of \(pt)")
+                throw SwiftMPCError
+                    .misc("Problem may be infeasible. Found minimum feasible point of \(pt)")
             }
 
             var startPrimal: [Double] = Array(pt[1 ..< pt.count])
@@ -705,7 +728,7 @@ public struct SymbolicObjective: Objective {
             return Matrix(self.numVariables, self.numVariables, Double.nan)
         }
     }
-    
+
     /// The sum of the negative logs of the negative of the constraints. Required by the `Objective` protocol.
     /// - Parameter x: The current primal.
     /// - Returns: The sum of the negative logs of the negative of the constraints
@@ -724,7 +747,7 @@ public struct SymbolicObjective: Objective {
             return Double.nan
         }
     }
-    
+
     /// The gradient of the negative logs of the negative of the constraints. Required by the `Objective` protocol.
     /// - Parameter x: The current primal.
     /// - Returns: The gradient of the negative logs of the negative of the constraints.
@@ -743,7 +766,7 @@ public struct SymbolicObjective: Objective {
             return Array(repeating: Double.nan, count: self.numConstraints)
         }
     }
-    
+
     /// The hessian of the negative logs of the negative of the constraints. Required by the `Objective` protocol.
     /// - Parameter x: The current primal.
     /// - Returns: The hessian of the negative logs of the negative of the constraints.

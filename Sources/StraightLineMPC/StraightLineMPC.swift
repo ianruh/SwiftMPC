@@ -45,7 +45,8 @@ struct StraightLineMPC {
         // Impose the max acceleration constraints
         var accelerationConstraints: [Node] = []
         for i in 0 ..< self.numSteps - 1 {
-            accelerationConstraints.append(v[i + 1] - v[i] <= (self.maxAcceleration * self.timeStep).symbol)
+            accelerationConstraints
+                .append(v[i + 1] - v[i] <= (self.maxAcceleration * self.timeStep).symbol)
         }
 
         // Impose the dynamics constraints

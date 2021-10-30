@@ -1,7 +1,6 @@
 // Created 2020 github @ianruh
 
 public extension SymbolicVector {
-
     /// Generate swift code for the symbolic vector.
     ///
     /// The form of the generated code is a `Vector` (a.k.a `Array<Double>`) literal.
@@ -13,7 +12,9 @@ public extension SymbolicVector {
     ///   - onlyElements: Whether only the vector element's representations should be returned (e.g. not the surrounding `[...]`)
     /// - Returns: The string representation of the code.
     /// - Throws: If the swift representation for an element cannot be generated.
-    func swiftCode(using representations: [Node: String], onlyElements: Bool = false) throws -> String {
+    func swiftCode(using representations: [Node: String],
+                   onlyElements: Bool = false) throws -> String
+    {
         var elementsStr = ""
         if self.elements.count > 0 {
             for i in 0 ..< self.elements.count - 1 {
@@ -82,7 +83,6 @@ public extension SymbolicVector {
 //===================== Matrix =================
 
 public extension SymbolicMatrix {
-
     /// Generate swift code for the matrix.
     ///
     /// Generates a LASwift.Matrix using an array literal.
@@ -96,11 +96,13 @@ public extension SymbolicMatrix {
         var elementsStr = ""
         if self.vectors.count > 0 {
             for i in 0 ..< self.vectors.count - 1 {
-                var rep: String = try self.vectors[i].swiftCode(using: representations, onlyElements: true)
+                var rep: String = try self.vectors[i]
+                    .swiftCode(using: representations, onlyElements: true)
                 rep += ",\n    "
                 elementsStr += rep
             }
-            elementsStr += "\(try self.vectors.last!.swiftCode(using: representations, onlyElements: true))"
+            elementsStr +=
+                "\(try self.vectors.last!.swiftCode(using: representations, onlyElements: true))"
         }
 
         return "Matrix(\(self.rows), \(self.cols), [\n    \(elementsStr)\n])"

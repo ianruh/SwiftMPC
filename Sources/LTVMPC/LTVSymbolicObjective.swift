@@ -115,21 +115,35 @@ public extension LTVMPC {
                 .append(xPosition[t] ≈ xPosition[t - 1] + self
                     .mpc_dt * previousVelocity[t] *
                     (Cos(vehicleAngle[t - 1] + previousSteeringAngle[t])
-                        .taylorExpand(in: vehicleAngle[t - 1], about: previousAngle[t], ofOrder: 1)!))
+                        .taylorExpand(
+                            in: vehicleAngle[t - 1],
+                            about: previousAngle[t],
+                            ofOrder: 1
+                        )!))
             // Y Position Constraint
             eqConstraints
                 .append(yPosition[t] ≈ yPosition[t - 1] + self
                     .mpc_dt * previousVelocity[t] *
                     (Sin(vehicleAngle[t - 1] + previousSteeringAngle[t])
-                        .taylorExpand(in: vehicleAngle[t - 1], about: previousAngle[t], ofOrder: 1)!))
+                        .taylorExpand(
+                            in: vehicleAngle[t - 1],
+                            about: previousAngle[t],
+                            ofOrder: 1
+                        )!))
             // Angular Constraint
             eqConstraints
                 .append(vehicleAngle[t] ≈ vehicleAngle[t - 1] + self
                     .mpc_dt * previousVelocity[t] * (1.0 / self.wheelBaseLength) *
                     (Sin(steerigAngle[t - 1])
-                        .taylorExpand(in: steerigAngle[t - 1], about: previousSteeringAngle[t], ofOrder: 1)!))
+                        .taylorExpand(
+                            in: steerigAngle[t - 1],
+                            about: previousSteeringAngle[t],
+                            ofOrder: 1
+                        )!))
             // Velocity Constraint
-            eqConstraints.append(forwardVelocity[t] ≈ forwardVelocity[t - 1] + self.mpc_dt * acceleration[t - 1])
+            eqConstraints
+                .append(forwardVelocity[t] ≈ forwardVelocity[t - 1] + self
+                    .mpc_dt * acceleration[t - 1])
         }
 
         //======== Objective ========

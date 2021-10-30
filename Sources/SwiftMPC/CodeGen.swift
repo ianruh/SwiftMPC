@@ -34,7 +34,9 @@ public extension SymbolicObjective {
                 for variable in variableVector {
                     guard self.orderedVariables.contains(variable) else {
                         throw SwiftMPCError
-                            .misc("The variable \(variable) cannot be extracted because it is not in the model")
+                            .misc(
+                                "The variable \(variable) cannot be extracted because it is not in the model"
+                            )
                     }
                 }
             }
@@ -43,20 +45,27 @@ public extension SymbolicObjective {
             for variable in variableVector {
                 guard self.orderedVariables.contains(variable) else {
                     throw SwiftMPCError
-                        .misc("The variable \(variable) cannot be extracted because it is not in the model")
+                        .misc(
+                            "The variable \(variable) cannot be extracted because it is not in the model"
+                        )
                 }
             }
         }
         for variable in variableExtractors.values {
             guard self.orderedVariables.contains(variable) else {
-                throw SwiftMPCError.misc("The variable \(variable) cannot be extracted because it is not in the model")
+                throw SwiftMPCError
+                    .misc(
+                        "The variable \(variable) cannot be extracted because it is not in the model"
+                    )
             }
         }
 
         // Merge the parameter representation dict with the generated variable representations dict
         var representation: [Node: String] = [:]
         representation
-            .merge(parameterRepresentations, uniquingKeysWith: { current, _ in current }) // closure is useless
+            .merge(parameterRepresentations, uniquingKeysWith: { current, _ in
+                current
+            }) // closure is useless
         for i in 0 ..< self.orderedVariables.count {
             representation[self.orderedVariables[i]] = "\(stateVectorName)[\(i)]"
         }
@@ -122,7 +131,8 @@ public extension SymbolicObjective {
         for (variableName, variable) in variableExtractors {
             str += "\n"
             str += "@inlinable\n"
-            str += "func extractVariable_\(variableName)(_ \(stateVectorName): Vector) -> Double {\n"
+            str +=
+                "func extractVariable_\(variableName)(_ \(stateVectorName): Vector) -> Double {\n"
             str += "return "
             str += try variable.swiftCode(using: representation)
             str += "\n"
@@ -273,7 +283,9 @@ public extension SymbolicObjective {
                 for variable in variableVector {
                     guard self.orderedVariables.contains(variable) else {
                         throw SwiftMPCError
-                            .misc("The variable \(variable) cannot be extracted because it is not in the model")
+                            .misc(
+                                "The variable \(variable) cannot be extracted because it is not in the model"
+                            )
                     }
                 }
             }
@@ -282,13 +294,18 @@ public extension SymbolicObjective {
             for variable in variableVector {
                 guard self.orderedVariables.contains(variable) else {
                     throw SwiftMPCError
-                        .misc("The variable \(variable) cannot be extracted because it is not in the model")
+                        .misc(
+                            "The variable \(variable) cannot be extracted because it is not in the model"
+                        )
                 }
             }
         }
         for variable in variableExtractors.values {
             guard self.orderedVariables.contains(variable) else {
-                throw SwiftMPCError.misc("The variable \(variable) cannot be extracted because it is not in the model")
+                throw SwiftMPCError
+                    .misc(
+                        "The variable \(variable) cannot be extracted because it is not in the model"
+                    )
             }
         }
 
@@ -296,10 +313,12 @@ public extension SymbolicObjective {
         // in one of the extractors
         if primalConstructor {
             for variable in self.orderedVariables {
-                let matrixContains: Bool = matrixExtractors.values.reduce(false) { runningValue, matrix in
-                    runningValue || matrix.reduce(false) { $0 || $1.contains(variable) }
-                }
-                let vectorContains: Bool = vectorExtractors.values.reduce(false) { $0 || $1.contains(variable) }
+                let matrixContains: Bool = matrixExtractors.values
+                    .reduce(false) { runningValue, matrix in
+                        runningValue || matrix.reduce(false) { $0 || $1.contains(variable) }
+                    }
+                let vectorContains: Bool = vectorExtractors.values
+                    .reduce(false) { $0 || $1.contains(variable) }
                 let variableContains: Bool = variableExtractors.values.contains(variable)
                 guard matrixContains || vectorContains || variableContains else {
                     throw SwiftMPCError
@@ -344,7 +363,9 @@ public extension SymbolicObjective {
         // Merge the parameter representation dict with the generated variable representations dict
         var representation: [Node: String] = [:]
         representation
-            .merge(parameterRepresentations, uniquingKeysWith: { current, _ in current }) // closure is useless
+            .merge(parameterRepresentations, uniquingKeysWith: { current, _ in
+                current
+            }) // closure is useless
         for i in 0 ..< self.orderedVariables.count {
             representation[self.orderedVariables[i]] = "\(stateVectorName)[\(i)]"
         }
@@ -386,7 +407,8 @@ public extension SymbolicObjective {
         for (matrixName, variableMatrix) in matrixExtractors {
             str += "\n"
             str += "@inlinable\n"
-            str += "static func extractMatrix_\(matrixName)(_ \(stateVectorName): Vector) -> Matrix {\n"
+            str +=
+                "static func extractMatrix_\(matrixName)(_ \(stateVectorName): Vector) -> Matrix {\n"
             str += try SymbolicMatrix(variableMatrix).swiftCode2(using: representation)
             str += "\n"
             str += "}"
@@ -397,7 +419,8 @@ public extension SymbolicObjective {
         for (vectorName, variableVector) in vectorExtractors {
             str += "\n"
             str += "@inlinable\n"
-            str += "static func extractVector_\(vectorName)(_ \(stateVectorName): Vector) -> Vector {\n"
+            str +=
+                "static func extractVector_\(vectorName)(_ \(stateVectorName): Vector) -> Vector {\n"
             str += try SymbolicVector(variableVector).swiftCode2(using: representation)
             str += "\n"
             str += "}"
@@ -408,7 +431,8 @@ public extension SymbolicObjective {
         for (variableName, variable) in variableExtractors {
             str += "\n"
             str += "@inlinable\n"
-            str += "static func extractVariable_\(variableName)(_ \(stateVectorName): Vector) -> Double {\n"
+            str +=
+                "static func extractVariable_\(variableName)(_ \(stateVectorName): Vector) -> Double {\n"
             str += "return "
             str += try variable.swiftCode(using: representation)
             str += "\n"
@@ -446,7 +470,8 @@ public extension SymbolicObjective {
 
             // Write every accessor
             for i in 0 ..< self.orderedVariables.count {
-                str += "buffer[\(i)] = \(primalConstructorGetVariableString(self.orderedVariables[i])!)\n"
+                str +=
+                    "buffer[\(i)] = \(primalConstructorGetVariableString(self.orderedVariables[i])!)\n"
             }
 
             // Close the pointer closure

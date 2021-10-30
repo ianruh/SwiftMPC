@@ -121,7 +121,9 @@ public class Power: Node, Operation {
         return ids
     }
 
-    @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
+    @discardableResult override public func replace(_ targetNode: Node,
+                                                    with replacement: Node) -> Node
+    {
         if targetNode == self {
             return replacement
         } else {
@@ -191,7 +193,9 @@ public class Power: Node, Operation {
         // You can thank [this issue](https://github.com/apple/swift-numerics/pull/82) for the weirdness here.
         guard let rightSideNumber = self.right as? Number else {
             throw SymbolicMathError
-                .misc("The exponent for a power must be a number, not \(self.right)(\(self.right.typeIdentifier))")
+                .misc(
+                    "The exponent for a power must be a number, not \(self.right)(\(self.right.typeIdentifier))"
+                )
         }
         guard let rightSide = Int(exactly: try rightSideNumber.evaluate(withValues: [:])) else {
             throw SymbolicMathError.misc("Power must be an integer, not \(rightSideNumber)")

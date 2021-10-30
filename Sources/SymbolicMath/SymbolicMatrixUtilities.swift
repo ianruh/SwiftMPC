@@ -4,7 +4,6 @@ import LASwift
 import RealModule
 
 public extension SymbolicMatrix {
-    
     /// Initialize a symbolic matrix from a double list of variables. It is assumed that each nested `[Variable]` array is the same length,
     /// otherwise the behavior is undefined.
     /// - Parameter vecs: The variables that constitute each element of the symbolic matrix (in row major form).

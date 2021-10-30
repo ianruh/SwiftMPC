@@ -131,7 +131,9 @@ public class Multiply: Node, Operation {
         return ids
     }
 
-    @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
+    @discardableResult override public func replace(_ targetNode: Node,
+                                                    with replacement: Node) -> Node
+    {
         if targetNode == self {
             return replacement
         } else {
@@ -212,7 +214,8 @@ public class Multiply: Node, Operation {
                 if tops.count == 1 {
                     return Divide(tops[0], Multiply(bottoms).simplify()).simplify()
                 } else {
-                    return Divide(Multiply(tops).simplify(), Multiply(bottoms).simplify()).simplify()
+                    return Divide(Multiply(tops).simplify(), Multiply(bottoms).simplify())
+                        .simplify()
                 }
             }
         }
@@ -280,7 +283,8 @@ public class Multiply: Node, Operation {
             // We no convert x*(y+1)*(z+1) --> x*y*(z+1) + x*1*(z+1), which then needs to get simplified again
             let firstAdd = additionTerms[0]
             let allOthers = otherTerms +
-                (additionTerms.count >= 2 ? [Add](additionTerms[1 ..< additionTerms.count]) : [Add]())
+                (additionTerms
+                    .count >= 2 ? [Add](additionTerms[1 ..< additionTerms.count]) : [Add]())
 
             var newNodeArguments: [Node] = []
             for el in firstAdd.arguments {

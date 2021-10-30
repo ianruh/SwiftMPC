@@ -6,7 +6,9 @@
 import LASwift
 import RealModule
 
-func newtonStepDirection(startingPoint _: Vector, gradient: Vector, hessian: Matrix) throws -> Vector {
+func newtonStepDirection(startingPoint _: Vector, gradient: Vector,
+                         hessian: Matrix) throws -> Vector
+{
     // Solve for the newton step Δx: ∇²f Δx = -1 * ∇f
     let step = try LASwift.linsolve(hessian, -1 .* Matrix(gradient))
     return step.flat // linsolve always returns a matrix at the moment, so we just flatten it
@@ -23,7 +25,10 @@ func approxBackTrackingLineSearch(
 ) -> Double {
     var t = 1.0
 
-    while objective.value(startPoint + t .* stepDirection) > startValue + alpha * t .* startGradient * stepDirection {
+    while objective
+        .value(startPoint + t .* stepDirection) > startValue + alpha * t .* startGradient *
+        stepDirection
+    {
         t = beta * t
     }
 
@@ -53,7 +58,11 @@ func unconstrainedMinimize(
 
     var iterations: Int = 0
     while norm(grad) > gradEpsilon, iterations < maxIterations {
-        let stepDirection = try newtonStepDirection(startingPoint: currentPoint, gradient: grad, hessian: H)
+        let stepDirection = try newtonStepDirection(
+            startingPoint: currentPoint,
+            gradient: grad,
+            hessian: H
+        )
 
         // Not really the step length as the newton step direction isn't normalized
         let stepLength = approxBackTrackingLineSearch(
@@ -109,7 +118,10 @@ func equalityConstrainedMinimize(
 ) throws -> Vector {
     // Check that the equality constraints and objective have the same number of variables
     guard objective.numVariables == equalityConstraintMatrix.cols else {
-        throw SwiftMPCError.wrongNumberOfVariables("Number of variables in objective and equality constraint disagree")
+        throw SwiftMPCError
+            .wrongNumberOfVariables(
+                "Number of variables in objective and equality constraint disagree"
+            )
     }
 
     // Set start point
@@ -147,7 +159,10 @@ func equalityConstrainedMinimize(
         // │ -∇f │
         // │  0  │
         // └     ┘
-        let newtonStepRightSide = LASwift.append(-1 .* Matrix(grad), rows: zeros(equalityConstraintMatrix.rows, 1))
+        let newtonStepRightSide = LASwift.append(
+            -1 .* Matrix(grad),
+            rows: zeros(equalityConstraintMatrix.rows, 1)
+        )
 
         let stepDirectionWithDual = try LASwift.linsolve(newtonStepMatrix, newtonStepRightSide).flat
 
@@ -209,7 +224,8 @@ func residualNorm(
     primal: Vector,
     dual: Vector
 ) -> Double {
-    let firstRow = Matrix(objective.gradient(primal)) + transpose(equalityConstraintMatrix) * Matrix(dual)
+    let firstRow = Matrix(objective.gradient(primal)) + transpose(equalityConstraintMatrix) *
+        Matrix(dual)
     let secondRow = equalityConstraintMatrix * Matrix(primal) - equalityConstraintVector
     return norm(append(firstRow, rows: secondRow).flat)
 }
@@ -257,7 +273,10 @@ func infeasibleEqualityMinimize(
 ) throws -> Vector {
     // Check that the equality constraints and objective have the same number of variables
     guard objective.numVariables == equalityConstraintMatrix.cols else {
-        throw SwiftMPCError.wrongNumberOfVariables("Number of variables in objective and equality constraint disagree")
+        throw SwiftMPCError
+            .wrongNumberOfVariables(
+                "Number of variables in objective and equality constraint disagree"
+            )
     }
     guard equalityConstraintMatrix.rows == equalityConstraintVector.count else {
         throw SwiftMPCError
@@ -317,7 +336,8 @@ func infeasibleEqualityMinimize(
         // Where v is our primal step direction, and w would be the next dual (not the dual step)
 
         let stepDirectionPrimal = Array(stepDirectionWithDual[0 ..< objective.numVariables])
-        let stepDirectionDual = Array(stepDirectionWithDual[objective.numVariables ..< stepDirectionWithDual.count]) -
+        let stepDirectionDual =
+            Array(stepDirectionWithDual[objective.numVariables ..< stepDirectionWithDual.count]) -
             currentDual
         // We subtract off the current dual here because w = ν + Δν, while v = Δx
 

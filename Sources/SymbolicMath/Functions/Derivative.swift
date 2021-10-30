@@ -78,7 +78,8 @@ public class Derivative: Node, Function {
         // Try numerically
         guard let variable = self.withRespectTo as? Variable else {
             // TODO: Numerical derivatives with respect to non-variables (aka other functions)
-            throw SymbolicMathError.misc("Derivatives with respect to non-variables hasn't been implemented yet.")
+            throw SymbolicMathError
+                .misc("Derivatives with respect to non-variables hasn't been implemented yet.")
         }
         // assume machine precision ~ 2^-52
         let sqrtEpsilon = 0.000000014899
@@ -89,7 +90,8 @@ public class Derivative: Node, Function {
         var x_forward = values
         x_forward[variable]! += h
 
-        return try (self.diffOf.evaluate(withValues: x_forward) - self.diffOf.evaluate(withValues: x_back)) / (2 * h)
+        return try (self.diffOf.evaluate(withValues: x_forward) - self.diffOf
+            .evaluate(withValues: x_back)) / (2 * h)
     }
 
     override internal func equals(_ otherNode: Node) -> Bool {
@@ -110,7 +112,9 @@ public class Derivative: Node, Function {
         return ids
     }
 
-    @discardableResult override public func replace(_ targetNode: Node, with replacement: Node) -> Node {
+    @discardableResult override public func replace(_ targetNode: Node,
+                                                    with replacement: Node) -> Node
+    {
         if targetNode == self {
             return replacement
         } else {

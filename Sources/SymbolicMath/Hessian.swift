@@ -6,7 +6,6 @@
 import LASwift
 
 public extension Node {
-    
     /// Find the hessian of the node using the node's variable ordering.
     /// - Returns: A symbolic Matrix representing the hessian of the node.
     func hessian() -> SymbolicMatrix? {
@@ -21,7 +20,9 @@ public extension Node {
             }
 
             for variable2 in variables {
-                guard let secondDerivative = differentiate(firstDerivative, wrt: variable2)?.simplify() else {
+                guard let secondDerivative = differentiate(firstDerivative, wrt: variable2)?
+                    .simplify() else
+                {
                     return nil
                 }
 

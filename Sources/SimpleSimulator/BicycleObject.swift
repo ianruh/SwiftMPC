@@ -53,7 +53,8 @@ public struct BicycleObject: SimulationObject {
             self.velocity * Double.cos(self.angle + self.steeringAngle),
             self.velocity * Double.sin(self.angle + self.steeringAngle)
         )
-        self.angle = self.angle + timeStep * self.velocity / self.wheelBase * Double.sin(self.steeringAngle)
+        self.angle = self.angle + timeStep * self.velocity / self.wheelBase * Double
+            .sin(self.steeringAngle)
         self.velocity = self.velocity + timeStep * self.acceleration
     }
 }

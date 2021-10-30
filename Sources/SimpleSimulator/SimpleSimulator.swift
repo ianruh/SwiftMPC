@@ -47,11 +47,15 @@ public class SimpleSimulator {
         return false
     }
 
-    public func getFreeSpace(atPositions positions: [Vec2], along axis: Axis) -> [(min: Double?, max: Double?)] {
+    public func getFreeSpace(atPositions positions: [Vec2],
+                             along axis: Axis) -> [(min: Double?, max: Double?)]
+    {
         return positions.map { self.getFreeSpace(atPosition: $0, along: axis) }
     }
 
-    public func getFreeSpace(atPosition position: Vec2, along axis: Axis) -> (min: Double?, max: Double?) {
+    public func getFreeSpace(atPosition position: Vec2,
+                             along axis: Axis) -> (min: Double?, max: Double?)
+    {
         if axis == .X {
             let intersectingObjects = self.getObjectsIntersecting(x: position.x)
             var minX = self.environmentBoundary.minX
@@ -89,7 +93,11 @@ public class SimpleSimulator {
         }
     }
 
-    public init(environmentBoundary: BoundingBox = BoundingBox(center: Vec2(0.0, 0.0), width: 1000.0, height: 1000.0)) {
+    public init(environmentBoundary: BoundingBox = BoundingBox(
+        center: Vec2(0.0, 0.0),
+        width: 1000.0,
+        height: 1000.0
+    )) {
         self.environmentBoundary = environmentBoundary
     }
 }
