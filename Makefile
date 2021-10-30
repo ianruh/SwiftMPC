@@ -26,7 +26,7 @@ test-debug:
 	swift test $(DEBUG) $(EXTRAS) $(NO_PARALLEL)
 
 format:
-	swiftformat --config .swiftformat Sources/
+	swiftformat --config .swiftformat Sources/ Tests/
 
 documentation:
 	sourcekitten doc --spm --module-name SwiftMPC > .SwiftMPC.json

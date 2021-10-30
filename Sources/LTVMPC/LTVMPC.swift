@@ -24,13 +24,13 @@ public struct LTVMPC {
     // Vehicle propertes
     let wheelBaseLength: Double = 1.0 // meters
 
-    var solver: InequalitySolver
+    var solver: Solver
     var numericObjective: LTVNumericObjective
 
     public init(numSteps: Int, dt: Double = 0.1) {
         self.numTimeHorizonSteps = numSteps
         self.mpc_dt = dt
-        self.solver = InequalitySolver()
+        self.solver = Solver()
         self.numericObjective = LTVNumericObjective(numSteps: numSteps)
     }
 

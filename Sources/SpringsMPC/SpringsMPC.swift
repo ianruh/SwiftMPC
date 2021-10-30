@@ -19,7 +19,7 @@ struct SpringsMPC {
 
     var costs: [Double] = []
 
-    var solver = InequalitySolver()
+    var solver = Solver()
     var simulator = SpringsSimulator()
     var numericObjective = SpringsNumericObjective()
 

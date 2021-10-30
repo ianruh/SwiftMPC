@@ -30,7 +30,7 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            var solver = InequalitySolver()
+            var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
             XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
@@ -63,7 +63,7 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            var solver = InequalitySolver()
+            var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
             XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
@@ -94,7 +94,7 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            var solver = InequalitySolver()
+            var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
             XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
@@ -122,7 +122,7 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            var solver = InequalitySolver()
+            var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
             XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
@@ -153,7 +153,7 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            var solver = InequalitySolver()
+            var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
             XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
@@ -168,7 +168,7 @@ final class RegressionTests: XCTestCase {
             let numSteps: Int = 3
             let timeStep: Double = 0.1
             let maxAcceleration: Double = 1.0
-            var solver = InequalitySolver()
+            var solver = Solver()
 
             let x = Variable.vector("x", count: numSteps)
             let v = Variable.vector("v", count: numSteps)
@@ -237,7 +237,7 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            var solver = InequalitySolver()
+            var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
             XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
@@ -267,7 +267,7 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            var solver = InequalitySolver()
+            var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
             XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")
@@ -301,7 +301,7 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            var solver = InequalitySolver()
+            var solver = Solver()
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
             XCTAssertTrue(pt.isApprox(expectedLocation, within: 0.1), "Calculate min location \(pt) is not equal to the expected one \(expectedLocation)")

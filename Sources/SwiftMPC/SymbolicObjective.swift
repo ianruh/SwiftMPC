@@ -632,7 +632,7 @@ public struct SymbolicObjective: Objective {
             printDebug("=========== Starting Feasible Point Search ===========")
             #endif
 
-            var solver = InequalitySolver()
+            var solver = Solver()
             solver.hyperParameters.valueThreshold = 0.0
             let (min, pt, _) = try solver.infeasibleInequalityMinimize(objective: newObjective)
 

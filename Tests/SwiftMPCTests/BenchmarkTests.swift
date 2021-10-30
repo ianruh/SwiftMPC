@@ -28,7 +28,7 @@ final class BenchmarkTests: XCTestCase {
                 return
             }
 
-            var solver = InequalitySolver()
+            var solver = Solver()
             solver.hyperParameters.residualEpsilon = 1e-8
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
@@ -60,7 +60,7 @@ final class BenchmarkTests: XCTestCase {
                 return
             }
 
-            var solver = InequalitySolver()
+            var solver = Solver()
             solver.hyperParameters.residualEpsilon = 1e-8
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
@@ -92,7 +92,7 @@ final class BenchmarkTests: XCTestCase {
                 return
             }
 
-            var solver = InequalitySolver()
+            var solver = Solver()
             solver.hyperParameters.residualEpsilon = 1e-8
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 
@@ -127,7 +127,7 @@ final class BenchmarkTests: XCTestCase {
                 return
             }
 
-            var solver = InequalitySolver()
+            var solver = Solver()
             solver.hyperParameters.residualEpsilon = 1e-8
             let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
 

@@ -12,7 +12,7 @@ struct StraightLineMPC {
 
     var maxAcceleration: Double = 1.0
 
-    var solver = InequalitySolver()
+    var solver = Solver()
 
     mutating func runSymbolic() throws -> (minimum: Double, point: Vector) {
         let objective = try self.symbolicObjective()

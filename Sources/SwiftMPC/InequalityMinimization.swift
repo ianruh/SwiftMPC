@@ -3,7 +3,7 @@
 import LASwift
 import RealModule
 
-public struct InequalitySolver {
+public struct Solver {
     /// The hyper parameters used by the solver.
     public var hyperParameters = HyperParameters()
 
