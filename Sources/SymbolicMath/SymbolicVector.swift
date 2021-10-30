@@ -42,6 +42,14 @@ public class SymbolicVector: Collection, ExpressibleByArrayLiteral {
         }
     }()
 
+    /// The union of all the binary variables in the individual elements of the vector.
+    public lazy var binaryVariables: Set<BinaryVariable> = {
+        self.reduce(Set<BinaryVariable>()) { currentSet, nextElement in
+            currentSet.union(nextElement.binaryVariables)
+        }
+    }()
+
+
     /// Initialize a symbolic vector from an  array of nodes.
     /// - Parameter array: An array of nodes.
     public init(_ array: [Node]) {

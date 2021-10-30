@@ -64,6 +64,16 @@ public class Node: CustomStringConvertible, Comparable, Hashable, CustomDebugStr
         }
     }
 
+    /// The set of binary variables in the node. This should be overridden.
+    internal var _binaryVariables: Set<BinaryVariable>?
+    public var binaryVariables: Set<BinaryVariable> {
+        if let binaryVariable = self._binaryVariables {
+            return binaryVariable
+        } else {
+            return []
+        }
+    }
+
     /// The set of derivatives in the node. This should be overridden.
     public var derivatives: Set<Derivative> {
         preconditionFailure("derivatives should be overridden")

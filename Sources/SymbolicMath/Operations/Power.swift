@@ -63,6 +63,17 @@ public class Power: Node, Operation {
         }
     }
 
+    override public var binaryVariables: Set<BinaryVariable> {
+        if let binaryVariables = self._binaryVariables {
+            return binaryVariables
+        } else {
+            self._binaryVariables = self.left.binaryVariables + self.right.binaryVariables
+            return self._binaryVariables!
+        }
+    }
+
+
+
     override public var derivatives: Set<Derivative> {
         return self.left.derivatives + self.right.derivatives
     }

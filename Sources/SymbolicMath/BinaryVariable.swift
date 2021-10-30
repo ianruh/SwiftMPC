@@ -50,6 +50,15 @@ public class BinaryVariable: Node, ExpressibleByStringLiteral {
         }
     }
 
+    override public var binaryVariables: Set<BinaryVariable> {
+        if let binaryVariables = self._binaryVariables {
+            return binaryVariables
+        } else {
+            self._binaryVariables = [self]
+            return self._binaryVariables!
+        }
+    }
+
     public static func == (_ lhs: BinaryVariable, _ rhs: BinaryVariable) -> Bool {
         return lhs.string == rhs.string && lhs.values == rhs.values
     }

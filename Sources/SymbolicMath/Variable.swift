@@ -46,6 +46,15 @@ public class Variable: Node, ExpressibleByStringLiteral {
         }
     }
 
+    override public var binaryVariables: Set<BinaryVariable> {
+        if let binaryVariables = self._binaryVariables {
+            return binaryVariables
+        } else {
+            self._binaryVariables = []
+            return self._binaryVariables!
+        }
+    }
+
     public static func == (_ lhs: Variable, _ rhs: Variable) -> Bool {
         return lhs.string == rhs.string
     }

@@ -40,6 +40,15 @@ public class Number: Node, ExpressibleByIntegerLiteral, ExpressibleByFloatLitera
         }
     }
 
+    override public var binaryVariables: Set<BinaryVariable> {
+        if let binaryVariables = self._binaryVariables {
+            return binaryVariables
+        } else {
+            self._binaryVariables = []
+            return self._binaryVariables!
+        }
+    }
+
     public convenience init(_ num: Int) {
         self.init(Double(num))
     }

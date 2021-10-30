@@ -67,6 +67,14 @@ public class SymbolicMatrix: Collection, ExpressibleByArrayLiteral {
         }
     }()
 
+    /// The union of all the binary variables in the individual elements of the matrix.
+    public lazy var binaryVariables: Set<BinaryVariable> = {
+        self.vectors.reduce(Set<BinaryVariable>()) { currentSet, nextVector in
+            currentSet.union(nextVector.binaryVariables)
+        }
+    }()
+
+
     /// A string shows which elements of the matrix are zero, and which  are non-zero.
     public var sparsityString: String {
         var str: String = ""

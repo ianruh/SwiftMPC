@@ -55,6 +55,15 @@ public class Factorial: Node, Operation {
         }
     }
 
+    override public var binaryVariables: Set<BinaryVariable> {
+        if let binaryVariables = self._binaryVariables {
+            return binaryVariables
+        } else {
+            self._binaryVariables = self.argument.binaryVariables
+            return self._binaryVariables!
+        }
+    }
+
     override public var derivatives: Set<Derivative> {
         return self.argument.derivatives
     }

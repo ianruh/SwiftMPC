@@ -70,6 +70,17 @@ public class Multiply: Node, Operation {
         }
     }
 
+    override public var binaryVariables: Set<BinaryVariable> {
+        if let binaryVariables = self._binaryVariables {
+            return binaryVariables
+        } else {
+            self._binaryVariables = self.arguments.reduce(Set<BinaryVariable>()) { currentSet, nextArg in
+                currentSet + nextArg.binaryVariables
+            }
+            return self._binaryVariables!
+        }
+    }
+
     override public var derivatives: Set<Derivative> {
         var derivatives: Set<Derivative> = []
 

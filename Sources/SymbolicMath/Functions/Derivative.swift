@@ -45,6 +45,15 @@ public class Derivative: Node, Function {
         }
     }
 
+    override public var binaryVariables: Set<BinaryVariable> {
+        if let binaryVariables = self._binaryVariables {
+            return binaryVariables
+        } else {
+            self._binaryVariables = self.diffOf.binaryVariables + self.withRespectTo.binaryVariables
+            return self._binaryVariables!
+        }
+    }
+
     override public var derivatives: Set<Derivative> {
         return [self]
     }
