@@ -632,9 +632,9 @@ public struct SymbolicObjective: Objective {
             printDebug("=========== Starting Feasible Point Search ===========")
             #endif
 
-            var solver = Solver()
+            var solver = try Solver(objective: newObjective)
             solver.hyperParameters.valueThreshold = 0.0
-            let (min, pt, _) = try solver.infeasibleInequalityMinimize(objective: newObjective)
+            let (min, pt, _) = try solver.infeasibleInequalityMinimize(primalStart: startVector)
 
             // Min should be negative if we have a feasible point
             guard min < 0.0 else {

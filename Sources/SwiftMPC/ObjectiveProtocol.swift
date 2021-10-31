@@ -56,14 +56,6 @@ public protocol Objective {
     /// The value of the hessian of the inequality constraints value.
     /// - Parameter x: The current primal value.
     func inequalityConstraintsHessian(_ x: Vector) -> Matrix
-
-    //=============== Start Point ================
-
-    /// Strictly feasible start point.
-    /// dual should be zeros is you don't have one or care (though of the current dimmensions)
-    ///
-    /// For reference,  `primal.count` = numbe of variables, `dual.count` = number of equality constraints.
-    func startPoint() throws -> (primal: Vector, dual: Vector)
 }
 
 public extension Objective {

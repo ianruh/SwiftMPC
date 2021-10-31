@@ -37,24 +37,24 @@ let package = Package(
                 .product(name: "RealModule", package: "swift-numerics"),
                 "LASwift"
             ]),
-        .target(
-            name: "StraightLineMPC",
-            dependencies: [
-                .product(name: "RealModule", package: "swift-numerics"),
-                "LASwift",
-                "SymbolicMath",
-                .product(name: "Collections", package: "swift-collections"),
-                "SwiftMPC"
-            ]),
-        .target(
-            name: "SpringsMPC",
-            dependencies: [
-                .product(name: "RealModule", package: "swift-numerics"),
-                "LASwift",
-                "SymbolicMath",
-                .product(name: "Collections", package: "swift-collections"),
-                "SwiftMPC"
-            ]),
+        //.target(
+        //    name: "StraightLineMPC",
+        //    dependencies: [
+        //        .product(name: "RealModule", package: "swift-numerics"),
+        //        "LASwift",
+        //        "SymbolicMath",
+        //        .product(name: "Collections", package: "swift-collections"),
+        //        "SwiftMPC"
+        //    ]),
+        //.target(
+        //    name: "SpringsMPC",
+        //    dependencies: [
+        //        .product(name: "RealModule", package: "swift-numerics"),
+        //        "LASwift",
+        //        "SymbolicMath",
+        //        .product(name: "Collections", package: "swift-collections"),
+        //        "SwiftMPC"
+        //    ]),
         .testTarget(
             name: "SymbolicMathTests",
             dependencies: [
@@ -70,14 +70,14 @@ let package = Package(
                 "SymbolicMath",
                 .product(name: "Collections", package: "swift-collections")
             ]),
-        .target(
-            name: "LTVMPC",
-            dependencies: [
-                .product(name: "RealModule", package: "swift-numerics"),
-                "LASwift",
-                "SymbolicMath",
-                .product(name: "Collections", package: "swift-collections"),
-                "SwiftMPC",
-            ]),
+        //.target(
+        //    name: "LTVMPC",
+        //    dependencies: [
+        //        .product(name: "RealModule", package: "swift-numerics"),
+        //        "LASwift",
+        //        "SymbolicMath",
+        //        .product(name: "Collections", package: "swift-collections"),
+        //        "SwiftMPC",
+        //    ]),
     ]
 )

@@ -9,8 +9,188 @@ public struct Solver {
 
     @usableFromInline
     internal var hasEqaulityConstraints: Bool = false
+    internal var numEqualityConstraints: Int = 0
+    
+    internal var objective: Objective
 
-    public init() { }
+    public init(objective: Objective) throws {
+        self.objective = objective
+
+        if let equalityConstraintMatrix = objective.equalityConstraintMatrix {
+            if let equalityConstraintVector = objective.equalityConstraintVector {
+                self.hasEqaulityConstraints = true
+                self.numEqualityConstraints = equalityConstraintVector.count
+
+                // Check that the equality constraints and objective have the same number of variables
+                guard objective.numVariables == equalityConstraintMatrix.cols else {
+                    throw SwiftMPCError
+                        .wrongNumberOfVariables(
+                            "Number of variables in objective and equality constraint disagree"
+                        )
+                }
+                // Check that the matrix and vector have the same height
+                guard equalityConstraintMatrix.rows == equalityConstraintVector.count else {
+                    throw SwiftMPCError
+                        .wrongNumberOfVariables(
+                            "Equality constraint matrix has different number of rows than the equality constraint vector."
+                        )
+                }
+            }
+        }
+
+
+    }
+
+    /// Minimize an infeasible start, inequality constrained objective.
+    /// - Parameter objective: The objective to minimize.
+    /// - Throws: For many reasons, including (ill formed problems, evaluation problems, line search problems, and others).
+    /// - Returns: The minimum objective value, the minimum's primal, and the minimum's dual).
+
+    /// The given primal should be strictly feasible, meaning it obeys all the inequality
+    /// constraints, but may violate the equality constraints.
+    public mutating func infeasibleInequalityMinimize(primalStart: Vector? = nil, dualStart: Vector? = nil) throws
+        -> (minimum: Double, primal: Vector, dual: Vector)
+    {
+        // Default primal and dual starts
+        var currentPoint: Vector = zeros(self.objective.numVariables)
+        var currentDual: Vector = ones(self.numEqualityConstraints)
+        if let givenPrimal = primalStart {
+            currentPoint = givenPrimal
+        }
+        if let givenDual = dualStart {
+            currentDual = givenDual
+        }
+
+        // Check that the start points are the right dimensions
+        guard currentPoint.count == objective.numVariables else {
+            throw SwiftMPCError
+                .wrongNumberOfVariables(
+                    "Primal start \(currentPoint) does not have the same number of variables as the objective (\(objective.numVariables))"
+                )
+        }
+        // Check the dual (empty is no equality constraints)
+        if self.hasEqaulityConstraints {
+            guard currentDual.count == objective.equalityConstraintMatrix!.rows else {
+                throw SwiftMPCError
+                    .wrongNumberOfVariables(
+                        "Dual start \(currentDual) does not have the same number of variables as "
+                        + "equality constraints in the objective (\(objective.equalityConstraintMatrix!.rows))"
+                    )
+            }
+        }
+
+        #if DEBUG
+        printDebug("Starting Primal: \(currentPoint)")
+        printDebug("Starting Dual: \(currentDual)")
+        #endif
+
+        // Hyper parameters
+        var t = self.hyperParameters.homotopyParameterStart
+        var tSteps = 0
+        var totalSteps = 0
+
+        var value = objective.value(currentPoint)
+        var grad: Vector = self.barrierGradient(objective: objective, at: currentPoint, t: t)
+        var H: Matrix = self.barrierHessian(objective: objective, at: currentPoint, t: t)
+        var lambda = self.residualNorm(
+            objective: objective,
+            primal: currentPoint,
+            dual: currentDual,
+            t: t
+        )
+
+        var homotopyStagesExitCondition: Bool = (objective.numConstraints == 0) ||
+            (Double(objective.numConstraints) / t > self.hyperParameters.dualGapEpsilon)
+        HOMOTOPY_STAGES_LOOP: while homotopyStagesExitCondition, tSteps < self.hyperParameters
+            .homotopyStagesMaximum, value > self.hyperParameters.valueThreshold
+        {
+            var iterations: Int = 0
+
+            // This needs to be recalulated because we changed  t
+            lambda = self.residualNorm(
+                objective: objective,
+                primal: currentPoint,
+                dual: currentDual,
+                t: t
+            )
+
+            #if DEBUG
+            printDebug("\(tSteps):\(iterations)     Point:   \(currentPoint)")
+            printDebug("\(tSteps):\(iterations)     Value:   \(value)")
+            printDebug("\(tSteps):\(iterations)     Grad:    \(grad)")
+            printDebug("\(tSteps):\(iterations)     Lambda:  \(lambda)")
+            #endif
+
+            while lambda > self.hyperParameters.residualEpsilon && iterations < self.hyperParameters
+                .newtonStepsStageMaximum && value > self.hyperParameters.valueThreshold
+            {
+                let (stepDirectionPrimal, stepDirectionDual) = try objective.stepSolver(
+                    gradient: grad,
+                    hessian: H,
+                    primal: currentPoint,
+                    dual: currentDual
+                )
+
+                // TODO: the next point value and residual are calculated twice, once in the line search and
+                // again when actually calculating it. This would be a good place for memoization
+
+                // Not really the step length as the newton step direction isn't normalized
+                let stepLength = try infeasibleLinesearch(
+                    objective: objective,
+                    primalDirection: stepDirectionPrimal,
+                    dualDirection: stepDirectionDual,
+                    startPrimal: currentPoint,
+                    startDual: currentDual,
+                    t: t
+                )
+
+                currentPoint = currentPoint + stepLength .* stepDirectionPrimal
+                currentDual = currentDual + stepLength .* stepDirectionDual
+
+                iterations += 1
+                totalSteps += 1
+
+                value = objective.value(currentPoint)
+                grad = self.barrierGradient(objective: objective, at: currentPoint, t: t)
+                H = self.barrierHessian(objective: objective, at: currentPoint, t: t)
+                lambda = self.residualNorm(
+                    objective: objective,
+                    primal: currentPoint,
+                    dual: currentDual,
+                    t: t
+                )
+
+                #if DEBUG
+                printDebug("\(tSteps):\(iterations)     Point:   \(currentPoint)")
+                printDebug("\(tSteps):\(iterations)     Value:   \(value)")
+                printDebug("\(tSteps):\(iterations)     Grad:    \(grad)")
+                printDebug("\(tSteps):\(iterations)     Lambda:  \(lambda)")
+                #endif
+            }
+
+            // If we have no inequality constraints, then our first homotopy stage is exact
+            if objective.numConstraints == 0 {
+                break HOMOTOPY_STAGES_LOOP
+            }
+
+            t *= self.hyperParameters.homotopyParameterMultiplier
+            tSteps += 1
+            homotopyStagesExitCondition = (objective.numConstraints == 0) ||
+                (Double(objective.numConstraints) / t > self.hyperParameters.dualGapEpsilon)
+        }
+
+        let minimum = objective.value(currentPoint)
+
+        #if DEBUG
+        printDebug("t: \(t)")
+        printDebug("Numer of Iterations: \(totalSteps)")
+        printDebug("Residual Norm: \(lambda)")
+        printDebug("Minimum Location: \(currentPoint)")
+        printDebug("Objective Value: \(objective.value(currentPoint))")
+        #endif
+
+        return (minimum: minimum, primal: currentPoint, dual: currentDual)
+    }
 
     /// The norm of
     ///
@@ -148,168 +328,7 @@ public struct Solver {
         return t .* objective.hessian(x) + objective.inequalityConstraintsHessian(x)
     }
 
-    /// Minimize an infeasible start, inequality constrained objective.
-    /// - Parameter objective: The objective to minimize.
-    /// - Throws: For many reasons, including (ill formed problems, evaluation problems, line search problems, and others).
-    /// - Returns: The minimum objective value, the minimum's primal, and the minimum's dual).
-    public mutating func infeasibleInequalityMinimize(objective: Objective) throws
-        -> (minimum: Double, primal: Vector, dual: Vector)
-    {
-        if let equalityConstraintMatrix = objective.equalityConstraintMatrix {
-            if let equalityConstraintVector = objective.equalityConstraintVector {
-                self.hasEqaulityConstraints = true
-
-                // Check that the equality constraints and objective have the same number of variables
-                guard objective.numVariables == equalityConstraintMatrix.cols else {
-                    throw SwiftMPCError
-                        .wrongNumberOfVariables(
-                            "Number of variables in objective and equality constraint disagree"
-                        )
-                }
-                // Check that the matrix and vector have the same height
-                guard equalityConstraintMatrix.rows == equalityConstraintVector.count else {
-                    throw SwiftMPCError
-                        .wrongNumberOfVariables(
-                            "Equality constraint matrix has different number of rows than the equality constraint vector."
-                        )
-                }
-            }
-        }
-
-        // Get start point
-        var (currentPoint, currentDual): (Vector, Vector) = try objective.startPoint()
-        // Check that they are the right dimensions
-        guard currentPoint.count == objective.numVariables else {
-            throw SwiftMPCError
-                .wrongNumberOfVariables(
-                    "Primal start \(currentPoint) does not have the same number of variables as the objective (\(objective.numVariables))"
-                )
-        }
-        if self.hasEqaulityConstraints {
-            guard currentDual.count == objective.equalityConstraintMatrix!.rows else {
-                throw SwiftMPCError
-                    .wrongNumberOfVariables(
-                        "Dual start \(currentDual) does not have the same number of variables as equality constraints in the objective (\(objective.equalityConstraintMatrix!.rows))"
-                    )
-            }
-        } else {
-            // Just set the dual to empty even if they provide one
-            currentDual = []
-        }
-
-        #if DEBUG
-        printDebug("Starting Primal: \(currentPoint)")
-        printDebug("Starting Dual: \(currentDual)")
-        #endif
-
-        // Hyper parameters
-        var t = self.hyperParameters.homotopyParameterStart
-        var tSteps = 0
-        var totalSteps = 0
-
-        var value = objective.value(currentPoint)
-        var grad: Vector = self.barrierGradient(objective: objective, at: currentPoint, t: t)
-        var H: Matrix = self.barrierHessian(objective: objective, at: currentPoint, t: t)
-        var lambda = self.residualNorm(
-            objective: objective,
-            primal: currentPoint,
-            dual: currentDual,
-            t: t
-        )
-
-        var homotopyStagesExitCondition: Bool = (objective.numConstraints == 0) ||
-            (Double(objective.numConstraints) / t > self.hyperParameters.dualGapEpsilon)
-        HOMOTOPY_STAGES_LOOP: while homotopyStagesExitCondition, tSteps < self.hyperParameters
-            .homotopyStagesMaximum, value > self.hyperParameters.valueThreshold
-        {
-            var iterations: Int = 0
-
-            // This needs to be recalulated because we changed  t
-            lambda = self.residualNorm(
-                objective: objective,
-                primal: currentPoint,
-                dual: currentDual,
-                t: t
-            )
-
-            #if DEBUG
-            printDebug("\(tSteps):\(iterations)     Point:   \(currentPoint)")
-            printDebug("\(tSteps):\(iterations)     Value:   \(value)")
-            printDebug("\(tSteps):\(iterations)     Grad:    \(grad)")
-            printDebug("\(tSteps):\(iterations)     Lambda:  \(lambda)")
-            #endif
-
-            while lambda > self.hyperParameters.residualEpsilon && iterations < self.hyperParameters
-                .newtonStepsStageMaximum && value > self.hyperParameters.valueThreshold
-            {
-                let (stepDirectionPrimal, stepDirectionDual) = try objective.stepSolver(
-                    gradient: grad,
-                    hessian: H,
-                    primal: currentPoint,
-                    dual: currentDual
-                )
-
-                // TODO: the next point value and residual are calculated twice, once in the line search and
-                // again when actually calculating it. This would be a good place for memoization
-
-                // Not really the step length as the newton step direction isn't normalized
-                let stepLength = try infeasibleLinesearch(
-                    objective: objective,
-                    primalDirection: stepDirectionPrimal,
-                    dualDirection: stepDirectionDual,
-                    startPrimal: currentPoint,
-                    startDual: currentDual,
-                    t: t
-                )
-
-                currentPoint = currentPoint + stepLength .* stepDirectionPrimal
-                currentDual = currentDual + stepLength .* stepDirectionDual
-
-                iterations += 1
-                totalSteps += 1
-
-                value = objective.value(currentPoint)
-                grad = self.barrierGradient(objective: objective, at: currentPoint, t: t)
-                H = self.barrierHessian(objective: objective, at: currentPoint, t: t)
-                lambda = self.residualNorm(
-                    objective: objective,
-                    primal: currentPoint,
-                    dual: currentDual,
-                    t: t
-                )
-
-                #if DEBUG
-                printDebug("\(tSteps):\(iterations)     Point:   \(currentPoint)")
-                printDebug("\(tSteps):\(iterations)     Value:   \(value)")
-                printDebug("\(tSteps):\(iterations)     Grad:    \(grad)")
-                printDebug("\(tSteps):\(iterations)     Lambda:  \(lambda)")
-                #endif
-            }
-
-            // If we have no inequality constraints, then our first homotopy stage is exact
-            if objective.numConstraints == 0 {
-                break HOMOTOPY_STAGES_LOOP
-            }
-
-            t *= self.hyperParameters.homotopyParameterMultiplier
-            tSteps += 1
-            homotopyStagesExitCondition = (objective.numConstraints == 0) ||
-                (Double(objective.numConstraints) / t > self.hyperParameters.dualGapEpsilon)
-        }
-
-        let minimum = objective.value(currentPoint)
-
-        #if DEBUG
-        printDebug("t: \(t)")
-        printDebug("Numer of Iterations: \(totalSteps)")
-        printDebug("Residual Norm: \(lambda)")
-        printDebug("Minimum Location: \(currentPoint)")
-        printDebug("Objective Value: \(objective.value(currentPoint))")
-        #endif
-
-        return (minimum: minimum, primal: currentPoint, dual: currentDual)
-    }
-
+    
     /// This struct is just a container for the hyper parameters that can be used to customize the behavior of the solver.
     ///
     /// The default values of fairly aggressive, so will find pretty precisely the minimum. For real time applications, many of the

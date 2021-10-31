@@ -33,9 +33,10 @@ final class BenchmarkTests: XCTestCase {
                 return
             }
 
-            var solver = Solver()
+            var solver = try Solver(objective: objective)
+            let (primalStart, dualStart) = try objective.startPoint()
             solver.hyperParameters.residualEpsilon = 1e-8
-            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(primalStart: primalStart, dualStart: dualStart)
 
             XCTAssertTrue(
                 pt.isApprox(expectedLocation, within: 0.1),
@@ -72,9 +73,10 @@ final class BenchmarkTests: XCTestCase {
                 return
             }
 
-            var solver = Solver()
-            solver.hyperParameters.residualEpsilon = 1e-8
-            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
+            var solver = try Solver(objective: objective)
+            solver.hyperParameters.residualEpsilon = 1e-8 
+            let (primalStart, dualStart) = try objective.startPoint()
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(primalStart: primalStart, dualStart: dualStart)
 
             XCTAssertTrue(
                 pt.isApprox(expectedLocation, within: 0.1),
@@ -111,9 +113,10 @@ final class BenchmarkTests: XCTestCase {
                 return
             }
 
-            var solver = Solver()
+            var solver = try Solver(objective: objective)
             solver.hyperParameters.residualEpsilon = 1e-8
-            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
+            let (primalStart, dualStart) = try objective.startPoint()
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(primalStart: primalStart, dualStart: dualStart)
 
             XCTAssertTrue(
                 pt.isApprox(expectedLocation, within: 0.1),
@@ -154,9 +157,10 @@ final class BenchmarkTests: XCTestCase {
                 return
             }
 
-            var solver = Solver()
+            var solver = try Solver(objective: objective)
             solver.hyperParameters.residualEpsilon = 1e-8
-            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
+            let (primalStart, dualStart) = try objective.startPoint()
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(primalStart: primalStart, dualStart: dualStart)
 
             XCTAssertTrue(
                 pt.isApprox(expectedLocation, within: 0.1),

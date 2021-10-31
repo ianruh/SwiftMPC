@@ -35,8 +35,9 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            var solver = Solver()
-            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
+            var solver = try Solver(objective: objective)
+            let (primalStart, dualStart) = try objective.startPoint()
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(primalStart: primalStart, dualStart: dualStart)
 
             XCTAssertTrue(
                 pt.isApprox(expectedLocation, within: 0.1),
@@ -74,9 +75,10 @@ final class RegressionTests: XCTestCase {
                 XCTFail("Unable to construct symbolic objective for \(obj)")
                 return
             }
-
-            var solver = Solver()
-            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
+            
+            var solver = try Solver(objective: objective)
+            let (primalStart, dualStart) = try objective.startPoint()
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(primalStart: primalStart, dualStart: dualStart)
 
             XCTAssertTrue(
                 pt.isApprox(expectedLocation, within: 0.1),
@@ -113,8 +115,9 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            var solver = Solver()
-            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
+            var solver = try Solver(objective: objective)
+            let (primalStart, dualStart) = try objective.startPoint()
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(primalStart: primalStart, dualStart: dualStart)
 
             XCTAssertTrue(
                 pt.isApprox(expectedLocation, within: 0.1),
@@ -148,8 +151,9 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            var solver = Solver()
-            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
+            var solver = try Solver(objective: objective)
+            let (primalStart, dualStart) = try objective.startPoint()
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(primalStart: primalStart, dualStart: dualStart)
 
             XCTAssertTrue(
                 pt.isApprox(expectedLocation, within: 0.1),
@@ -186,8 +190,9 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            var solver = Solver()
-            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
+            var solver = try Solver(objective: objective)
+            let (primalStart, dualStart) = try objective.startPoint()
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(primalStart: primalStart, dualStart: dualStart)
 
             XCTAssertTrue(
                 pt.isApprox(expectedLocation, within: 0.1),
@@ -204,7 +209,6 @@ final class RegressionTests: XCTestCase {
             let numSteps: Int = 3
             let timeStep: Double = 0.1
             let maxAcceleration: Double = 1.0
-            var solver = Solver()
 
             let x = Variable.vector("x", count: numSteps)
             let v = Variable.vector("v", count: numSteps)
@@ -249,7 +253,9 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
+            var solver = try Solver(objective: objective)
+            let (primalStart, dualStart) = try objective.startPoint()
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(primalStart: primalStart, dualStart: dualStart)
 
             XCTAssertTrue(
                 pt.isApprox(expectedSolution, within: 0.1),
@@ -286,8 +292,9 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            var solver = Solver()
-            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
+            var solver = try Solver(objective: objective)
+            let (primalStart, dualStart) = try objective.startPoint()
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(primalStart: primalStart, dualStart: dualStart)
 
             XCTAssertTrue(
                 pt.isApprox(expectedLocation, within: 0.1),
@@ -323,8 +330,9 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            var solver = Solver()
-            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
+            var solver = try Solver(objective: objective)
+            let (primalStart, dualStart) = try objective.startPoint()
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(primalStart: primalStart, dualStart: dualStart)
 
             XCTAssertTrue(
                 pt.isApprox(expectedLocation, within: 0.1),
@@ -365,8 +373,9 @@ final class RegressionTests: XCTestCase {
                 return
             }
 
-            var solver = Solver()
-            let (_, pt, _) = try solver.infeasibleInequalityMinimize(objective: objective)
+            var solver = try Solver(objective: objective)
+            let (primalStart, dualStart) = try objective.startPoint()
+            let (_, pt, _) = try solver.infeasibleInequalityMinimize(primalStart: primalStart, dualStart: dualStart)
 
             XCTAssertTrue(
                 pt.isApprox(expectedLocation, within: 0.1),

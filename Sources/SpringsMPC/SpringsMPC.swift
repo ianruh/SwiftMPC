@@ -19,9 +19,12 @@ struct SpringsMPC {
 
     var costs: [Double] = []
 
-    var solver = Solver()
+    var solver: Solver
     var simulator = SpringsSimulator()
-    var numericObjective = SpringsNumericObjective()
+
+    public init() {
+        self.solver = Solver(objective: SpringsNumericObjective())
+    }
 
     // mutating func runSimulation(length: Double = 10) throws -> (positions: [Vector], velocities: [Vector], times: [Double]) {
     //     let N = Int(length / self.sim_dt)
@@ -82,7 +85,9 @@ struct SpringsMPC {
 
     mutating func runSymbolic() throws -> (minimum: Double, point: Vector) {
         let objective = try self.constructSymbolicObjective()
-        let (min, pt, _) = try self.solver.infeasibleInequalityMinimize(objective: objective)
+        let solver = Solver(objective: objective)
+        let (primalStart, dualStart) = objective.startVector()
+        let (min, pt, _) = try solver.infeasibleInequalityMinimize(primalStart: primalStart, dualStart: dualStart)
         return (minimum: min, point: pt)
     }
 
